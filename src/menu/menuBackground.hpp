@@ -29,12 +29,14 @@
 
 namespace usdx
 {
+	// Exception
+	class MenuBackgroundException { };
+
 	// MenuBackground - abstract class for MenuBackgrounds
 	class MenuBackground
 	{
 	public:
 		// all members are pure virtual
-		virtual MenuBackground(const ThemeBeckground* themed_settings) = 0;
 		virtual ~MenuBackground() = 0;
 
 		virtual void on_show(void) = 0;
