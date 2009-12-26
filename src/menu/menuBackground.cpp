@@ -1,4 +1,5 @@
-{* UltraStar Deluxe - Karaoke Game
+/*
+ * UltraStar Deluxe - Karaoke Game
  *
  * UltraStar Deluxe is the legal property of its developers, whose names
  * are too numerous to list here. Please refer to the COPYRIGHT
@@ -21,50 +22,19 @@
  *
  * $URL$
  * $Id$
- *}
+ */
 
-unit UMenuBackgroundNone;
+#include "menuBackground.hpp"
+#include <GL/gl.h>
 
-interface
+int screen_act = 1;
 
-{$IFDEF FPC}
-  {$MODE Delphi}
-{$ENDIF}
-
-{$I switches.inc}
-
-uses
-  UThemes,
-  UMenuBackground;
-
-//TMenuBackgroundNone - Just no Background (e.g. for Overlays)
-//--------
-
-type
-  TMenuBackgroundNone = class (TMenuBackground)
-    private
-
-    public
-      constructor Create(const ThemedSettings: TThemeBackground); override;
-      procedure   Draw; override;
-  end;
-
-implementation
-uses
-  gl,
-  glext,
-  UGraphic;
-
-constructor TMenuBackgroundNone.Create(const ThemedSettings: TThemeBackground);
-begin
-  inherited;
-end;
-
-procedure   TMenuBackgroundNone.Draw;
-begin
-  //Do just nothing in here!
-  If (ScreenAct = 1) then //Clear just once when in dual screen mode
-    glClear(GL_DEPTH_BUFFER_BIT);
-end;
-
-end.
+namespace usdx
+{
+	void MenuBackgroundNone::draw(void)
+	{
+		// clear just once when in dual screen mode
+		if (screen_act == 0)
+			glClear(GL_DEPTH_BUFFER_BIT);
+	}
+};

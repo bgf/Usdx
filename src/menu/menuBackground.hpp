@@ -49,6 +49,11 @@ namespace usdx
 		MenuBackground(const MenuBackground&);
 		MenuBackground& operator=(const MenuBackground&);
 	};
+
+	class MenuBackgroundNone : MenuBackground
+	{
+		virtual void draw(void);
+	};
 };
 
 #endif
