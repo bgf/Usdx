@@ -52,6 +52,7 @@ namespace usdx
 
 	class MenuBackgroundNone : MenuBackground
 	{
+	public:
 		virtual void draw(void);
 	};
 };
