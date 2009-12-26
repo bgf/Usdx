@@ -55,6 +55,15 @@ namespace usdx
 	public:
 		virtual void draw(void);
 	};
+
+	class MenuBackgroundColor : MenuBackground
+	{
+	private:
+		RGB color;
+	public:
+		MenuBackgroundColor(RGB &color);
+		virtual void draw(void);
+	};
 };
 
 #endif

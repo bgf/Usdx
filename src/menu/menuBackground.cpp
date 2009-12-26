@@ -37,4 +37,18 @@ namespace usdx
 		if (screen_act == 0)
 			glClear(GL_DEPTH_BUFFER_BIT);
 	}
+
+	MenuBackgroundColor::MenuBackgrundColor(RGB &color)
+	{
+		this->color = color;
+	}
+
+	void MenuBackgroundColor::draw(void)
+	{
+		// just clear once, even when using two screens
+		if (screen_act == 1) {
+			glClearColor(color.r, color.g, color.b, 0);
+			glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+		}
+	}
 };
