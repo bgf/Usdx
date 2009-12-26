@@ -36,13 +36,13 @@ namespace usdx
 	class MenuBackground
 	{
 	public:
-		// all members are pure virtual
-		virtual ~MenuBackground() = 0;
-
-		virtual void on_show(void) = 0;
-		virtual void on_finish(void) = 0;
-
 		virtual void draw(void) = 0;
+
+		// optional methods
+		virtual ~MenuBackground() {}
+
+		virtual void on_show(void) {}
+		virtual void on_finish(void) {}
 
 	protected:
 		// no copy and no assignment
