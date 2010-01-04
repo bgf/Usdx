@@ -24,6 +24,8 @@
  * $Id$
  */
 
+#if 0
+
 #include "display.hpp"
 #include <math.h>
 #include <SDL/SDL.h>
@@ -534,3 +536,5 @@ namespace usdx
 		glColor4f(1, 1, 1, 1);
 	}
 };
+
+#endif

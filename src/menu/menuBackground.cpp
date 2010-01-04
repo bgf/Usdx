@@ -24,6 +24,8 @@
  * $Id$
  */
 
+#if 0
+
 #include "menuBackground.hpp"
 #include <GL/gl.h>
 
@@ -52,3 +54,5 @@ namespace usdx
 		}
 	}
 };
+
+#endif
