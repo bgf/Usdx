@@ -31,10 +31,12 @@
 namespace usdx
 {
 
-	RingBuffer::RingBuffer(int size)
+	RingBuffer::RingBuffer(int size):
+		buffer_count(0),
+		buffer_size(size),
+		write_pos(0),
+		read_pos(0)
 	{
-		buffer_size = size;
-
 		ring_buffer = (char*)malloc(size);
 		if (ring_buffer == NULL)
 			throw "No memory";
