@@ -38,6 +38,9 @@ namespace usdx
 		CPPUNIT_TEST(testNotNull);
 		CPPUNIT_TEST(testGetVersion);
 		CPPUNIT_TEST(testSetAndGetVersion);
+		CPPUNIT_TEST(testSizeOfTime_t);
+		CPPUNIT_TEST(testGetStatReset);
+		CPPUNIT_TEST(testFormatDate);
 		CPPUNIT_TEST_SUITE_END();
 	private:
 		StatDatabase *db;
@@ -69,6 +72,23 @@ namespace usdx
 			CPPUNIT_ASSERT( 0 == StatDatabase::get_instance()->get_version() );
 			StatDatabase::get_instance()->set_version(1);
 			CPPUNIT_ASSERT( 1 == StatDatabase::get_instance()->get_version() );
+		}
+
+		void testSizeOfTime_t()
+		{
+			CPPUNIT_ASSERT( sizeof(time_t) == sizeof(long) );
+		}
+
+		void testGetStatReset()
+		{
+			CPPUNIT_ASSERT( 1000000000 < StatDatabase::get_instance()->get_stat_reset() );
+		}
+
+		void testFormatDate()
+		{
+			char buf[9];
+			StatDatabase::get_instance()->format_date(buf, 9, 1262433600);
+			CPPUNIT_ASSERT( strcmp(buf, "13.02.09") );
 		}
 	};
 

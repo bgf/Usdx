@@ -300,40 +300,40 @@ namespace usdx
 */
 	time_t StatDatabase::get_stat_reset(void)
 	{
-		// TODO
-		// var
-		//   Query: string;
-		// begin
-		//   Result := 0;
+		std::string sqlStatement = "SELECT [ResetTime] FROM [";
+		sqlStatement += usdx_statistics_info + std::string("];");
 
-		//   if not Assigned(ScoreDB) then
-		//     Exit;
+		sqlite3_stmt *sqliteStatement;
+		int result = -1;
 
-		//   try
-		//     Query := 'SELECT [ResetTime] FROM [' + cUS_Statistics_Info + '];';
-		//     Result := UnixToDateTime(ScoreDB.GetTableValue(Query));
-		//   except on E: Exception do
-		//     Log.LogError(E.Message, 'TDataBaseSystem.GetStatReset');
-		//   end;
-		return 0;
+		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
+			sqlite3_finalize(sqliteStatement);
+			throw "Error preparing statement.";
+		}
+
+		int rc = sqlite3_step(sqliteStatement);
+		if (rc == SQLITE_DONE || rc == SQLITE_ROW) {
+			result = sqlite3_column_int(sqliteStatement, 0);
+		}
+
+		sqlite3_finalize(sqliteStatement);
+		return (time_t)result;
 	}
 
 	char* StatDatabase::format_date(char* time, size_t max, time_t timestamp)
 	{
-		// TODO
-		// if (timestamp != 0) {
-		// 	struct tm *tmp = localtime(&timestamp);
-		// 	if (tmp) {
-		// 		if (strftime(time, max, Language.Translate("STAT_FORMAT_DATE"), tmp)) {
-		// 			return time;
-		// 		}
-		// 	}
-		// }
+		if (timestamp != 0) {
+			struct tm *tmp = localtime(&timestamp);
+			if (tmp) {
+				strftime(time, max, "%d.%m.%y" /* TODO: Language.Translate("STAT_FORMAT_DATE")*/, tmp);
+				return time;
+			}
+		}
 
-		// if (max > 0) {
-		// 	time[0] = '\0';
-		// 	return time;
-		// }
+		if (max > 0) {
+			time[0] = '\0';
+			return time;
+		}
 
 		return NULL;
 	}
