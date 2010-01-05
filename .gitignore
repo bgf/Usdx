@@ -6,6 +6,7 @@ Thumbs.db
 *.rst
 *.compiled
 *.or
+*.d
 *.o
 *.a
 *.exe
