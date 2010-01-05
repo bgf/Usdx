@@ -47,15 +47,21 @@ namespace usdx
 		StatDatabase(std::string filename);
 
 		static StatDatabase* instance;
+
+		int get_version(void);
+		void set_version(int version);
+
+#ifdef STAT_DATABASE_TEST
+		// for testing private members
+		friend class StatDatabaseTest;
+#endif
+
 	public:
 		static StatDatabase* get_instance();
 
 		~StatDatabase(void);
 
 		static void init(const std::string filename);
-
-		int get_version(void);
-		void set_version(int version);
 
 /*		void read_score(Song *song);
 		void add_score(Song *song, int level, const char* name, int score);

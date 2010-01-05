@@ -24,8 +24,12 @@
  * $Id$
  */
 
+#define STAT_DATABASE_TEST
+
 #include "database.hpp"
 #include <cppunit/extensions/HelperMacros.h>
+#include <ctime>
+#include <cstring>
 
 namespace usdx
 {
