@@ -51,6 +51,10 @@ namespace usdx
 		if (count <= 0)
 			return count;
 
+		// check if the buffer is NULL
+		if (buffer == NULL)
+			return -1;
+
 		// adjust output count
 		if (count > buffer_count)
 		{
@@ -80,6 +84,10 @@ namespace usdx
 		// check for a reasonable request
 		if (count <= 0)
 			return count;
+
+		// check if the buffer is NULL
+		if (buffer == NULL)
+			return -1;
 
 		// skip input data if the input buffer is bigger than the ring-buffer
 		if (count > buffer_size)
