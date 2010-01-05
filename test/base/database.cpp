@@ -40,7 +40,7 @@ namespace usdx
 	public:
 		void setUp()
 		{
-			StatDatabase::init("/home/alex/projects/usdx/game/Ultrastar.db");
+			StatDatabase::init("../game/Ultrastar.db");
 		}
 
 		void tearDown()
