@@ -25,8 +25,7 @@ $(TARGET):	$(objects) $(deps)
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
 %.d:	%.cpp
-	$(CXX) $(CXXFLAGS) -MMD -E -c $< -o $(@:.d=.tmp)
-	rm $(@:.d=.tmp)
+	$(CXX) $(CXXFLAGS) -MM -c $< -MF $@
 
 clean:
 	-$(RM) $(TARGET) $(objects) $(deps)
