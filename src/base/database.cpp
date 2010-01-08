@@ -325,9 +325,10 @@ namespace usdx
 	char* StatDatabase::format_date(char* time, size_t max, time_t timestamp)
 	{
 		if (timestamp != 0) {
-			struct tm *tmp = localtime(&timestamp);
-			if (tmp) {
-				strftime(time, max, "%d.%m.%y" /* TODO: Language.Translate("STAT_FORMAT_DATE")*/, tmp);
+			struct tm tmp;
+
+			if (localtime_r(&timestamp, &tmp)) {
+				strftime(time, max, "%d.%m.%y" /* TODO: Language.Translate("STAT_FORMAT_DATE")*/, &tmp);
 				return time;
 			}
 		}
