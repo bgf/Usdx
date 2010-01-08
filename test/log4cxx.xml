@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+
+  <appender name="Roll" class="org.apache.log4j.rolling.RollingFileAppender">
+    <triggeringPolicy class="org.apache.log4j.rolling.SizeBasedTriggeringPolicy">
+      <param name="MaxFileSize" value="400KB" />
+    </triggeringPolicy>
+
+    <rollingPolicy class="org.apache.log4j.rolling.FixedWindowRollingPolicy">
+      <param name="MaxIndex" value="4" />
+      <param name="FileNamePattern" value="debug.%i.log" />
+    </rollingPolicy>
+
+    <param name="FileName" value="debug.log" />
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%-6r [%-5p] %F:%L - %M - %m%n" />
+    </layout>
+  </appender>
+
+
+  <appender name="Console" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%-6r [%-5p] %F:%L - %M - %m%n" />
+    </layout>
+
+    <filter class="org.apache.log4j.filter.LevelRangeFilter">
+      <param name="LevelMin" value="ERROR" />
+    </filter>
+  </appender>
+
+
+  <root>
+    <priority value ="ALL" />
+    <appender-ref ref="Console" />
+    <appender-ref ref="Roll"/>
+  </root>
+
+</log4j:configuration>
