@@ -68,6 +68,101 @@ namespace usdx
 
 		instance = new StatDatabase(filename);
 		// TODO
+		//   // open database
+		//   ScoreDB   := TSQLiteDatabase.Create(Filename.ToUTF8);
+		//   fFilename := Filename;
+
+		//   Version := GetVersion();
+
+		//   // add Table cUS_Statistics_Info
+		//   // needed in the conversion from 1.01 to 1.1
+		//   if not ScoreDB.TableExists(cUS_Statistics_Info) then
+		//   begin
+		//     Log.LogInfo('Outdated song database found - missing table"' + cUS_Statistics_Info + '"', 'TDataBaseSystem.Init');
+		//     ScoreDB.ExecSQL('CREATE TABLE IF NOT EXISTS [' + cUS_Statistics_Info + '] (' +
+		//                     '[ResetTime] INTEGER' +
+		//                     ');');
+		//     // insert creation timestamp
+		//     ScoreDB.ExecSQL(Format('INSERT INTO [' + cUS_Statistics_Info + '] ' +
+		//                            '([ResetTime]) VALUES(%d);',
+		//                            [DateTimeToUnix(Now())]));
+		//   end;
+
+		//   // convert data from 1.01 to 1.1
+		//   // part #1 - prearrangement
+		//   finalizeConversion := false;
+		//   if (Version = 0) AND ScoreDB.TableExists('US_Scores') then
+		//   begin
+		//     // rename old tables - to be able to insert new table structures
+		//     ScoreDB.ExecSQL('ALTER TABLE US_Scores RENAME TO us_scores_101;');
+		//     ScoreDB.ExecSQL('ALTER TABLE US_Songs RENAME TO us_songs_101;');
+		//     finalizeConversion := true; // means: conversion has to be done!
+		//   end;
+
+		//   // Set version number after creation
+		//   if (Version = 0) then
+		//     SetVersion(cDBVersion);
+
+		//   // SQLite does not handle VARCHAR(n) or INT(n) as expected.
+		//   // Texts do not have a restricted length, no matter which type is used,
+		//   // so use the native TEXT type. INT(n) is always INTEGER.
+		//   // In addition, SQLiteTable3 will fail if other types than the native SQLite
+		//   // types are used (especially FieldAsInteger). Also take care to write the
+		//   // types in upper-case letters although SQLite does not care about this -
+		//   // SQLiteTable3 is very sensitive in this regard.
+		//   ScoreDB.ExecSQL('CREATE TABLE IF NOT EXISTS [' + cUS_Scores + '] (' +
+		//                     '[SongID] INTEGER NOT NULL, ' +
+		//                     '[Difficulty] INTEGER NOT NULL, ' +
+		//                     '[Player] TEXT NOT NULL, ' +
+		//                     '[Score] INTEGER NOT NULL, ' +
+		//                     '[Date] INTEGER NULL' +
+		//                   ');');
+
+		//   ScoreDB.ExecSQL('CREATE TABLE IF NOT EXISTS [' + cUS_Songs + '] (' +
+		//                     '[ID] INTEGER PRIMARY KEY, ' +
+		//                     '[Artist] TEXT NOT NULL, ' +
+		//                     '[Title] TEXT NOT NULL, ' +
+		//                     '[TimesPlayed] INTEGER NOT NULL, ' +
+		//                     '[Rating] INTEGER NULL' +
+		//                   ');');
+
+		//   // convert data from 1.01 to 1.1
+		//   // part #2 - accomplishment
+		//   if finalizeConversion then
+		//   begin
+		//     Log.LogInfo('Outdated song database  found - begin conversion from V1.01 to V1.1', 'TDataBaseSystem.Init');
+		//     // insert old values into new db-schemes (/tables)
+		//     ScoreDB.ExecSQL('INSERT INTO ' + cUS_Scores + ' SELECT  SongID, Difficulty, Player, Score FROM us_scores_101;');
+		//     ScoreDB.ExecSQL('INSERT INTO ' + cUS_Songs + ' SELECT  ID, Artist, Title, TimesPlayed, ''NULL'' FROM us_songs_101;');
+		//     //now drop old tables
+		//     ScoreDB.ExecSQL('DROP TABLE us_scores_101;');
+		//     ScoreDB.ExecSQL('DROP TABLE us_songs_101;');
+		//   end;
+
+		//   // add column rating to cUS_Songs
+		//   // just for users of nightly builds and developers!
+		//   if not ScoreDB.ContainsColumn(cUS_Songs, 'Rating') then
+		//   begin
+		//     Log.LogInfo('Outdated song database found - adding column rating to "' + cUS_Songs + '"', 'TDataBaseSystem.Init');
+		//     ScoreDB.ExecSQL('ALTER TABLE ' + cUS_Songs + ' ADD COLUMN [Rating] INTEGER NULL');
+		//   end;
+
+
+		//   //add column date to cUS-Scores
+		//   if not ScoreDB.ContainsColumn(cUS_Scores, 'Date') then
+		//   begin
+		//     Log.LogInfo('adding column date to "' + cUS_Scores + '"', 'TDataBaseSystem.Init');
+		//     ScoreDB.ExecSQL('ALTER TABLE ' + cUS_Scores + ' ADD COLUMN [Date] INTEGER NULL');
+		//   end;
+
+		// except
+		//   on E: Exception do
+		//   begin
+		//     Log.LogError(E.Message, 'TDataBaseSystem.Init');
+		//     FreeAndNil(ScoreDB);
+		//   end;
+		// end;
+
 	}
 
 	int StatDatabase::get_version(void)
