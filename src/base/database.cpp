@@ -36,6 +36,7 @@ namespace usdx
 	const char usdx_statistics_info[] = "us_statistics_info";
 
 	StatDatabase* StatDatabase::instance;
+	log4cxx::LoggerPtr StatDatabase::log = log4cxx::Logger::getLogger("usdx.base.StatDatabase");
 
 	StatDatabase::StatDatabase(const std::string filename)
 	{
@@ -50,8 +51,7 @@ namespace usdx
 	StatDatabase::~StatDatabase(void)
 	{
 		/* frees database */
-		// TODO: LOG
-		// Log->get_instance()->info("StatDatabase::~StatDatabase") << "~StatDatabase" << endl;
+		LOG4CXX_DEBUG(log, "Closing Database");
 
 		sqlite3_close(database);
 		database = NULL;
@@ -64,8 +64,7 @@ namespace usdx
 
 	void StatDatabase::init(const std::string filename)
 	{
-		// TODO: LOG
-		// Log->get_instance()->status("StatDatabase::init") << "Initializing database: \"" << filename->to_native() << "\"" << endl;
+		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);
 
 		instance = new StatDatabase(filename);
 		// TODO
@@ -79,6 +78,8 @@ namespace usdx
 
 		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement, strlen(sqlStatement), &sqliteStatement, NULL)) {
 			sqlite3_finalize(sqliteStatement);
+
+			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
 			throw "Error preparing statement.";
 		}
 
@@ -102,8 +103,7 @@ namespace usdx
 		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
 			sqlite3_finalize(sqliteStatement);
 
-			// TODO: LOG
-			// std::cerr << sqlite3_errmsg(database) << std::endl;
+			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
 			throw "Error preparing statement.";
 		}
 
@@ -308,6 +308,8 @@ namespace usdx
 
 		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
 			sqlite3_finalize(sqliteStatement);
+
+			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
 			throw "Error preparing statement.";
 		}
 

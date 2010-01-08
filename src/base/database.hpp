@@ -27,10 +27,11 @@
 #ifndef DATABASE_HPP
 #define DATABASE_HPP
 
-#include <time.h>
-#include <sqlite3.h>
+#include <ctime>
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
+#include <log4cxx/logger.h>
 
 namespace usdx
 {
@@ -40,6 +41,8 @@ namespace usdx
 	class StatDatabase
 	{
 	private:
+		static log4cxx::LoggerPtr log;
+
 		std::string filename;
 		sqlite3 *database;
 
