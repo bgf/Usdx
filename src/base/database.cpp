@@ -191,7 +191,7 @@ namespace usdx
 		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA user_version;");
 
 		int rc = sqlite3_step(sqliteStatement);
-		if (rc == SQLITE_DONE || rc == SQLITE_ROW) {
+		if (rc == SQLITE_ROW) {
 			result = sqlite3_column_int(sqliteStatement, 0);
 		}
 
@@ -405,7 +405,7 @@ namespace usdx
 		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
 
 		int rc = sqlite3_step(sqliteStatement);
-		if (rc == SQLITE_DONE || rc == SQLITE_ROW) {
+		if (rc == SQLITE_ROW) {
 			result = sqlite3_column_int(sqliteStatement, 0);
 		}
 
