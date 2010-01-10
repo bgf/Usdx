@@ -75,6 +75,13 @@ namespace usdx
 		return sqliteStatement;
 	}
 
+	void StatDatabase::sqlite_exec(const std::string sqlStatement)
+	{
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
+		sqlite3_step(sqliteStatement);
+		sqlite3_finalize(sqliteStatement);
+	}
+
 	void StatDatabase::init(const std::string filename)
 	{
 		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);
@@ -197,19 +204,8 @@ namespace usdx
 		// format the PRAGMA statement (PRAGMA does _not_ support parameters)
 		std::ostringstream sqlStatementBuffer (std::ostringstream::out);
 		sqlStatementBuffer << "PRAGMA user_version = " << version << ";";
-		std::string sqlStatement = sqlStatementBuffer.str();
 
-		sqlite3_stmt *sqliteStatement;
-		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
-			sqlite3_finalize(sqliteStatement);
-
-			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
-			throw "Error preparing statement.";
-		}
-
-		sqlite3_bind_int(sqliteStatement, 1, version);
-		sqlite3_step(sqliteStatement);
-		sqlite3_finalize(sqliteStatement);
+		sqlite_exec(sqlStatementBuffer.str());
 	}
 
 /*	void StatDatabase::read_score(Song *song)

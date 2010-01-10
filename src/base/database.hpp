@@ -66,6 +66,12 @@ namespace usdx
 		 */
 		sqlite3_stmt *sqlite_prepare(const std::string sqlStatement);
 
+		/**
+		 * Just a quick alias for sqlite_prepare, sqlite3_step and
+		 * sqlite3_finalize.
+		 */
+		void sqlite_exec(const std::string sqlStatement);
+
 		// Singleton
 		StatDatabase(std::string filename);
 
