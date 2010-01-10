@@ -94,13 +94,9 @@ namespace usdx
 
 		static StatDatabase* instance;
 
+	protected:
 		int get_version(void);
 		void set_version(int version);
-
-#ifdef STAT_DATABASE_TEST
-		// for testing private members
-		friend class StatDatabaseTest;
-#endif
 
 	public:
 		static StatDatabase* get_instance();
@@ -145,6 +141,11 @@ namespace usdx
 		 *		- the date string with the terminating '\\0'
 		 */
 		char* format_date(char* time, size_t max, time_t timestamp);
+
+#ifdef STAT_DATABASE_TEST
+		// for testing private members
+		friend class StatDatabaseTest;
+#endif
 	};
 
 	/* Element for linked list with pointer to next */
