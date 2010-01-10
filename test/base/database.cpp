@@ -41,6 +41,8 @@ namespace usdx
 		CPPUNIT_TEST(testSizeOfTime_t);
 		CPPUNIT_TEST(testGetStatReset);
 		CPPUNIT_TEST(testFormatDate);
+		CPPUNIT_TEST(testTableExists);
+		CPPUNIT_TEST(testTableNotExists);
 		CPPUNIT_TEST_SUITE_END();
 	private:
 		StatDatabase *db;
@@ -89,6 +91,16 @@ namespace usdx
 			char buf[9];
 			StatDatabase::get_instance()->format_date(buf, 9, 1262433600);
 			CPPUNIT_ASSERT( strcmp(buf, "13.02.09") );
+		}
+
+		void testTableExists()
+		{
+			CPPUNIT_ASSERT( true == StatDatabase::get_instance()->sqlite_table_exists("us_songs") );
+		}
+
+		void testTableNotExists()
+		{
+			CPPUNIT_ASSERT( false == StatDatabase::get_instance()->sqlite_table_exists("abc") );
 		}
 	};
 

@@ -82,6 +82,26 @@ namespace usdx
 		sqlite3_finalize(sqliteStatement);
 	}
 
+	const bool StatDatabase::sqlite_table_exists(const std::string table)
+	{
+		std::string sql = "select [name] from [sqlite_master] where [type] = 'table' and [tbl_name] = ?1;";
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(sql);
+
+		// bind table name to parameter 1 and execute statement
+		sqlite3_bind_text(sqliteStatement, 1, table.c_str(), table.length(), SQLITE_TRANSIENT);
+		int rc = sqlite3_step(sqliteStatement);
+
+		// if rc is SQLITE_ROW, than result has at lease one row and so
+		// the table exists
+		bool result = false;
+		if (rc == SQLITE_ROW) {
+			result = true;
+		}
+
+		sqlite3_finalize(sqliteStatement);
+		return result;
+	}
+
 	void StatDatabase::init(const std::string filename)
 	{
 		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);

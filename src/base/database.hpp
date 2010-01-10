@@ -72,6 +72,14 @@ namespace usdx
 		 */
 		void sqlite_exec(const std::string sqlStatement);
 
+		/**
+		 * Check if the given table exists in the database.
+		 *
+		 * @param table Name to check if exists
+		 * @return true, if table exists, false if not
+		 */
+		const bool sqlite_table_exists(const std::string table);
+
 		// Singleton
 		StatDatabase(std::string filename);
 
