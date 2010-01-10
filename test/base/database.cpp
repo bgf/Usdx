@@ -43,6 +43,9 @@ namespace usdx
 		CPPUNIT_TEST(testFormatDate);
 		CPPUNIT_TEST(testTableExists);
 		CPPUNIT_TEST(testTableNotExists);
+		CPPUNIT_TEST(testTableColumnExists);
+		CPPUNIT_TEST(testTableColumnNotExists);
+		CPPUNIT_TEST(testTableColumnTableNotExists);
 		CPPUNIT_TEST_SUITE_END();
 	private:
 		StatDatabase *db;
@@ -101,6 +104,21 @@ namespace usdx
 		void testTableNotExists()
 		{
 			CPPUNIT_ASSERT( false == StatDatabase::get_instance()->sqlite_table_exists("abc") );
+		}
+
+		void testTableColumnExists()
+		{
+			CPPUNIT_ASSERT( true == StatDatabase::get_instance()->sqlite_table_contains_column("us_songs", "Title") );
+		}
+
+		void testTableColumnNotExists()
+		{
+			CPPUNIT_ASSERT( false == StatDatabase::get_instance()->sqlite_table_contains_column("us_songs", "title") );
+		}
+
+		void testTableColumnTableNotExists()
+		{
+			CPPUNIT_ASSERT( false == StatDatabase::get_instance()->sqlite_table_contains_column("abc", "Title") );
 		}
 	};
 

@@ -102,6 +102,31 @@ namespace usdx
 		return result;
 	}
 
+	const bool StatDatabase::sqlite_table_contains_column(const std::string table, const std::string column)
+	{
+		std::string sqlStatement = "PRAGMA TABLE_INFO([";
+		sqlStatement += table;
+		sqlStatement += "]);";
+
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
+		bool result = false;
+
+		int rc = sqlite3_step(sqliteStatement);
+		while (rc == SQLITE_ROW) {
+			const char *column_name = (const char*)sqlite3_column_blob(sqliteStatement, 1);
+
+			if (column == std::string(column_name)) {
+				result = true;
+				break;
+			}
+
+			rc = sqlite3_step(sqliteStatement);
+		}
+
+		sqlite3_finalize(sqliteStatement);
+		return result;
+	}
+
 	void StatDatabase::init(const std::string filename)
 	{
 		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);

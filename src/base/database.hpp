@@ -80,6 +80,15 @@ namespace usdx
 		 */
 		const bool sqlite_table_exists(const std::string table);
 
+		/**
+		 * Check if the given table has the given column by name.
+		 *
+		 * @param table Table to examine
+		 * @param column Name of the column to check if exists
+		 * @return true, if column exists in that table, false if not
+		 */
+		const bool sqlite_table_contains_column(const std::string table, const std::string column);
+
 		// Singleton
 		StatDatabase(std::string filename);
 
