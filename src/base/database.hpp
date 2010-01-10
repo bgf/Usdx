@@ -43,7 +43,15 @@ namespace usdx
 	private:
 		static log4cxx::LoggerPtr log;
 
+		/**
+		 * Filename of the opened statistic database.
+		 */
 		std::string filename;
+
+		/**
+		 * Internal reference to the sqlite database handle of the open
+		 * sqlite database.
+		 */
 		sqlite3 *database;
 
 		// Singleton
@@ -64,6 +72,12 @@ namespace usdx
 
 		~StatDatabase(void);
 
+		/**
+		 * Opens a sqlite3 database from the given path and initializes
+		 * that class by saving a reference to the open database handle.
+		 *
+		 * @param filename Filename of a database to open.
+		 */
 		static void init(const std::string filename);
 
 /*		void read_score(Song *song);
@@ -75,7 +89,26 @@ namespace usdx
 		StatResult* get_stats(StatResult *list, short count, unsigned int page, bool reversed);
 //		unsigned int get_total_entrys(StatType type);
 
+		/**
+		 * Get the timestamp of the last reset of the database.
+		 *
+		 * @return Timestamp
+		 */
 		time_t get_stat_reset(void);
+
+		/**
+		 * Convert a timestamp to a data representation in a string.
+		 *
+		 * @param time Pointer to a char buffer that will contain the
+		 * 	the date string.
+		 * @param max Maximum bytes that could be written to the buffer.
+		 * @param timestamp Timestamp to convert to the string.
+		 * @return Pointer to the buffer supplied as first parameter,
+		 * 	containing:
+		 *		- only a '\\0' at first position if timestamp was
+		 * 		  0 or if max was to short to contain the date
+		 *		- the date string with the terminating '\\0'
+		 */
 		char* format_date(char* time, size_t max, time_t timestamp);
 	};
 
