@@ -62,6 +62,19 @@ namespace usdx
 		return instance;
 	}
 
+	sqlite3_stmt *StatDatabase::sqlite_prepare(const std::string sqlStatement)
+	{
+		sqlite3_stmt *sqliteStatement;
+		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
+			sqlite3_finalize(sqliteStatement);
+
+			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
+			throw "Error preparing statement.";
+		}
+
+		return sqliteStatement;
+	}
+
 	void StatDatabase::init(const std::string filename)
 	{
 		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);
@@ -167,16 +180,8 @@ namespace usdx
 
 	int StatDatabase::get_version(void)
 	{
-		char sqlStatement[] = "PRAGMA user_version;";
-		sqlite3_stmt *sqliteStatement;
 		int result = -1;
-
-		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement, strlen(sqlStatement), &sqliteStatement, NULL)) {
-			sqlite3_finalize(sqliteStatement);
-
-			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
-			throw "Error preparing statement.";
-		}
+		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA user_version;");
 
 		int rc = sqlite3_step(sqliteStatement);
 		if (rc == SQLITE_DONE || rc == SQLITE_ROW) {
@@ -395,18 +400,13 @@ namespace usdx
 */
 	time_t StatDatabase::get_stat_reset(void)
 	{
-		std::string sqlStatement = "SELECT [ResetTime] FROM [";
-		sqlStatement += usdx_statistics_info + std::string("];");
-
-		sqlite3_stmt *sqliteStatement;
 		int result = -1;
 
-		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
-			sqlite3_finalize(sqliteStatement);
+		std::string sqlStatement = "SELECT [ResetTime] FROM [";
+		sqlStatement += usdx_statistics_info;
+		sqlStatement += "];";
 
-			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
-			throw "Error preparing statement.";
-		}
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
 
 		int rc = sqlite3_step(sqliteStatement);
 		if (rc == SQLITE_DONE || rc == SQLITE_ROW) {

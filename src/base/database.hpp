@@ -54,6 +54,18 @@ namespace usdx
 		 */
 		sqlite3 *database;
 
+		/**
+		 * Wrapper arround the sqlite_prepare_v2 function with propper
+		 * logging and exception throwing on error.
+		 *
+		 * @param sqlStatement SQL Statement for preparing to
+		 * 	sqlite3_stmt
+		 * @return Pointner to a sqlite3_stmt used for binding
+		 * 	parameters and excuting the statement. Need to be freed
+		 * 	with sqlite3_finalize.
+		 */
+		sqlite3_stmt *sqlite_prepare(const std::string sqlStatement);
+
 		// Singleton
 		StatDatabase(std::string filename);
 
