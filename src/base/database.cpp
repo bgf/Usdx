@@ -30,25 +30,17 @@
 
 namespace usdx
 {
-	const int db_version = 1;
-	const char usdx_scores[] = "us_scores";
-	const char usdx_songs[]  = "us_songs";
-	const char usdx_statistics_info[] = "us_statistics_info";
+	log4cxx::LoggerPtr Database::log = log4cxx::Logger::getLogger("usdx.base.Database");
 
-	StatDatabase* StatDatabase::instance;
-	log4cxx::LoggerPtr StatDatabase::log = log4cxx::Logger::getLogger("usdx.base.StatDatabase");
-
-	StatDatabase::StatDatabase(const std::string filename)
+	Database::Database(const std::string filename)
 	{
-		this->filename = filename;
-
-		if (SQLITE_OK != sqlite3_open_v2(this->filename.c_str(), &this->database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL)) {
+		if (SQLITE_OK != sqlite3_open_v2(filename.c_str(), &this->database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL)) {
 			sqlite3_close(database);
 			throw "Error opening database.";
 		}
 	}
 
-	StatDatabase::~StatDatabase(void)
+	Database::~Database(void)
 	{
 		/* frees database */
 		LOG4CXX_DEBUG(log, "Closing Database");
@@ -57,12 +49,7 @@ namespace usdx
 		database = NULL;
 	}
 
-	StatDatabase* StatDatabase::get_instance()
-	{
-		return instance;
-	}
-
-	sqlite3_stmt *StatDatabase::sqlite_prepare(const std::string sqlStatement)
+	sqlite3_stmt *Database::sqlite_prepare(const std::string sqlStatement)
 	{
 		sqlite3_stmt *sqliteStatement;
 		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
@@ -75,14 +62,14 @@ namespace usdx
 		return sqliteStatement;
 	}
 
-	void StatDatabase::sqlite_exec(const std::string sqlStatement)
+	void Database::sqlite_exec(const std::string sqlStatement)
 	{
 		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
 		sqlite3_step(sqliteStatement);
 		sqlite3_finalize(sqliteStatement);
 	}
 
-	const bool StatDatabase::sqlite_table_exists(const std::string table)
+	const bool Database::sqlite_table_exists(const std::string table)
 	{
 		std::string sql = "select [name] from [sqlite_master] where [type] = 'table' and [tbl_name] = ?1;";
 		sqlite3_stmt *sqliteStatement = sqlite_prepare(sql);
@@ -102,13 +89,9 @@ namespace usdx
 		return result;
 	}
 
-	const bool StatDatabase::sqlite_table_contains_column(const std::string table, const std::string column)
+	const bool Database::sqlite_table_contains_column(const std::string table, const std::string column)
 	{
-		std::string sqlStatement = "PRAGMA TABLE_INFO([";
-		sqlStatement += table;
-		sqlStatement += "]);";
-
-		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
+		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA TABLE_INFO([" + table + "]);");
 		bool result = false;
 
 		int rc = sqlite3_step(sqliteStatement);
@@ -127,138 +110,7 @@ namespace usdx
 		return result;
 	}
 
-	void StatDatabase::init(const std::string filename)
-	{
-		LOG4CXX_DEBUG(log, "Initializing Database: " << filename);
-
-		instance = new StatDatabase(filename);
-
-		try {
-			if (! instance->sqlite_table_exists(usdx_statistics_info)) {
-				// add table usdx_statistics_info, needed in the conversion from 1.01 to 1.1
-				LOG4CXX_INFO(log, "Outdated song database found - missing table'" << usdx_statistics_info << "'");
-
-				std::string sqlStatement;
-
-				sqlStatement = "CREATE TABLE IF NOT EXISTS [";
-				sqlStatement += usdx_statistics_info;
-				sqlStatement += "] ([ResetTime] Integer);";
-
-				instance->sqlite_exec(sqlStatement);
-
-				// insert creation timestamp
-				sqlStatement = "INSERT INTO [";
-				sqlStatement += usdx_statistics_info;
-				sqlStatement += "] ([ResetTime]) VALUES (?1);";
-
-				sqlite3_stmt *sqliteStatement = instance->sqlite_prepare(sqlStatement);
-				sqlite3_bind_int(sqliteStatement, 1, time(NULL));
-				sqlite3_step(sqliteStatement);
-				sqlite3_finalize(sqliteStatement);
-			}
-
-			int version = instance->get_version();
-
-			bool finalizeConversion = false;
-			if (version == 0 && instance->sqlite_table_exists("US_Scores")) {
-				// convert data from 1.01 to 1.1
-				// part #1 - prearrangement
-				// rename old tables - to be able to insert new table structures
-				instance->sqlite_exec("ALTER TABLE US_Scores RENAME TO us_scores_101;");
-				instance->sqlite_exec("ALTER TABLE US_Songs RENAME TO us_songs_101;");
-			}
-
-			if (version == 0) {
-				// Set version number after creation
-				instance->set_version(db_version);
-			}
-
-			// SQLite does not handle VARCHAR(n) or INT(n) as expected.
-			// Texts do not have a restricted length, no matter which type is used,
-			// so use the native TEXT type. INT(n) is always INTEGER.
-			// In addition, SQLiteTable3 will fail if other types than the native SQLite
-			// types are used (especially FieldAsInteger). Also take care to write the
-			// types in upper-case letters although SQLite does not care about this -
-			// SQLiteTable3 is very sensitive in this regard.
-			std::string sqlStatement;
-
-			sqlStatement = "CREATE TABLE IF NOT EXISTS [";
-			sqlStatement += usdx_scores;
-			sqlStatement += "] (";
-			sqlStatement += "[SongID] INTEGER NOT NULL, ";
-			sqlStatement += "[Difficulty] INTEGER NOT NULL, ";
-			sqlStatement += "[Player] TEXT NOT NULL, ";
-			sqlStatement += "[Score] INTEGER NOT NULL, ";
-			sqlStatement += "[Date] INTEGER NULL";
-			sqlStatement += ");";
-
-			instance->sqlite_exec(sqlStatement);
-
-			sqlStatement = "CREATE TABLE IF NOT EXISTS [";
-			sqlStatement += usdx_songs;
-			sqlStatement += "] (";
-			sqlStatement += "[ID] INTEGER PRIMARY KEY, ";
-			sqlStatement += "[Artist] TEXT NOT NULL, ";
-			sqlStatement += "[Title] TEXT NOT NULL, ";
-			sqlStatement += "[TimesPlayed] INTEGER NOT NULL, ";
-			sqlStatement += "[Rating] INTEGER NULL";
-			sqlStatement += ");";
-
-			instance->sqlite_exec(sqlStatement);
-
-			if (finalizeConversion) {
-				// convert data from 1.01 to 1.1
-				// part #2 - accomplishment
-				LOG4CXX_INFO(log, "Outdated song database  found - begin conversion from V1.01 to V1.1");
-
-				// insert old values into new db-schemes (/tables)
-			 	sqlStatement = "INSERT INTO [";
-				sqlStatement += usdx_scores;
-				sqlStatement += "] SELECT  [SongID], [Difficulty], [Player], [Score] FROM [us_scores_101];";
-				instance->sqlite_exec(sqlStatement);
-
-				sqlStatement = "INSERT INTO [";
-				sqlStatement += usdx_songs;
-				sqlStatement += "]  SELECT  [ID], [Artist], [Title], [TimesPlayed], NULL FROM [us_songs_101];";
-				instance->sqlite_exec(sqlStatement);
-
-				// now drop old tables
-				instance->sqlite_exec("DROP TABLE us_scores_101;");
-				instance->sqlite_exec("DROP TABLE us_songs_101;");
-			}
-
-			// add column rating to cUS_Songs
-			// just for users of nightly builds and developers!
-			if (! instance->sqlite_table_contains_column(usdx_songs, "Rating")) {
-				LOG4CXX_INFO(log, "Outdated song database found - adding column rating to '" <<  usdx_songs << "'");
-
-			 	sqlStatement = "ALTER TABLE [";
-				sqlStatement += usdx_songs;
-				sqlStatement += "] ADD COLUMN [Rating] INTEGER NULL;";
-				instance->sqlite_exec(sqlStatement);
-			}
-
-			//add column date to cUS-Scores
-			if (! instance->sqlite_table_contains_column(usdx_scores, "Date")) {
-				LOG4CXX_INFO(log, "Outdated score database found - adding column date to '" <<  usdx_scores << "'");
-
-			 	sqlStatement = "ALTER TABLE [";
-				sqlStatement += usdx_scores;
-				sqlStatement += "] ADD COLUMN [Date] INTEGER NULL;";
-				instance->sqlite_exec(sqlStatement);
-			}
-		}
-		catch (...) {
-			// TODO:
-			// catch (Execption e) {
-			// LOG4CXX_ERROR(log, e.message);
-
-		 	delete instance;
-			// throw e;
-		}
-	}
-
-	int StatDatabase::get_version(void)
+	const int Database::get_version(void)
 	{
 		int result = -1;
 		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA user_version;");
@@ -272,245 +124,12 @@ namespace usdx
 		return result;
 	}
 
-	void StatDatabase::set_version(int version)
+	void Database::set_version(const int version)
 	{
 		// format the PRAGMA statement (PRAGMA does _not_ support parameters)
 		std::ostringstream sqlStatementBuffer (std::ostringstream::out);
 		sqlStatementBuffer << "PRAGMA user_version = " << version << ";";
 
 		sqlite_exec(sqlStatementBuffer.str());
-	}
-
-/*	void StatDatabase::read_score(Song *song)
-	{
-		// TODO
-		// var
-		//   TableData:  TSQLiteUniTable;
-		//   Difficulty: integer;
-		//   I: integer;
-		//   PlayerListed: boolean;
-		// begin
-		//   if not Assigned(ScoreDB) then
-		//     Exit;
-
-		//   TableData := nil;
-		//   try
-		//     // Search Song in DB
-		//     TableData := ScoreDB.GetUniTable(
-		//       'SELECT [Difficulty], [Player], [Score], [Date] FROM [' + cUS_Scores + '] ' +
-		//       'WHERE [SongID] = (' +
-		//         'SELECT [ID] FROM [' + cUS_Songs + '] ' +
-		//         'WHERE [Artist] = ? AND [Title] = ? ' +
-		//         'LIMIT 1) ' +
-		//       'ORDER BY [Score] DESC;', //no LIMIT! see filter below!
-		//       [Song.Artist, Song.Title]);
-
-		//     // Empty Old Scores
-		//     SetLength(Song.Score[0], 0); //easy
-		//     SetLength(Song.Score[1], 0); //medium
-		//     SetLength(Song.Score[2], 0); //hard
-
-		//     // Go through all Entrys
-		//     while (not TableData.EOF) do
-		//     begin
-		//       // Add one Entry to Array
-		//       Difficulty := TableData.FieldAsInteger(TableData.FieldIndex['Difficulty']);
-		//       if ((Difficulty >= 0) and (Difficulty <= 2)) and
-		//          (Length(Song.Score[Difficulty]) < 5) then
-		//       begin
-		//         //filter player
-		//         PlayerListed:=false;
-		//         if (Length(Song.Score[Difficulty])>0) then
-		//         begin
-		//           for I := 0 to Length(Song.Score[Difficulty]) - 1 do
-		//           begin
-		//             if (Song.Score[Difficulty, I].Name = TableData.FieldByName['Player']) then
-		//             begin
-		//               PlayerListed:=true;
-		//               break;
-		//             end;
-		//           end;
-		//         end;
-
-		//         if not PlayerListed then
-		//         begin
-		//           SetLength(Song.Score[Difficulty], Length(Song.Score[Difficulty]) + 1);
-
-		//           Song.Score[Difficulty, High(Song.Score[Difficulty])].Name  :=
-		//             TableData.FieldByName['Player'];
-		//           Song.Score[Difficulty, High(Song.Score[Difficulty])].Score :=
-		//             TableData.FieldAsInteger(TableData.FieldIndex['Score']);
-		//           Song.Score[Difficulty, High(Song.Score[Difficulty])].Date :=
-		//             FormatDate(TableData.FieldAsInteger(TableData.FieldIndex['Date']));
-		//         end;
-		//       end;
-
-		//       TableData.Next;
-		//     end; // while
-
-		//   except
-		//     for Difficulty := 0 to 2 do
-		//     begin
-		//       SetLength(Song.Score[Difficulty], 1);
-		//       Song.Score[Difficulty, 1].Name := 'Error Reading ScoreDB';
-		//     end;
-		//   end;
-
-		//   TableData.Free;
-	}
-
-	void StatDatabase::add_score(Song *song, int level, const char* name, int score)
-	{
-		// TODO
-		// var
-		//   ID:        integer;
-		//   TableData: TSQLiteTable;
-		// begin
-		//   if not Assigned(ScoreDB) then
-		//     Exit;
-
-		//   // Prevent 0 Scores from being added EDIT: ==> UScreenTop5.pas!
-		//   //if (Score <= 0) then
-		//   //  Exit;
-
-		//   TableData := nil;
-
-		//   try
-
-		//     ID := ScoreDB.GetTableValue(
-		//         'SELECT [ID] FROM [' + cUS_Songs + '] ' +
-		//         'WHERE [Artist] = ? AND [Title] = ?',
-		//         [Song.Artist, Song.Title]);
-		//     if (ID = 0) then
-		//     begin
-		//       // Create song if it does not exist
-		//       ScoreDB.ExecSQL(
-		//           'INSERT INTO [' + cUS_Songs + '] ' +
-		//           '([ID], [Artist], [Title], [TimesPlayed]) VALUES ' +
-		//           '(NULL, ?, ?, 0);',
-		//           [Song.Artist, Song.Title]);
-		//       // Get song-ID
-		//       ID := ScoreDB.GetLastInsertRowID();
-		//     end;
-		//     // Create new entry
-		//     ScoreDB.ExecSQL(
-		//       'INSERT INTO [' + cUS_Scores + '] ' +
-		//       '([SongID] ,[Difficulty], [Player], [Score], [Date]) VALUES ' +
-		//       '(?, ?, ?, ?, ?);',
-		//       [ID, Level, Name, Score, DateTimeToUnix(Now())]);
-
-		//   except on E: Exception do
-		//     Log.LogError(E.Message, 'TDataBaseSystem.AddScore');
-		//   end;
-
-		//   TableData.Free;
- 	}
-
-	void StatDatabase::write_score(Song *song)
-	{
-		// TODO
-		// if not Assigned(ScoreDB) then
-		//   Exit;
-
-		// try
-		//   // Increase TimesPlayed
-		//   ScoreDB.ExecSQL(
-		//       'UPDATE [' + cUS_Songs + '] ' +
-		//       'SET [TimesPlayed] = [TimesPlayed] + 1 ' +
-		//       'WHERE [Title] = ? AND [Artist] = ?;',
-		//       [Song.Title, Song.Artist]);
-		// except on E: Exception do
-		//   Log.LogError(E.Message, 'TDataBaseSystem.WriteScore');
-		// end;
-	}
-
-*/
-	const std::string StatDatabase::get_filename(void)
-	{
-		return this->filename;
-	}
-
-
-	StatResult* StatDatabase::get_stats(StatResult *list, short count, unsigned int page, bool reversed)
-	{
-		// TODO
-		return NULL;
-	}
-
-/*	unsigned int StatDatabase::get_total_entrys(StatType type)
-	{
-		// TODO
-		// var
-		//   Query: string;
-		// begin
-		//   Result := 0;
-
-		//   if not Assigned(ScoreDB) then
-		//     Exit;
-
-		//   try
-		//     // Create query
-		//     case Typ of
-		//       stBestScores:
-		//         Query := 'SELECT COUNT([SongID]) FROM [' + cUS_Scores + '];';
-		//       stBestSingers:
-		//         Query := 'SELECT COUNT(DISTINCT [Player]) FROM [' + cUS_Scores + '];';
-		//       stMostSungSong:
-		//         Query := 'SELECT COUNT([ID]) FROM [' + cUS_Songs + '];';
-		//       stMostPopBand:
-		//         Query := 'SELECT COUNT(DISTINCT [Artist]) FROM [' + cUS_Songs + '];';
-		//     end;
-
-		//     Result := ScoreDB.GetTableValue(Query);
-		//   except on E: Exception do
-		//     Log.LogError(E.Message, 'TDataBaseSystem.GetTotalEntrys');
-		//   end;
-	}
-*/
-	time_t StatDatabase::get_stat_reset(void)
-	{
-		int result = -1;
-
-		std::string sqlStatement = "SELECT [ResetTime] FROM [";
-		sqlStatement += usdx_statistics_info;
-		sqlStatement += "];";
-
-		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
-
-		int rc = sqlite3_step(sqliteStatement);
-		if (rc == SQLITE_ROW) {
-			result = sqlite3_column_int(sqliteStatement, 0);
-		}
-
-		sqlite3_finalize(sqliteStatement);
-		return (time_t)result;
-	}
-
-	char* StatDatabase::format_date(char* time, size_t max, time_t timestamp)
-	{
-		if (timestamp != 0) {
-			struct tm tmp;
-
-			if (localtime_r(&timestamp, &tmp)) {
-				strftime(time, max, "%d.%m.%y" /* TODO: Language.Translate("STAT_FORMAT_DATE")*/, &tmp);
-				return time;
-			}
-		}
-
-		if (max > 0) {
-			time[0] = '\0';
-			return time;
-		}
-
-		return NULL;
-	}
-
-	/* recursive delete the list items */
-	StatResult::~StatResult(void)
-	{
-		if (this->next) {
-			delete this->next;
-			this->next = NULL;
-		}
 	}
 };

@@ -27,41 +27,39 @@
 #ifndef DATABASE_HPP
 #define DATABASE_HPP
 
-#include <ctime>
-#include <iostream>
 #include <string>
 #include <sqlite3.h>
 #include <log4cxx/logger.h>
 
 namespace usdx
 {
-	class StatResult;
-
-	/* Wrapper for statistic database */
-	class StatDatabase
+	/**
+	 * Abstract base class for all sqlite databases.
+	 */
+	class Database
 	{
 	private:
 		static log4cxx::LoggerPtr log;
 
-		/**
-		 * Filename of the opened statistic database.
-		 */
-		std::string filename;
-
+	protected:
 		/**
 		 * Internal reference to the sqlite database handle of the open
 		 * sqlite database.
 		 */
 		sqlite3 *database;
 
+		Database(std::string filename);
+		virtual ~Database(void);
+
+	public:
 		/**
-		 * Wrapper arround the sqlite_prepare_v2 function with propper
+		 * Wrapper around the sqlite_prepare_v2 function with propper
 		 * logging and exception throwing on error.
 		 *
 		 * @param sqlStatement SQL Statement for preparing to
 		 * 	sqlite3_stmt
-		 * @return Pointner to a sqlite3_stmt used for binding
-		 * 	parameters and excuting the statement. Need to be freed
+		 * @return Pointer to a sqlite3_stmt used for binding
+		 * 	parameters and executing the statement. Need to be freed
 		 * 	with sqlite3_finalize.
 		 */
 		sqlite3_stmt *sqlite_prepare(const std::string sqlStatement);
@@ -89,133 +87,24 @@ namespace usdx
 		 */
 		const bool sqlite_table_contains_column(const std::string table, const std::string column);
 
-		// Singleton
-		StatDatabase(std::string filename);
-
-		static StatDatabase* instance;
-
-	protected:
-		int get_version(void);
-		void set_version(int version);
-
-	public:
-		static StatDatabase* get_instance();
-
-		~StatDatabase(void);
+		/**
+		 * Queries the user version from the sqlite database. This is a
+		 * free settable additional field to identify the version of the
+		 * schemata in the database.
+		 *
+		 * @see set_version(const int version)
+		 * @return Value of the user_version setting of the sqlite
+		 * 	database
+		 */
+		const int get_version(void);
 
 		/**
-		 * Opens a sqlite3 database from the given path and initializes
-		 * that class by saving a reference to the open database handle.
+		 * Set the user version of the database.
 		 *
-		 * @param filename Filename of a database to open.
+		 * @see get_version(void)
+		 * @param version Current scheme version.
 		 */
-		static void init(const std::string filename);
-
-/*		void read_score(Song *song);
-		void add_score(Song *song, int level, const char* name, int score);
-		void write_score(Song *song);
-*/
-		const std::string get_filename(void);
-
-		StatResult* get_stats(StatResult *list, short count, unsigned int page, bool reversed);
-//		unsigned int get_total_entrys(StatType type);
-
-		/**
-		 * Get the timestamp of the last reset of the database.
-		 *
-		 * @return Timestamp
-		 */
-		time_t get_stat_reset(void);
-
-		/**
-		 * Convert a timestamp to a data representation in a string.
-		 *
-		 * @param time Pointer to a char buffer that will contain the
-		 * 	the date string.
-		 * @param max Maximum bytes that could be written to the buffer.
-		 * @param timestamp Timestamp to convert to the string.
-		 * @return Pointer to the buffer supplied as first parameter,
-		 * 	containing:
-		 *		- only a '\\0' at first position if timestamp was
-		 * 		  0 or if max was to short to contain the date
-		 *		- the date string with the terminating '\\0'
-		 */
-		char* format_date(char* time, size_t max, time_t timestamp);
-
-#ifdef STAT_DATABASE_TEST
-		// for testing private members
-		friend class StatDatabaseTest;
-#endif
-	};
-
-	/* Element for linked list with pointer to next */
-	class StatResult
-	{
-	private:
-		StatResult() {};
-		StatResult(const StatResult &source) {};
-		void operator=(const StatResult &source) {};
-
-	protected:
-		StatResult *next;
-
-	public:
-		virtual ~StatResult(void);
-	};
-
-	class StatResultBestScores : StatResult
-	{
-	private:
-		char *singer;
-		unsigned short score;
-		unsigned short difficulty;
-		char *song_artist;
-		char *song_title;
-		time_t date;
-
-	public:
-		StatResultBestScores(
-			char *singer,
-			unsigned short score,
-			unsigned short difficulty,
-			char* song_artist,
-			char* song_title,
-			time_t date);
-		~StatResultBestScores(void);
-	};
-
-	class StatResultBestSingers : StatResult
-	{
-	private:
-		char *singer;
-		unsigned short average_score;
-
-	public:
-		StatResultBestSingers(char *singer, unsigned short average_score);
-		~StatResultBestSingers(void);
-	};
-
-	class StatResultMostSungSong : StatResult
-	{
-	private:
-		char *song_artist;
-		char *song_title;
-		unsigned short times_sung;
-
-	public:
-		StatResultMostSungSong(char* song_artist, char* song_title, unsigned short times_sung);
-		~StatResultMostSungSong(void);
-	};
-
-	class StatResultMostSungBand : StatResult
-	{
-	private:
-		char *song_artist;
-		unsigned short times_sung;
-
-	public:
-		StatResultMostSungBand(char* song_artist, unsigned short times_sung);
-		~StatResultMostSungBand(void);
+		void set_version(const int version);
 	};
 };
 
