@@ -5,8 +5,8 @@ PROJECT:=usdx-tests
 TARGET:=$(PROJECT)
 
 zip:=$(PROJECT).rar
-headers:=$(wildcard *.hpp) $(wildcard */*.hpp) $(wildcard ../src/*/*.hpp) $(wildcard ../src/*.hpp)
-sources:=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard ../src/*/*.cpp) $(wildcard ../src/*.cpp)
+headers:=$(wildcard *.hpp) $(wildcard */*.hpp) $(wildcard ../src/*/*/*.hpp) $(wildcard ../src/*/*.hpp) $(wildcard ../src/*.hpp)
+sources:=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard ../src/*/*/*.cpp) $(wildcard ../src/*/*.cpp) $(wildcard ../src/*.cpp)
 objects:=$(sources:.cpp=.o)
 deps:=$(sources:.cpp=.d)
 
