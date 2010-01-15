@@ -44,6 +44,7 @@ namespace usdx
 		title = get_header_tag("TITLE", true);
 		artist = get_header_tag("ARTIST", true);
 		mp3 = get_header_tag("MP3", true);
+		// TODO: bpm array
 		bpm = get_header_tag("BPM", true);
 
 		// TODO: float
@@ -112,4 +113,104 @@ namespace usdx
 	{
 		return artist;
 	}
+
+	const std::string& Song::get_mp3(void)
+	{
+		return mp3;
+	}
+
+// TODO: bpm array
+//	const bpmarray Song::get_bpm(void)
+//	{
+//		return bpm;
+//	}
+
+// TODO
+//	const float Song::get_gap(void)
+//	{
+//		return gap;
+//	}
+
+	const std::string& Song::get_cover(void)
+	{
+		return cover;
+	}
+
+	const std::string& Song::get_background(void)
+	{
+		return background;
+	}
+
+	const std::string& Song::get_video(void)
+	{
+		return video;
+	}
+
+// TODO
+//	const float Song::get_videogap(void)
+//	{
+//		return videogap;
+//	}
+
+	const std::string& Song::get_genre(void)
+	{
+		return genre;
+	}
+
+	const std::string& Song::get_edition(void)
+	{
+		return edition;
+	}
+
+	const std::string& Song::get_creator(void)
+	{
+		return creator;
+	}
+
+	const std::string& Song::get_language(void)
+	{
+		return language;
+	}
+
+// TODO
+//	const int Song::get_year(void)
+//	{
+//		return year;
+//	}
+
+// TODO
+//	const float Song::get_start(void)
+//	{
+//		return start;
+//	}
+
+// TODO
+//	const int Song::get_end(void)
+//	{
+//		return end;
+//	}
+
+// TODO
+//	const int Song::get_resolution(void)
+//	{
+//		return resolution;
+//	}
+
+// TODO
+//	const int Song::get_notesgap(void)
+//	{
+//		return notesgap;
+//	}
+
+// TODO
+//	const bool Song::get_relative(void)
+//	{
+//		return relative;
+//	}
+
+// TODO: filetype
+//	const std::string& Song::get_encoding(void)
+//	{
+//		return encoding;
+//	}
 };

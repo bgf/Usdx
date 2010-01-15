@@ -54,7 +54,7 @@ namespace usdx
 
 		std::pair<std::string, std::string> result;
 
-		// copy the substring to : without # to result.first and
+		// copy the substring until ':', without # to result.first and
 		// transform to upper case
 		result.first.resize(pos - 1);
 		std::transform(line.begin() + 1, line.begin() + pos,
