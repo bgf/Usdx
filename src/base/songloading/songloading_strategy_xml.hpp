@@ -37,7 +37,8 @@ namespace usdx
 		SongloadingStrategyXml(void);
 		virtual ~SongloadingStrategyXml(void);
 
-		virtual Song* loadSong(std::string filename);
+		virtual Song* load_song(Song* song);
+		virtual Song* load_header(const std::string& filename);
 	};
 };
 

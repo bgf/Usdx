@@ -56,7 +56,7 @@ namespace usdx
 		return instance;
 	}
 
-	Song *Songloader::load(std::string filename)
+	Song *Songloader::load_header(std::string filename)
 	{
 		std::string extension = "";
 
@@ -71,6 +71,6 @@ namespace usdx
 			throw "Unknown file format.";
 		}
 
-		return it->second->loadSong(filename);
+		return it->second->load_header(filename);
 	}
 };

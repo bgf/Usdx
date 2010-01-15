@@ -28,12 +28,18 @@
 #define SONG_HPP
 
 #include <string>
+#include <map>
+#include <log4cxx/logger.h>
 
 namespace usdx
 {
 	class Song
 	{
 	private:
+		static log4cxx::LoggerPtr log;
+
+		std::string filename;
+
 		std::string title;
 		std::string artist;
 
@@ -62,12 +68,21 @@ namespace usdx
 		bool relative;
 		int resolution;
 		// TODO: bpm: array of TBPM
+		std::string bpm;
 
 		// TODO: list of LyricLines
 
 		// TODO: Encoding:   TEncoding;
-		// TODO: CustomTags: array of TCustomHeaderTag;
+		std::map<std::string, std::string> custom_header_tags;
+
+		std::string get_header_tag(const std::string& tag, const bool required = false);
 	public:
+		const std::string& get_filename(void);
+
+		Song(const std::string& filename, const std::map<std::string, std::string>& header);
+
+		const std::string& get_title(void);
+		const std::string& get_artist(void);
 	};
 };
 

@@ -49,11 +49,11 @@ namespace usdx
 		static Songloader *instance;
 
 	public:
-		Songloader *get_instance(void);
+		static Songloader *get_instance(void);
 
 		virtual ~Songloader(void);
 
-		Song *load(std::string filename);
+		Song *load_header(std::string filename);
 	};
 };
 

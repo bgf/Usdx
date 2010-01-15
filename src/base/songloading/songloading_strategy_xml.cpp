@@ -36,9 +36,14 @@ namespace usdx
 	{
 	}
 
-	Song* SongloadingStrategyXml::loadSong(std::string filename)
+	Song* SongloadingStrategyXml::load_song(Song *song)
 	{
 		// TODO
+		return song;
+	}
+
+	Song* SongloadingStrategyXml::load_header(const std::string& filename)
+	{
 		return NULL;
 	}
 };

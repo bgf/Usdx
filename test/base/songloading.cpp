@@ -24,47 +24,36 @@
  * $Id$
  */
 
-#ifndef SONGLOADING_STRATEGY_TXT_HPP
-#define SONGLOADING_STRATEGY_TXT_HPP
-
-#include <string>
-#include <log4cxx/logger.h>
-#include "songloading_strategy.hpp"
+#include <iostream>
+#include <cppunit/extensions/HelperMacros.h>
+#include "song.hpp"
+#include "songloading/songloader.hpp"
 
 namespace usdx
 {
-	class SongloadingStrategyTxt : public SongloadingStrategy
-	{
-	private:
-		static log4cxx::LoggerPtr log;
-
-		/**
-		 * Split the header field in name and value.
-		 */
-		std::pair<std::string, std::string> split_header_field(std::string &line);
-
-		/**
-		 * Removes whitespaces in front of the string.
-		 */
-		std::string& ltrim(std::string& line);
-
-		/**
-		 * Removes whitespaces in behind the string.
-		 */
-		std::string& rtrim(std::string& line);
-
-		/**
-		 * Removes whitespaces in front of the string and behind it.
-		 */
-		std::string& trim(std::string& line);
+	class SongloadingTest : public CppUnit::TestFixture {
+		CPPUNIT_TEST_SUITE(SongloadingTest);
+		CPPUNIT_TEST(testSongloadingTxt);
+		CPPUNIT_TEST_SUITE_END();
 
 	public:
-		SongloadingStrategyTxt();
-		virtual ~SongloadingStrategyTxt();
+		void setUp()
+		{
+		}
 
-		virtual Song* load_song(Song* song);
-		virtual Song* load_header(const std::string& filename);
+		void tearDown()
+		{
+		}
+
+		void testSongloadingTxt()
+		{
+			Song *song = Songloader::get_instance()->load_header(
+				"../game/songs/Dead Smiling Pirates - I 18 [DEMO]/Dead Smiling Pirates - I 18.txt");
+
+			CPPUNIT_ASSERT( "Dead Smiling Pirates" == song->get_artist() );
+			CPPUNIT_ASSERT( "I 18" == song->get_title() );
+		}
 	};
-};
 
-#endif
+	CPPUNIT_TEST_SUITE_REGISTRATION(SongloadingTest);
+};
