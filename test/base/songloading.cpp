@@ -49,7 +49,7 @@ namespace usdx
 		{
 			Song *song = Songloader::get_instance()->load_header("testdata/testsong_correct.txt");
 
-			CPPUNIT_ASSERT( "Test Ärtist" == song->get_artist() );
+			CPPUNIT_ASSERT( "Test Ãrtist" == song->get_artist() );
 			CPPUNIT_ASSERT( "Test Title" == song->get_title() );
 			CPPUNIT_ASSERT( "Test.mp3" == song->get_mp3() );
 			// TODO bpm array

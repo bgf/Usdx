@@ -73,4 +73,22 @@ namespace usdx
 
 		return it->second->load_header(filename);
 	}
+
+	Song* Songloader::load_song(Song* song)
+	{
+		std::string extension = "";
+
+		size_t found = song->get_filename().rfind('.');
+		if (found != std::string::npos) {
+			extension = song->get_filename().substr(found);
+		}
+
+		std::map<std::string, SongloadingStrategy*>::iterator it = strategies.find(extension);
+		if (it == strategies.end()) {
+			LOG4CXX_WARN(log, "No SongloadingStrategy found for file extension: '" << extension << "'");
+			throw "Unknown file format.";
+		}
+
+		return it->second->load_song(song);
+	}
 };

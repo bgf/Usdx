@@ -53,7 +53,8 @@ namespace usdx
 
 		virtual ~Songloader(void);
 
-		Song *load_header(std::string filename);
+		Song* load_header(std::string filename);
+		Song* load_song(Song* song);
 	};
 };
 
