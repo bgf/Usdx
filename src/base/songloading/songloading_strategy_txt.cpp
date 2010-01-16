@@ -105,90 +105,104 @@ namespace usdx
 		LOG4CXX_DEBUG(log, "Starting loading song from file: " << song->get_filename());
 
 		File file(song->get_filename());
-		std::string line;
-		char type;
 
-		int line_number = 0;;
-
-		while (file.stream().good()) {
-			std::getline(file.stream(), line);
-			++line_number;
-
-			std::istringstream linestream(line);
-			linestream >> std::skipws >> type;
-
-			if (type == '#') {
-				// ignore, header already read
-			}
-			else if (type == 'E') {
-				// song end
-				if (file.stream().eof()) {
-					LOG4CXX_WARN(log, "End marker found in line " << line_number <<
-						     " before end of file: '" << song->get_filename() << "'.");
-				}
-
-				break;
-			}
-			else if (type == '-') {
-				// line break
-				int line_out, line_in = -1;
-
-				linestream >> line_out;
-				if (linestream.good()) {
-					linestream >> line_in;
-					LOG4CXX_DEBUG(log, "Found newline in line " <<
-						      line_number << " with out of last line with "
-						      << line_out << " and in of next line " << line_in);
-				}
-				else {
-					LOG4CXX_DEBUG(log, "Found newline in line " <<
-						      line_number << " with out of last line with "
-						      << line_out);
-				}
-
-//				song.new_line(line_out, line_in);
-			}
-			else if (type == 'B') {
-				// new bpm
-				int beat;
-				LocaleIndependentFloat new_bpm;
-
-				linestream >> beat >> new_bpm;
-				LOG4CXX_DEBUG(log, "Found new bpm in line " <<
-					      line_number << " starting at beat: " <<
-					      beat << " and new bpm of " << new_bpm.get_value());
-//				song.new_bpm(new_beat, new_bpm);
-			}
-			else if (type == ':' || type == 'F' || type == '*') {
-				// normal line
-				int beat, length, height;
-				std::string lyric;
-
-				linestream >> beat >> length >> height >> std::noskipws;
-				linestream.ignore();
-				getline(linestream, lyric);
-
-				LOG4CXX_DEBUG(log, "Found lyric: '" << lyric << "' at line: " << line_number <<
-					      " at beat: " << beat << " with length: " << length <<
-					      " at height: " << height);
-//				song.new_note(beat, length, height, lyric);
-			}
-			else {
-				LOG4CXX_WARN(log, "Unknown line in song: '" << line <<
-					     "' in file: " << song->get_filename() <<
-					     " at line " << line_number);
-			}
-		}
+		int line_number = 0;
+		while (file.stream().good() && parse_line(song, file, ++line_number));
 
 		// fill song
 
 		return song;
 	}
 
-/*	void SongloadingStrategyTxt::parse_line(const std::string& line, const int line_num)
+	bool SongloadingStrategyTxt::parse_line(Song* song, File& file, const int line_number)
 	{
+		std::string line;
+		std::getline(file.stream(), line);
+
+		char type;
+		std::istringstream linestream(line);
+		linestream >> std::skipws >> type;
+
+		if (type == '#') {
+			// ignore, header already read
+		}
+		else if (type == 'E') {
+			// song end
+			if (file.stream().eof()) {
+				LOG4CXX_WARN(log, "End marker found in line " << line_number <<
+					     " before end of file: '" << song->get_filename() << "'.");
+			}
+
+			return false;
+		}
+		else if (type == '-') {
+			parse_newline(song, linestream, line_number);
+		}
+		else if (type == 'B') {
+			parse_bpm(song, linestream, line_number);
+		}
+		else if (type == ':' || type == 'F' || type == '*') {
+			parse_note(song, type, linestream, line_number);
+		}
+		else {
+			LOG4CXX_WARN(log, "Unknown line in song: '" << line <<
+				     "' in file: " << song->get_filename() <<
+				     " at line " << line_number);
+		}
+
+		return true;
 	}
-*/
+
+	void SongloadingStrategyTxt::parse_newline(Song *song, std::istringstream& linestream, const int line_number)
+	{
+		// line break
+		int line_out, line_in = -1;
+
+		linestream >> line_out;
+		if (linestream.good()) {
+			linestream >> line_in;
+			LOG4CXX_DEBUG(log, "Found newline in line " <<
+				      line_number << " with out of last line with "
+				      << line_out << " and in of next line " << line_in);
+		}
+		else {
+			LOG4CXX_DEBUG(log, "Found newline in line " <<
+				      line_number << " with out of last line with "
+				      << line_out);
+		}
+
+		// song.new_line(line_out, line_in);
+	}
+
+	void SongloadingStrategyTxt::parse_bpm(Song *song, std::istringstream& linestream, const int line_number)
+	{
+		// new bpm
+		int beat;
+		LocaleIndependentFloat new_bpm;
+
+		linestream >> beat >> new_bpm;
+		LOG4CXX_DEBUG(log, "Found new bpm in line " <<
+			      line_number << " starting at beat: " <<
+			      beat << " and new bpm of " << new_bpm.get_value());
+		// song.new_bpm(new_beat, new_bpm);
+	}
+
+	void SongloadingStrategyTxt::parse_note(Song *song, char type, std::istringstream& linestream, const int line_number)
+	{
+		// normal line
+		int beat, length, height;
+		std::string lyric;
+
+		linestream >> beat >> length >> height >> std::noskipws;
+		linestream.ignore();
+		getline(linestream, lyric);
+
+		LOG4CXX_DEBUG(log, "Found lyric: '" << lyric << "' at line: " << line_number <<
+			      " at beat: " << beat << " with length: " << length <<
+			      " at height: " << height);
+		// song.new_note(beat, length, height, lyric);
+	}
+
 	Song* SongloadingStrategyTxt::load_header(const std::string& filename)
 	{
 		File file(filename);

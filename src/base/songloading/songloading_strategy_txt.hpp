@@ -30,6 +30,7 @@
 #include <string>
 #include <log4cxx/logger.h>
 #include "songloading_strategy.hpp"
+#include "utils/file.hpp"
 
 namespace usdx
 {
@@ -57,6 +58,12 @@ namespace usdx
 		 * Removes whitespaces in front of the string and behind it.
 		 */
 		std::string& trim(std::string& line);
+
+		bool parse_line(Song* song, File& file, const int line_number);
+		void parse_newline(Song* song, std::istringstream& linestream, const int line_number);
+		void parse_bpm(Song* song, std::istringstream& linestream, const int line_number);
+		void parse_note(Song* song, char type, std::istringstream& linestream, const int line_number);
+
 
 	public:
 		SongloadingStrategyTxt();
