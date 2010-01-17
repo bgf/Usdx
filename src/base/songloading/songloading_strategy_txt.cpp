@@ -171,7 +171,7 @@ namespace usdx
 				      << line_out);
 		}
 
-		// song.new_line(line_out, line_in);
+		song->new_line(line_out, line_in);
 	}
 
 	void SongloadingStrategyTxt::parse_bpm(Song *song, std::istringstream& linestream, const int line_number)
@@ -184,7 +184,7 @@ namespace usdx
 		LOG4CXX_DEBUG(log, "Found new bpm in line " <<
 			      line_number << " starting at beat: " <<
 			      beat << " and new bpm of " << new_bpm.get_value());
-		// song.new_bpm(new_beat, new_bpm);
+		song->new_bpm(beat, new_bpm.get_value());
 	}
 
 	void SongloadingStrategyTxt::parse_note(Song *song, char type, std::istringstream& linestream, const int line_number)
@@ -200,7 +200,7 @@ namespace usdx
 		LOG4CXX_DEBUG(log, "Found lyric: '" << lyric << "' at line: " << line_number <<
 			      " at beat: " << beat << " with length: " << length <<
 			      " at height: " << height);
-		// song.new_note(beat, length, height, lyric);
+		song->new_note(type, beat, length, height, lyric);
 	}
 
 	Song* SongloadingStrategyTxt::load_header(const std::string& filename)

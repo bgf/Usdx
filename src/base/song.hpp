@@ -29,7 +29,10 @@
 
 #include <string>
 #include <map>
+#include <list>
 #include <log4cxx/logger.h>
+#include "bpm.hpp"
+#include "lyric_line.hpp"
 
 namespace usdx
 {
@@ -61,48 +64,57 @@ namespace usdx
 		std::string creator;
 
 		int notes_gap;
-		float gap; // in miliseconds
+		float gap; ///< in miliseconds
 
-		float start; // in seconds
-		int finish; // in miliseconds
+		float start; ///< in seconds
+		int finish; ///< in miliseconds
 		bool relative;
 		int resolution;
-		// TODO: bpm: array of TBPM
-		std::string bpm;
 
-		// TODO: list of LyricLines
+		std::list<BPM*> bpm;
+
+		std::list<LyricLine*> lyrics;
 
 		// TODO: Encoding:   TEncoding;
+
 		std::map<std::string, std::string> custom_header_tags;
 
 		std::string get_header_tag(const std::string& tag, const bool required = false);
+
+		LyricLine* get_last_lyric_line(void);
+		LyricLine* create_new_lyric_line(int start);
 	public:
-		const std::string& get_filename(void);
-
 		Song(const std::string& filename, const std::map<std::string, std::string>& header);
+		virtual ~Song(void);
 
-		const std::string& get_title(void);
-		const std::string& get_artist(void);
-		const std::string& get_mp3(void);
-		// TODO: bpm array
-		//const bpmarray get_bpm(void);
-		//const float get_gap(void);
-		const std::string& get_cover(void);
-		const std::string& get_background(void);
-		const std::string& get_video(void);
-		//const float get_videogap(void);
-		const std::string& get_genre(void);
-		const std::string& get_edition(void);
-		const std::string& get_creator(void);
-		const std::string& get_language(void);
-		//const int get_year(void);
-		//const float get_start(void);
-		//const int get_end(void);
-		//const int get_resolution(void);
-		//const int get_notesgap(void);
-		//const bool get_relative(void);
-		// TODO: encodeing class
-		//const std::string& get_encoding(void);
+		const std::string& get_filename(void) const;
+
+		const std::string& get_title(void) const;
+		const std::string& get_artist(void) const;
+		const std::string& get_mp3(void) const;
+		const float get_bpm(int beat) const;
+		// const float get_gap(void) const;
+		const std::string& get_cover(void) const;
+		const std::string& get_background(void) const;
+		const std::string& get_video(void) const;
+		// const float get_videogap(void) const;
+		const std::string& get_genre(void) const;
+		const std::string& get_edition(void) const;
+		const std::string& get_creator(void) const;
+		const std::string& get_language(void) const;
+		// const int get_year(void) const;
+		// const float get_start(void) const;
+		// const int get_end(void) const;
+		// const int get_resolution(void) const;
+		// const int get_notesgap(void) const;
+		// const bool get_relative(void) const;
+
+		// TODO: encoding class
+		// const std::string& get_encoding(void) const;
+
+		void new_bpm(const int beat, const float new_bpm);
+		void new_line(const int line_out, const int line_in);
+		void new_note(const char type, const int beat, const int length, const int height, const std::string& lyric);
 	};
 };
 

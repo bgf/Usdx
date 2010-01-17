@@ -25,13 +25,14 @@
  */
 
 #include "song.hpp"
+#include "lyric_word.hpp"
 
 namespace usdx
 {
 	log4cxx::LoggerPtr Song::log =
 		log4cxx::Logger::getLogger("usdx.base.Song");
 
-	const std::string& Song::get_filename(void)
+	const std::string& Song::get_filename(void) const
 	{
 		return filename;
 	}
@@ -44,8 +45,8 @@ namespace usdx
 		title = get_header_tag("TITLE", true);
 		artist = get_header_tag("ARTIST", true);
 		mp3 = get_header_tag("MP3", true);
-		// TODO: bpm array
-		bpm = get_header_tag("BPM", true);
+		// TODO
+		// bpm.push_back(new BPM(get_header_tag("BPM", true)));
 
 		// TODO: float
 		// gap = get_header_tag("GAP");
@@ -87,6 +88,12 @@ namespace usdx
 		// encoding = get_header_tag("ENCODING");
 	}
 
+	Song::~Song(void)
+	{
+		bpm.clear();
+		lyrics.clear();
+	}
+
 	std::string Song::get_header_tag(const std::string& tag, const bool required)
 	{
 		std::map<std::string, std::string>::iterator it;
@@ -104,113 +111,157 @@ namespace usdx
 		return result;
 	}
 
-	const std::string& Song::get_title(void)
+	LyricLine* Song::get_last_lyric_line(void)
+	{
+		LyricLine* line = lyrics.back();
+
+		if (line) {
+			return line;
+		}
+
+		return create_new_lyric_line(0);
+	}
+
+	LyricLine* Song::create_new_lyric_line(int start)
+	{
+		LyricLine* line = new LyricLine(start);
+		lyrics.push_back(line);
+		return line;
+	}
+
+	const std::string& Song::get_title(void) const
 	{
 		return title;
 	}
 
-	const std::string& Song::get_artist(void)
+	const std::string& Song::get_artist(void) const
 	{
 		return artist;
 	}
 
-	const std::string& Song::get_mp3(void)
+	const std::string& Song::get_mp3(void) const
 	{
 		return mp3;
 	}
 
-// TODO: bpm array
-//	const bpmarray Song::get_bpm(void)
-//	{
-//		return bpm;
-//	}
+	const float Song::get_bpm(int beat) const
+	{
+		float last_bpm;
 
-// TODO
-//	const float Song::get_gap(void)
-//	{
-//		return gap;
-//	}
+		for (std::list<BPM*>::const_iterator it = bpm.begin(); it != bpm.end(); it++) {
+			if ((*it)->get_beat() > beat) {
+				break;
+			}
 
-	const std::string& Song::get_cover(void)
+			last_bpm = (*it)->get_bpm();
+		}
+
+		return last_bpm;
+	}
+
+	// TODO
+	// const float Song::get_gap(void) const
+	// {
+	// 	return gap;
+	// }
+
+	const std::string& Song::get_cover(void) const
 	{
 		return cover;
 	}
 
-	const std::string& Song::get_background(void)
+	const std::string& Song::get_background(void) const
 	{
 		return background;
 	}
 
-	const std::string& Song::get_video(void)
+	const std::string& Song::get_video(void) const
 	{
 		return video;
 	}
 
-// TODO
-//	const float Song::get_videogap(void)
-//	{
-//		return videogap;
-//	}
+	// TODO
+	// const float Song::get_videogap(void) const
+	// {
+	// 	return videogap;
+	// }
 
-	const std::string& Song::get_genre(void)
+	const std::string& Song::get_genre(void) const
 	{
 		return genre;
 	}
 
-	const std::string& Song::get_edition(void)
+	const std::string& Song::get_edition(void) const
 	{
 		return edition;
 	}
 
-	const std::string& Song::get_creator(void)
+	const std::string& Song::get_creator(void) const
 	{
 		return creator;
 	}
 
-	const std::string& Song::get_language(void)
+	const std::string& Song::get_language(void) const
 	{
 		return language;
 	}
 
-// TODO
-//	const int Song::get_year(void)
-//	{
-//		return year;
-//	}
+	// TODO
+	// const int Song::get_year(void) const
+	// {
+	// 	return year;
+	// }
 
-// TODO
-//	const float Song::get_start(void)
-//	{
-//		return start;
-//	}
+	// TODO
+	// const float Song::get_start(void) const
+	// {
+	// 	return start;
+	// }
 
-// TODO
-//	const int Song::get_end(void)
-//	{
-//		return end;
-//	}
+	// TODO
+	// const int Song::get_end(void) const
+	// {
+	// 	return end;
+	// }
 
-// TODO
-//	const int Song::get_resolution(void)
-//	{
-//		return resolution;
-//	}
+	// TODO
+	// const int Song::get_resolution(void) const
+	// {
+	// 	return resolution;
+	// }
 
-// TODO
-//	const int Song::get_notesgap(void)
-//	{
-//		return notesgap;
-//	}
+	// TODO
+	// const int Song::get_notesgap(void) const
+	// {
+	// 	return notesgap;
+	// }
 
-// TODO
-//	const bool Song::get_relative(void)
-//	{
-//		return relative;
-//	}
+	// TODO
+	// const bool Song::get_relative(void) const
+	// {
+	// 	return relative;
+	// }
 
-// TODO: filetype
-//	const std::string& Song::get_encoding(void)
-//	{
-//		return encoding;
-//	}
+	// TODO: filetype
+	// const std::string& Song::get_encoding(void) const
+	// {
+	// 	return encoding;
+	// }
+
+	void Song::new_bpm(const int beat, const float new_bpm)
+	{
+		bpm.push_back(new BPM(beat, new_bpm));
+	}
+
+	void Song::new_line(const int line_out, const int line_in)
+	{
+		get_last_lyric_line()->set_end(line_out);
+		create_new_lyric_line(line_in);
+	}
+
+	void Song::new_note(const char type, const int beat, const int length, const int height, const std::string& lyric)
+	{
+		get_last_lyric_line()->add_word(new LyricWord(type, beat, length, height, lyric));
+	}
+
 };
