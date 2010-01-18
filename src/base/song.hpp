@@ -60,14 +60,14 @@ namespace usdx
 		std::string genre;
 		std::string edition;
 		std::string language;
-		std::string year;
+		int year;
 		std::string creator;
 
 		int notes_gap;
 		float gap; ///< in miliseconds
 
 		float start; ///< in seconds
-		int finish; ///< in miliseconds
+		int stop; ///< in miliseconds
 		bool relative;
 		int resolution;
 

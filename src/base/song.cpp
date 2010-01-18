@@ -46,11 +46,10 @@ namespace usdx
 		title = get_header_tag("TITLE", true);
 		artist = get_header_tag("ARTIST", true);
 		mp3 = get_header_tag("MP3", true);
-		// TODO
-		// bpm.push_back(new BPM(get_header_tag("BPM", true)));
 
-		// TODO: float
-		// gap = get_header_tag("GAP");
+		bpm.push_back(new BPM(get_header_tag_float("BPM", true)));
+
+		gap = get_header_tag_float("GAP");
 		cover = get_header_tag("COVER");
 		background = get_header_tag("BACKGROUND");
 
@@ -62,28 +61,23 @@ namespace usdx
 		// else
 		//  Log.LogError('Can''t find video file in song: ' +
 	        // Fulfilling);
-
-		// TODO: float
-		// videogap = get_header_tag("VIDEOGAP");
+		video_gap = get_header_tag_float("VIDEOGAP");
 
 		genre = get_header_tag("GENRE");
 		edition = get_header_tag("EDITION");
 		creator = get_header_tag("CREATOR");
 		language = get_header_tag("LANGUAGE");
 
-		// TODO: int
-		// year = get_header_tag("YEAR");
+		year = get_header_tag_int("YEAR");
 
-		// TODO: float
-		// start = get_header_tag("START");
+		start = get_header_tag_float("START");
+		stop = get_header_tag_int("END");
 
-		// TODO: int
-		// end = get_header_tag("END");
-		// resolution = get_header_tag("RESOLUTION");
-		// notesgap = get_header_tag("NOTESGAP");
+		resolution = get_header_tag_int("RESOLUTION");
+		notes_gap = get_header_tag_int("NOTESGAP");
 
-		// TODO: bool
-		// relative = get_header_tag("RELATIVE");
+		relative = get_header_tag_bool("RELATIVE");
+
 
 		// TODO
 		// encoding = get_header_tag("ENCODING");
