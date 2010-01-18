@@ -50,7 +50,7 @@ namespace usdx
 		std::string& ltrim(std::string& line);
 
 		/**
-		 * Removes whitespaces in behind the string.
+		 * Removes whitespaces behind the string.
 		 */
 		std::string& rtrim(std::string& line);
 
