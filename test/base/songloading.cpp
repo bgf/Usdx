@@ -48,6 +48,7 @@ namespace usdx
 		void testSongloadingTxtHeader()
 		{
 			Song *song = Songloader::get_instance()->load_header("testdata/testsong_correct.txt");
+			Songloader::get_instance()->load_song(song);
 
 			CPPUNIT_ASSERT( "Test Ärtist" == song->get_artist() );
 			CPPUNIT_ASSERT( "Test Title" == song->get_title() );
