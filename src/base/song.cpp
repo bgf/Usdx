@@ -90,7 +90,15 @@ namespace usdx
 
 	Song::~Song(void)
 	{
+		for (std::list<BPM*>::iterator it = bpm.begin(); it != bpm.end(); it++) {
+			delete *it;
+		}
+
 		bpm.clear();
+
+		for (std::list<LyricLine*>::iterator it = lyrics.begin(); it != lyrics.end(); it++) {
+			delete *it;
+		}
 		lyrics.clear();
 	}
 

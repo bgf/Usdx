@@ -34,6 +34,10 @@ namespace usdx
 
 	LyricLine::~LyricLine()
 	{
+		for (std::list<LyricWord*>::iterator it = words.begin(); it != words.end(); it++) {
+			delete *it;
+		}
+
 		words.clear();
 	}
 
