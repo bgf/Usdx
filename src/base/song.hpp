@@ -83,6 +83,14 @@ namespace usdx
 
 		LyricLine* get_last_lyric_line(void);
 		LyricLine* create_new_lyric_line(int start);
+
+		/**
+		 * Used to calculate the absolute beat times in relative song
+		 * mode.
+		 *
+		 * @return Start beat time from last line.
+		 */
+		int get_relative_beat(void);
 	public:
 		Song(const std::string& filename, const std::map<std::string, std::string>& header);
 		virtual ~Song(void);

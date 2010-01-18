@@ -256,20 +256,28 @@ namespace usdx
 	// 	return encoding;
 	// }
 
+	int Song::get_relative_beat(void)
+	{
+		if (relative)
+			return get_last_lyric_line()->get_start();
+
+		return 0;
+	}
+
 	void Song::new_bpm(const int beat, const float new_bpm)
 	{
-		bpm.push_back(new BPM(beat, new_bpm));
+		bpm.push_back(new BPM(beat + get_relative_beat(), new_bpm));
 	}
 
 	void Song::new_line(const int line_out, const int line_in)
 	{
-		get_last_lyric_line()->set_end(line_out);
-		create_new_lyric_line(line_in);
+		get_last_lyric_line()->set_end(line_out + get_relative_beat());
+		create_new_lyric_line(line_in + get_relative_beat());
 	}
 
 	void Song::new_note(const char type, const int beat, const int length, const int height, const std::string& lyric)
 	{
-		get_last_lyric_line()->add_word(new LyricWord(type, beat, length, height, lyric));
+		get_last_lyric_line()->add_word(new LyricWord(type, beat + get_relative_beat(), length, height, lyric));
 	}
 
 };
