@@ -291,7 +291,7 @@ namespace usdx
 		return relative;
 	}
 
-	// TODO: filetype
+	// TODO:
 	// const std::string& Song::get_encoding(void) const
 	// {
 	// 	return encoding;
