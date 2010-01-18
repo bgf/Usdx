@@ -80,6 +80,9 @@ namespace usdx
 		std::map<std::string, std::string> custom_header_tags;
 
 		std::string get_header_tag(const std::string& tag, const bool required = false);
+		float get_header_tag_float(const std::string& tag, const bool required = false);
+		int get_header_tag_int(const std::string& tag, const bool required = false);
+		bool get_header_tag_bool(const std::string& tag, const bool required = false);
 
 		LyricLine* get_last_lyric_line(void);
 		LyricLine* create_new_lyric_line(int start);

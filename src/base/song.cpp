@@ -26,6 +26,7 @@
 
 #include "song.hpp"
 #include "lyric_word.hpp"
+#include "utils/locale_independent_float.hpp"
 
 namespace usdx
 {
@@ -109,6 +110,62 @@ namespace usdx
 
 		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
 			result = it->second;
+			custom_header_tags.erase(it);
+		}
+		else if (required) {
+			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			throw "Incomplete Song! Missing Tag.";
+		}
+
+		return result;
+	}
+
+	float Song::get_header_tag_float(const std::string& tag, const bool required)
+	{
+		std::map<std::string, std::string>::iterator it;
+		float result;
+
+		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
+			result = LocaleIndependentFloat(it->second).get_value();
+			custom_header_tags.erase(it);
+		}
+		else if (required) {
+			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			throw "Incomplete Song! Missing Tag.";
+		}
+
+		return result;
+	}
+
+	int Song::get_header_tag_int(const std::string& tag, const bool required)
+	{
+		std::map<std::string, std::string>::iterator it;
+		int result;
+
+		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
+			std::istringstream stream(it->second);
+			custom_header_tags.erase(it);
+			stream >> result;
+		}
+		else if (required) {
+			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			throw "Incomplete Song! Missing Tag.";
+		}
+
+		return result;
+	}
+
+	bool Song::get_header_tag_bool(const std::string& tag, const bool required)
+	{
+		std::map<std::string, std::string>::iterator it;
+		bool result;
+
+		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
+			// accept all like (YES, JA, TRUE, 1)
+			result = (it->second[0] == 'j' || it->second[0] == 'J' ||
+				  it->second[0] == 'y' || it->second[0] == 'Y' ||
+				  it->second[0] == 't' || it->second[0] == 'T' ||
+				  it->second[0] == '1');
 			custom_header_tags.erase(it);
 		}
 		else if (required) {
