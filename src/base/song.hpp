@@ -75,8 +75,6 @@ namespace usdx
 
 		std::list<LyricLine*> lyrics;
 
-		// TODO: Encoding:   TEncoding;
-
 		std::map<std::string, std::string> custom_header_tags;
 
 		std::string get_header_tag(const std::string& tag, const bool required = false);
@@ -94,6 +92,8 @@ namespace usdx
 		 * @return Start beat time from last line.
 		 */
 		int get_relative_beat(void);
+
+		// TODO: Encoding:   TEncoding;
 	public:
 		Song(const std::string& filename, const std::map<std::string, std::string>& header);
 		virtual ~Song(void);

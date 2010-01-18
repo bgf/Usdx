@@ -54,13 +54,6 @@ namespace usdx
 		background = get_header_tag("BACKGROUND");
 
 		video = get_header_tag("VIDEO");
-		// TODO
-	        // EncFile := DecodeFilename(Value);
-		// if (self.Path.Append(EncFile).IsFile) then
-                //   self.Video := EncFile
-		// else
-		//  Log.LogError('Can''t find video file in song: ' +
-	        // Fulfilling);
 		video_gap = get_header_tag_float("VIDEOGAP");
 
 		genre = get_header_tag("GENRE");
@@ -78,6 +71,13 @@ namespace usdx
 
 		relative = get_header_tag_bool("RELATIVE");
 
+		// TODO
+	        // EncFile := DecodeFilename(Value);
+		// if (self.Path.Append(EncFile).IsFile) then
+                //   self.Video := EncFile
+		// else
+		//  Log.LogError('Can''t find video file in song: ' +
+	        // Fulfilling);
 
 		// TODO
 		// encoding = get_header_tag("ENCODING");
