@@ -216,11 +216,10 @@ namespace usdx
 		return last_bpm;
 	}
 
-	// TODO
-	// const float Song::get_gap(void) const
-	// {
-	// 	return gap;
-	// }
+	const float Song::get_gap(void) const
+	{
+		return gap;
+	}
 
 	const std::string& Song::get_cover(void) const
 	{
@@ -237,11 +236,10 @@ namespace usdx
 		return video;
 	}
 
-	// TODO
-	// const float Song::get_videogap(void) const
-	// {
-	// 	return videogap;
-	// }
+	const float Song::get_video_gap(void) const
+	{
+		return video_gap;
+	}
 
 	const std::string& Song::get_genre(void) const
 	{
@@ -263,41 +261,35 @@ namespace usdx
 		return language;
 	}
 
-	// TODO
-	// const int Song::get_year(void) const
-	// {
-	// 	return year;
-	// }
+	const int Song::get_year(void) const
+	{
+		return year;
+	}
 
-	// TODO
-	// const float Song::get_start(void) const
-	// {
-	// 	return start;
-	// }
+	const float Song::get_start(void) const
+	{
+		return start;
+	}
 
-	// TODO
-	// const int Song::get_end(void) const
-	// {
-	// 	return end;
-	// }
+	const int Song::get_stop(void) const
+	{
+		return stop;
+	}
 
-	// TODO
-	// const int Song::get_resolution(void) const
-	// {
-	// 	return resolution;
-	// }
+	const int Song::get_resolution(void) const
+	{
+		return resolution;
+	}
 
-	// TODO
-	// const int Song::get_notesgap(void) const
-	// {
-	// 	return notesgap;
-	// }
+	const int Song::get_notes_gap(void) const
+	{
+		return notes_gap;
+	}
 
-	// TODO
-	// const bool Song::get_relative(void) const
-	// {
-	// 	return relative;
-	// }
+	const bool Song::get_relative(void) const
+	{
+		return relative;
+	}
 
 	// TODO: filetype
 	// const std::string& Song::get_encoding(void) const

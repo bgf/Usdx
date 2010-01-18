@@ -104,21 +104,21 @@ namespace usdx
 		const std::string& get_artist(void) const;
 		const std::string& get_mp3(void) const;
 		const float get_bpm(int beat) const;
-		// const float get_gap(void) const;
+		const float get_gap(void) const;
 		const std::string& get_cover(void) const;
 		const std::string& get_background(void) const;
 		const std::string& get_video(void) const;
-		// const float get_videogap(void) const;
+		const float get_video_gap(void) const;
 		const std::string& get_genre(void) const;
 		const std::string& get_edition(void) const;
 		const std::string& get_creator(void) const;
 		const std::string& get_language(void) const;
-		// const int get_year(void) const;
-		// const float get_start(void) const;
-		// const int get_end(void) const;
-		// const int get_resolution(void) const;
-		// const int get_notesgap(void) const;
-		// const bool get_relative(void) const;
+		const int get_year(void) const;
+		const float get_start(void) const;
+		const int get_stop(void) const;
+		const int get_resolution(void) const;
+		const int get_notes_gap(void) const;
+		const bool get_relative(void) const;
 
 		// TODO: encoding class
 		// const std::string& get_encoding(void) const;
