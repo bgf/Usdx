@@ -121,10 +121,8 @@ namespace usdx
 
 	LyricLine* Song::get_last_lyric_line(void)
 	{
-		LyricLine* line = lyrics.back();
-
-		if (line) {
-			return line;
+		if (lyrics.size() > 0) {
+			return lyrics.back();
 		}
 
 		return create_new_lyric_line(0);
