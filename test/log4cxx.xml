@@ -24,7 +24,7 @@
 
   <appender name="Console" class="org.apache.log4j.ConsoleAppender">
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%-6r [%-5p] %F:%L - %M - %m%n" />
+      <param name="ConversionPattern" value="%-6r [%-5p] %F:%-3L - %m%n" />
     </layout>
 
     <filter class="org.apache.log4j.filter.LevelRangeFilter">
