@@ -55,6 +55,16 @@ namespace usdx
 		std::string& rtrim(std::string& line);
 
 		/**
+		 * Removes ''\r'' and ''\n'' in front of the string.
+		 */
+		std::string& ltrim_newlines(std::string& line);
+
+		/**
+		 * Removes ''\r'' and ''\n'' behind the string.
+		 */
+		std::string& rtrim_newlines(std::string& line);
+
+		/**
 		 * Removes whitespaces in front of the string and behind it.
 		 */
 		std::string& trim(std::string& line);

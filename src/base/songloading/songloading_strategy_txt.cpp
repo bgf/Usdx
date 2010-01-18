@@ -85,9 +85,29 @@ namespace usdx
 		return line;
 	}
 
+	std::string& SongloadingStrategyTxt::ltrim_newlines(std::string& line)
+	{
+		std::size_t found = line.find_first_not_of("\n\r");
+		if (found != std::string::npos) {
+			line.erase(0, found - 1);
+		}
+
+		return line;
+	}
+
 	std::string& SongloadingStrategyTxt::rtrim(std::string& line)
 	{
 		std::size_t found = line.find_last_not_of(" \t\n\r");
+		if (found != std::string::npos) {
+			line.erase(found + 1);
+		}
+
+		return line;
+	}
+
+	std::string& SongloadingStrategyTxt::rtrim_newlines(std::string& line)
+	{
+		std::size_t found = line.find_last_not_of("\n\r");
 		if (found != std::string::npos) {
 			line.erase(found + 1);
 		}
@@ -196,6 +216,7 @@ namespace usdx
 		linestream >> beat >> length >> height >> std::noskipws;
 		linestream.ignore();
 		getline(linestream, lyric);
+		rtrim_newlines(lyric);
 
 		LOG4CXX_DEBUG(log, "Found lyric: '" << lyric << "' at line: " << line_number <<
 			      " at beat: " << beat << " with length: " << length <<
