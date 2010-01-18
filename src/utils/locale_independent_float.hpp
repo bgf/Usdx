@@ -37,6 +37,8 @@ namespace usdx
 		float value;
 	public:
 		LocaleIndependentFloat();
+		LocaleIndependentFloat(std::string& value);
+
 		virtual ~LocaleIndependentFloat();
 
 		const float get_value();
@@ -44,6 +46,7 @@ namespace usdx
 
 		LocaleIndependentFloat& operator= (const LocaleIndependentFloat& value);
 		LocaleIndependentFloat& operator= (const float& vaule);
+		LocaleIndependentFloat& operator= (std::string& vaule);
 	};
 
 	std::istream& operator>> (std::istream& is, LocaleIndependentFloat& float_value);
