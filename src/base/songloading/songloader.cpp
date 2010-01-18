@@ -44,6 +44,12 @@ namespace usdx
 
 	Songloader::~Songloader(void)
 	{
+		std::map<std::string, SongloadingStrategy*>::iterator it;
+		for (it = strategies.begin(); it != strategies.end(); it++) {
+			delete it->second;
+			it->second = NULL;
+		}
+
 		strategies.clear();
 	}
 

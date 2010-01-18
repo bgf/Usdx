@@ -69,6 +69,9 @@ namespace usdx
 			//CPPUNIT_ASSERT( 0 == song->get_notesgap() );
 			// TODO encodeing class
 			//CPPUNIT_ASSERT( UTF-8 == song->get_encodeing() );
+
+			delete song;
+			delete Songloader::get_instance();
 		}
 	};
 
