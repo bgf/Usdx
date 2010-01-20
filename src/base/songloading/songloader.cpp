@@ -74,7 +74,7 @@ namespace usdx
 		std::map<std::string, SongloadingStrategy*>::iterator it = strategies.find(extension);
 		if (it == strategies.end()) {
 			LOG4CXX_WARN(log, "No SongloadingStrategy found for file extension: '" << extension << "'");
-			throw "Unknown file format.";
+			throw NoStrategyException("Unknown file format.");
 		}
 
 		return it->second->load_header(filename);
@@ -92,7 +92,7 @@ namespace usdx
 		std::map<std::string, SongloadingStrategy*>::iterator it = strategies.find(extension);
 		if (it == strategies.end()) {
 			LOG4CXX_WARN(log, "No SongloadingStrategy found for file extension: '" << extension << "'");
-			throw "Unknown file format.";
+			throw NoStrategyException("Unknown file format.");
 		}
 
 		return it->second->load_song(song);

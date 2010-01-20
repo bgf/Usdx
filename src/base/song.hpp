@@ -33,9 +33,17 @@
 #include <log4cxx/logger.h>
 #include "bpm.hpp"
 #include "lyric_line.hpp"
+#include "utils/base_exception.hpp"
 
 namespace usdx
 {
+	class MissingSongTagException : public BaseException
+	{
+	public:
+		MissingSongTagException(std::string message) : BaseException(message) {};
+		~MissingSongTagException () throw () {};
+	};
+
 	class Song
 	{
 	private:

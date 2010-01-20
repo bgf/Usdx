@@ -24,45 +24,25 @@
  * $Id$
  */
 
-#ifndef SONGLOADER_HPP
-#define SONGLOADER_HPP
+#ifndef BASE_MESSAGE_EXCEPTIONS_HPP
+#define BASE_MESSAGE_EXCEPTIONS_HPP
 
-#include <map>
-#include <log4cxx/logger.h>
-#include "songloading_strategy.hpp"
-#include "song.hpp"
-#include "utils/base_exception.hpp"
+#include <string>
+#include <exception>
 
 namespace usdx
 {
-	class NoStrategyException : public BaseException
-	{
-	public:
-		NoStrategyException(std::string message) : BaseException(message) {};
-		~NoStrategyException () throw () {};
-	};
-
-	class Songloader
+	class BaseException : public std::exception
 	{
 	private:
-		static log4cxx::LoggerPtr log;
+		std::string message;
 
-		Songloader(void);
-
-		std::map<std::string, SongloadingStrategy*> strategies;
-
-		/**
-		 * Singleton
-		 */
-		static Songloader *instance;
+	protected:
+		BaseException(std::string message);
 
 	public:
-		static Songloader *get_instance(void);
-
-		virtual ~Songloader(void);
-
-		Song* load_header(std::string filename);
-		Song* load_song(Song* song);
+		~BaseException() throw ();
+		virtual const char* what() const throw();
 	};
 };
 
