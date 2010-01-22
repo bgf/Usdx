@@ -28,6 +28,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include "song.hpp"
 #include "songloading/songloader.hpp"
+#include <log4cxx/logger.h>
 
 namespace usdx
 {
@@ -36,13 +37,22 @@ namespace usdx
 		CPPUNIT_TEST(testSongloadingTxtHeader);
 		CPPUNIT_TEST_SUITE_END();
 
+	private:
+		int oldLogLevel;
+
 	public:
 		void setUp()
 		{
+			// save old loglevel in case we want to disable logging
+			using namespace log4cxx;
+			oldLogLevel = Logger::getRootLogger()->getEffectiveLevel()->toInt();
 		}
 
 		void tearDown()
 		{
+			// set old loglevel in case we did disable logging
+			using namespace log4cxx;
+			Logger::getRootLogger()->setLevel(Level::toLevel(oldLogLevel));
 		}
 
 		void testSongloadingTxtHeader()
