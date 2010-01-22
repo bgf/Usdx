@@ -35,6 +35,10 @@ namespace usdx
 	class SongloadingTest : public CppUnit::TestFixture {
 		CPPUNIT_TEST_SUITE(SongloadingTest);
 		CPPUNIT_TEST(testSongloadingTxtHeader);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldArtist, MissingSongTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldTitle, MissingSongTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldMp3, MissingSongTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldBpm, MissingSongTagException);
 		CPPUNIT_TEST_SUITE_END();
 
 	private:
@@ -82,6 +86,53 @@ namespace usdx
 
 			delete song;
 		}
+
+		void testSongloadingTxtMissingHeaderFieldArtist()
+		{
+			// disable logging to avoid logmsgs when the exeption
+			// is thrown
+			using namespace log4cxx;
+			Logger::getRootLogger()->setLevel(Level::getOff());
+
+			Songloader::get_instance()->
+					load_header("testdata/testsong_missing_artist.txt");
+		}
+
+		void testSongloadingTxtMissingHeaderFieldTitle()
+		{
+			// disable logging to avoid logmsgs when the exeption
+			// is thrown
+			using namespace log4cxx;
+			Logger::getRootLogger()->setLevel(Level::getOff());
+
+			Songloader::get_instance()->
+					load_header("testdata/testsong_missing_title.txt");
+		}
+
+		void testSongloadingTxtMissingHeaderFieldMp3()
+		{
+			// disable logging to avoid logmsgs when the exeption
+			// is thrown
+			using namespace log4cxx;
+			Logger::getRootLogger()->setLevel(Level::getOff());
+
+			Songloader::get_instance()->
+					load_header("testdata/testsong_missing_mp3.txt");
+
+		}
+
+		void testSongloadingTxtMissingHeaderFieldBpm()
+		{
+			// disable logging to avoid logmsgs when the exeption
+			// is thrown
+			using namespace log4cxx;
+			Logger::getRootLogger()->setLevel(Level::getOff());
+
+			Songloader::get_instance()->
+					load_header("testdata/testsong_missing_bpm.txt");
+		}
+
+		
 	};
 
 	CPPUNIT_TEST_SUITE_REGISTRATION(SongloadingTest);

@@ -1,0 +1,26 @@
+#ARTIST:Test Ärtist
+#MP3:Test.mp3
+#BPM:42.23
+#GAP:10
+#BACKGROUND:Test[BG].jpg
+#COVER:Test[CO].jpg
+#GENRE:Test Genre
+#RELATIVE:no
+#EDITION:Test Edition
+#LANGUAGE:Cpp
+#VIDEO:Test[VD#12,3].mkv
+#VIDEOGAP:0
+#START:0
+#CREATOR:Test0r
+#YEAR:7
+#END:666
+#NOTESGAP:0
+#ENCODEING:UTF-8
+: 1 1 10 Test
+: 2 2 11 söng
+: 4 3 12  in
+- 11
+: 14 4 13 Pro
+: 18 5 14 gress
+: 23 6 15  ! ! 1 !
+E
