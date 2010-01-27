@@ -138,38 +138,44 @@ namespace usdx
 
 	bool SongloadingStrategyTxt::parse_line(Song* song, File& file, const int line_number)
 	{
-		std::string line;
-		std::getline(file.stream(), line);
+		try {
+			std::string line;
+			std::getline(file.stream(), line);
 
-		char type;
-		std::istringstream linestream(line);
-		linestream >> std::skipws >> type;
+			char type;
+			std::istringstream linestream(line);
+			linestream >> std::skipws >> type;
 
-		if (type == '#') {
-			// ignore, header already read
-		}
-		else if (type == 'E') {
-			// song end
-			if (file.stream().eof()) {
-				LOG4CXX_WARN(log, "End marker found in line " << line_number <<
-					     " before end of file: '" << song->get_filename() << "'.");
+			if (type == '#') {
+				// ignore, header already read
 			}
+			else if (type == 'E') {
+				// song end
+				if (file.stream().eof()) {
+					LOG4CXX_WARN(log, "End marker found in line " << line_number <<
+						     " before end of file: '" << song->get_filename() << "'.");
+				}
 
-			return false;
+				return false;
+			}
+			else if (type == '-') {
+				parse_newline(song, linestream, line_number);
+			}
+			else if (type == 'B') {
+				parse_bpm(song, linestream, line_number);
+			}
+			else if (type == ':' || type == 'F' || type == '*') {
+				parse_note(song, type, linestream, line_number);
+			}
+			else {
+				LOG4CXX_WARN(log, "Unknown line in song: '" << line <<
+					     "' in file: " << song->get_filename() <<
+					     " at line " << line_number);
+			}
 		}
-		else if (type == '-') {
-			parse_newline(song, linestream, line_number);
-		}
-		else if (type == 'B') {
-			parse_bpm(song, linestream, line_number);
-		}
-		else if (type == ':' || type == 'F' || type == '*') {
-			parse_note(song, type, linestream, line_number);
-		}
-		else {
-			LOG4CXX_WARN(log, "Unknown line in song: '" << line <<
-				     "' in file: " << song->get_filename() <<
-				     " at line " << line_number);
+		catch (std::exception &e) {
+			LOG4CXX_WARN(log, "Error in song file at line " <<
+				     line_number << ": " << e.what());
 		}
 
 		return true;
