@@ -24,9 +24,11 @@
  * $Id$
  */
 
-#include <string>
-#include <sstream>
 #include <algorithm>
+#include <exception>
+#include <sstream>
+#include <string>
+
 #include "songloading_strategy_txt.hpp"
 #include "utils/file.hpp"
 #include "utils/locale_independent_float.hpp"
