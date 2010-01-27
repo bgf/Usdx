@@ -108,7 +108,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
-			throw MissingSongTagException("Incomplete Song! Missing Tag.");
+			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
@@ -125,7 +125,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
-			throw MissingSongTagException("Incomplete Song! Missing Tag.");
+			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
@@ -143,7 +143,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
-			throw MissingSongTagException("Incomplete Song! Missing Tag.");
+			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
@@ -164,7 +164,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
-			throw MissingSongTagException("Incomplete Song! Missing Tag.");
+			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;

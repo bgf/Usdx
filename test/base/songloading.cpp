@@ -35,10 +35,10 @@ namespace usdx
 	class SongloadingTest : public CppUnit::TestFixture {
 		CPPUNIT_TEST_SUITE(SongloadingTest);
 		CPPUNIT_TEST(testSongloadingTxtHeader);
-		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldArtist, MissingSongTagException);
-		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldTitle, MissingSongTagException);
-		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldMp3, MissingSongTagException);
-		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldBpm, MissingSongTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldArtist, MissingTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldTitle, MissingTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldMp3, MissingTagException);
+		CPPUNIT_TEST_EXCEPTION(testSongloadingTxtMissingHeaderFieldBpm, MissingTagException);
 		CPPUNIT_TEST_SUITE_END();
 
 	private:

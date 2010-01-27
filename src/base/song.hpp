@@ -37,11 +37,22 @@
 
 namespace usdx
 {
-	class MissingSongTagException : public BaseException
+	class MissingTagException : public BaseException
 	{
+	private:
+		/**
+		 * TODO: Maybe refactor this to separate sub-classes.
+		 */
+		const std::string tag;
+
 	public:
-		MissingSongTagException(std::string message) : BaseException(message) {};
-		~MissingSongTagException () throw () {};
+		MissingTagException(const std::string tag,
+				    const std::string message) :
+			BaseException(message), tag(tag) {};
+
+		~MissingTagException () throw () {};
+
+		virtual const std::string& get_tag() const { return tag; };
 	};
 
 	class Song
