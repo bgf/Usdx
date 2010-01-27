@@ -37,6 +37,12 @@ namespace usdx
 	private:
 		bool visible;
 
+	protected:
+		/**
+		 * Pure virtual method, that descendant classes have to implement.
+		 */
+		virtual void on_draw(void) const = 0;
+
 	public:
  		Drawable(void);
 		virtual ~Drawable(void) {};
@@ -45,11 +51,6 @@ namespace usdx
 		 * Method for redraw this Object. If visible issues on_draw.
 		 */
 		void draw(void) const;
-
-		/**
-		 * Pure virtual method, that descendant classes have to implement.
-		 */
-		virtual void on_draw(void) const = 0;
 
 		/**
 		 * Setter for visible.

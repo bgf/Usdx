@@ -35,11 +35,14 @@ namespace usdx
 	{
 	private:
 		float spacing;
+
+	protected:
+		virtual void on_draw(void) const;
+
 	public:
 		Reflection(float spacing);
 		virtual ~Reflection(void);
 
-		virtual void on_draw(void) const;
 
 		void set_spacing(float value);
 		const float get_spacing(void) const;
