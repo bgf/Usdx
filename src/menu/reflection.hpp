@@ -40,6 +40,9 @@ namespace usdx
 		virtual ~Reflection(void);
 
 		virtual void on_draw(void) const;
+
+		void set_spacing(float value);
+		const float get_spacing(void) const;
 	};
 };
 
