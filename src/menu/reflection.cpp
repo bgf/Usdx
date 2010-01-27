@@ -43,6 +43,7 @@ namespace usdx
 	void Reflection::set_spacing(float value)
 	{
 		spacing = value;
+		draw();
 	}
 
 	const float Reflection::get_spacing(void) const

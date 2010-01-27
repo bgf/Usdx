@@ -42,6 +42,7 @@ namespace usdx
 	void Drawable::set_visible(bool value)
 	{
 		visible = value;
+		draw();
 	}
 
 	const bool Drawable::get_visible(void) const
