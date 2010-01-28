@@ -38,38 +38,38 @@ namespace usdx
 		return filename;
 	}
 
-	Song::Song(const std::string& filename, const std::map<std::string, std::string>& header) :
+	Song::Song(const std::string& filename, const std::map<std::wstring, std::wstring>& header) :
 		filename(filename), custom_header_tags(header)
 	{
-		std::map<std::string, std::string>::iterator it;
+		std::map<std::wstring, std::wstring>::iterator it;
 
-		title = get_header_tag("TITLE", true);
-		artist = get_header_tag("ARTIST", true);
-		mp3 = get_header_tag("MP3", true);
+		title = get_header_tag(L"TITLE", true);
+		artist = get_header_tag(L"ARTIST", true);
+		mp3 = get_header_tag(L"MP3", true);
 
-		bpm.push_back(new BPM(get_header_tag_float("BPM", true)));
+		bpm.push_back(new BPM(get_header_tag_float(L"BPM", true)));
 
-		gap = get_header_tag_float("GAP");
-		cover = get_header_tag("COVER");
-		background = get_header_tag("BACKGROUND");
+		gap = get_header_tag_float(L"GAP");
+		cover = get_header_tag(L"COVER");
+		background = get_header_tag(L"BACKGROUND");
 
-		video = get_header_tag("VIDEO");
-		video_gap = get_header_tag_float("VIDEOGAP");
+		video = get_header_tag(L"VIDEO");
+		video_gap = get_header_tag_float(L"VIDEOGAP");
 
-		genre = get_header_tag("GENRE");
-		edition = get_header_tag("EDITION");
-		creator = get_header_tag("CREATOR");
-		language = get_header_tag("LANGUAGE");
+		genre = get_header_tag(L"GENRE");
+		edition = get_header_tag(L"EDITION");
+		creator = get_header_tag(L"CREATOR");
+		language = get_header_tag(L"LANGUAGE");
 
-		year = get_header_tag_int("YEAR");
+		year = get_header_tag_int(L"YEAR");
 
-		start = get_header_tag_float("START");
-		stop = get_header_tag_int("END");
+		start = get_header_tag_float(L"START");
+		stop = get_header_tag_int(L"END");
 
-		resolution = get_header_tag_int("RESOLUTION");
-		notes_gap = get_header_tag_int("NOTESGAP");
+		resolution = get_header_tag_int(L"RESOLUTION");
+		notes_gap = get_header_tag_int(L"NOTESGAP");
 
-		relative = get_header_tag_bool("RELATIVE");
+		relative = get_header_tag_bool(L"RELATIVE");
 
 		// TODO
 	        // EncFile := DecodeFilename(Value);
@@ -97,26 +97,27 @@ namespace usdx
 		lyrics.clear();
 	}
 
-	std::string Song::get_header_tag(const std::string& tag, const bool required)
+	std::wstring Song::get_header_tag(const std::wstring& tag, const bool required)
 	{
-		std::map<std::string, std::string>::iterator it;
-		std::string result = "";
+		std::map<std::wstring, std::wstring>::iterator it;
+		std::wstring result = L"";
 
 		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
 			result = it->second;
 			custom_header_tags.erase(it);
 		}
 		else if (required) {
-			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
+				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
 	}
 
-	float Song::get_header_tag_float(const std::string& tag, const bool required)
+	float Song::get_header_tag_float(const std::wstring& tag, const bool required)
 	{
-		std::map<std::string, std::string>::iterator it;
+		std::map<std::wstring, std::wstring>::iterator it;
 		float result;
 
 		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
@@ -124,46 +125,49 @@ namespace usdx
 			custom_header_tags.erase(it);
 		}
 		else if (required) {
-			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
+				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
 	}
 
-	int Song::get_header_tag_int(const std::string& tag, const bool required)
+	int Song::get_header_tag_int(const std::wstring& tag, const bool required)
 	{
-		std::map<std::string, std::string>::iterator it;
+		std::map<std::wstring, std::wstring>::iterator it;
 		int result;
 
 		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
-			std::istringstream stream(it->second);
+			std::wistringstream stream(it->second);
 			custom_header_tags.erase(it);
 			stream >> result;
 		}
 		else if (required) {
-			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
+				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
 		return result;
 	}
 
-	bool Song::get_header_tag_bool(const std::string& tag, const bool required)
+	bool Song::get_header_tag_bool(const std::wstring& tag, const bool required)
 	{
-		std::map<std::string, std::string>::iterator it;
+		std::map<std::wstring, std::wstring>::iterator it;
 		bool result;
 
 		if ((it = custom_header_tags.find(tag)) != custom_header_tags.end()) {
 			// accept all like (YES, JA, TRUE, 1)
-			result = (it->second[0] == 'j' || it->second[0] == 'J' ||
-				  it->second[0] == 'y' || it->second[0] == 'Y' ||
-				  it->second[0] == 't' || it->second[0] == 'T' ||
-				  it->second[0] == '1');
+			result = (it->second[0] == L'j' || it->second[0] == L'J' ||
+				  it->second[0] == L'y' || it->second[0] == L'Y' ||
+				  it->second[0] == L't' || it->second[0] == L'T' ||
+				  it->second[0] == L'1');
 			custom_header_tags.erase(it);
 		}
 		else if (required) {
-			LOG4CXX_ERROR(log, "Incomplete Song! Missing '" << tag << "' Tag in: '" << get_filename() << "'");
+			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
+				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
@@ -186,17 +190,17 @@ namespace usdx
 		return line;
 	}
 
-	const std::string& Song::get_title(void) const
+	const std::wstring& Song::get_title(void) const
 	{
 		return title;
 	}
 
-	const std::string& Song::get_artist(void) const
+	const std::wstring& Song::get_artist(void) const
 	{
 		return artist;
 	}
 
-	const std::string& Song::get_mp3(void) const
+	const std::wstring& Song::get_mp3(void) const
 	{
 		return mp3;
 	}
@@ -221,17 +225,17 @@ namespace usdx
 		return gap;
 	}
 
-	const std::string& Song::get_cover(void) const
+	const std::wstring& Song::get_cover(void) const
 	{
 		return cover;
 	}
 
-	const std::string& Song::get_background(void) const
+	const std::wstring& Song::get_background(void) const
 	{
 		return background;
 	}
 
-	const std::string& Song::get_video(void) const
+	const std::wstring& Song::get_video(void) const
 	{
 		return video;
 	}
@@ -241,22 +245,22 @@ namespace usdx
 		return video_gap;
 	}
 
-	const std::string& Song::get_genre(void) const
+	const std::wstring& Song::get_genre(void) const
 	{
 		return genre;
 	}
 
-	const std::string& Song::get_edition(void) const
+	const std::wstring& Song::get_edition(void) const
 	{
 		return edition;
 	}
 
-	const std::string& Song::get_creator(void) const
+	const std::wstring& Song::get_creator(void) const
 	{
 		return creator;
 	}
 
-	const std::string& Song::get_language(void) const
+	const std::wstring& Song::get_language(void) const
 	{
 		return language;
 	}
@@ -316,7 +320,7 @@ namespace usdx
 		create_new_lyric_line(line_in + get_relative_beat());
 	}
 
-	void Song::new_note(const char type, const int beat, const int length, const int height, const std::string& lyric)
+	void Song::new_note(const wchar_t type, const int beat, const int length, const int height, const std::wstring& lyric)
 	{
 		get_last_lyric_line()->add_word(new LyricWord(type, beat + get_relative_beat(), length, height, lyric));
 	}

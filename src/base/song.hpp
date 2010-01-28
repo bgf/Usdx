@@ -43,16 +43,16 @@ namespace usdx
 		/**
 		 * TODO: Maybe refactor this to separate sub-classes.
 		 */
-		const std::string tag;
+		const std::wstring tag;
 
 	public:
-		MissingTagException(const std::string tag,
+		MissingTagException(const std::wstring tag,
 				    const std::string message) :
 			BaseException(message), tag(tag) {};
 
 		~MissingTagException () throw () {};
 
-		virtual const std::string& get_tag() const { return tag; };
+		virtual const std::wstring& get_tag() const { return tag; };
 	};
 
 	class Song
@@ -62,25 +62,25 @@ namespace usdx
 
 		std::string filename;
 
-		std::string title;
-		std::string artist;
+		std::wstring title;
+		std::wstring artist;
 
 		// filenames
-		std::string mp3;
+		std::wstring mp3;
 
-		std::string background;
+		std::wstring background;
 
-		std::string video;
+		std::wstring video;
 		float video_gap;
 
-		std::string cover;
+		std::wstring cover;
 		// texture cover_tex;
 
-		std::string genre;
-		std::string edition;
-		std::string language;
+		std::wstring genre;
+		std::wstring edition;
+		std::wstring language;
 		int year;
-		std::string creator;
+		std::wstring creator;
 
 		int notes_gap;
 		float gap; ///< in miliseconds
@@ -94,12 +94,12 @@ namespace usdx
 
 		std::list<LyricLine*> lyrics;
 
-		std::map<std::string, std::string> custom_header_tags;
+		std::map<std::wstring, std::wstring> custom_header_tags;
 
-		std::string get_header_tag(const std::string& tag, const bool required = false);
-		float get_header_tag_float(const std::string& tag, const bool required = false);
-		int get_header_tag_int(const std::string& tag, const bool required = false);
-		bool get_header_tag_bool(const std::string& tag, const bool required = false);
+		std::wstring get_header_tag(const std::wstring& tag, const bool required = false);
+		float get_header_tag_float(const std::wstring& tag, const bool required = false);
+		int get_header_tag_int(const std::wstring& tag, const bool required = false);
+		bool get_header_tag_bool(const std::wstring& tag, const bool required = false);
 
 		LyricLine* get_last_lyric_line(void);
 		LyricLine* create_new_lyric_line(int start);
@@ -114,24 +114,24 @@ namespace usdx
 
 		// TODO: Encoding:   TEncoding;
 	public:
-		Song(const std::string& filename, const std::map<std::string, std::string>& header);
+		Song(const std::string& filename, const std::map<std::wstring, std::wstring>& header);
 		virtual ~Song(void);
 
 		const std::string& get_filename(void) const;
 
-		const std::string& get_title(void) const;
-		const std::string& get_artist(void) const;
-		const std::string& get_mp3(void) const;
+		const std::wstring& get_title(void) const;
+		const std::wstring& get_artist(void) const;
+		const std::wstring& get_mp3(void) const;
 		const float get_bpm(int beat) const;
 		const float get_gap(void) const;
-		const std::string& get_cover(void) const;
-		const std::string& get_background(void) const;
-		const std::string& get_video(void) const;
+		const std::wstring& get_cover(void) const;
+		const std::wstring& get_background(void) const;
+		const std::wstring& get_video(void) const;
 		const float get_video_gap(void) const;
-		const std::string& get_genre(void) const;
-		const std::string& get_edition(void) const;
-		const std::string& get_creator(void) const;
-		const std::string& get_language(void) const;
+		const std::wstring& get_genre(void) const;
+		const std::wstring& get_edition(void) const;
+		const std::wstring& get_creator(void) const;
+		const std::wstring& get_language(void) const;
 		const int get_year(void) const;
 		const float get_start(void) const;
 		const int get_stop(void) const;
@@ -144,7 +144,7 @@ namespace usdx
 
 		void new_bpm(const int beat, const float new_bpm);
 		void new_line(const int line_out, const int line_in);
-		void new_note(const char type, const int beat, const int length, const int height, const std::string& lyric);
+		void new_note(const wchar_t type, const int beat, const int length, const int height, const std::wstring& lyric);
 	};
 };
 

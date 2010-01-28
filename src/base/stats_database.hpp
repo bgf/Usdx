@@ -61,9 +61,9 @@ namespace usdx
 		 */
 		static char* format_date(char* time, size_t max, time_t timestamp);
 
-		static const std::string usdx_scores;
-		static const std::string usdx_songs;
-		static const std::string usdx_statistics_info;
+		static const std::wstring usdx_scores;
+		static const std::wstring usdx_songs;
+		static const std::wstring usdx_statistics_info;
 
 
 #ifdef STAT_DATABASE_TEST

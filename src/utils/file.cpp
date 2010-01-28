@@ -25,11 +25,18 @@
  */
 
 #include "file.hpp"
+#include <string>
+#include <locale>
+
+#include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 
 namespace usdx
 {
-	File::File(const std::string& filename) : file(filename.c_str(), std::ifstream::in)
+	File::File(const std::string& filename) : file(filename.c_str(), std::wifstream::in)
 	{
+		std::locale global_loc = std::locale();
+		std::locale loc(global_loc, new boost::program_options::detail::utf8_codecvt_facet());
+		file.imbue(loc);
 	}
 
 	File::~File(void)
@@ -37,7 +44,7 @@ namespace usdx
 		file.close();
 	}
 
-	std::istream &File::stream(void)
+	std::wistream &File::stream(void)
 	{
 		return file;
 	}

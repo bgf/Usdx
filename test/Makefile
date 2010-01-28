@@ -1,5 +1,5 @@
 CXXFLAGS:=-Wall -Werror -lcppunit -I../src/ -I../src/base -I../src/menu -I../src/media -I../src/screens -g
-LDFLAGS:=-lsqlite3 -lSDL -llog4cxx
+LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt
 
 PROJECT:=usdx-tests
 TARGET:=$(PROJECT)

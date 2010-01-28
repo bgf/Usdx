@@ -38,7 +38,7 @@ namespace usdx
 	{
 	}
 
-	LocaleIndependentFloat::LocaleIndependentFloat(std::string& value)
+	LocaleIndependentFloat::LocaleIndependentFloat(std::wstring& value)
 	{
 		this->operator=(value);
 	}
@@ -65,27 +65,27 @@ namespace usdx
 		return *this;
 	}
 
-	LocaleIndependentFloat& LocaleIndependentFloat::operator= (std::string& value)
+	LocaleIndependentFloat& LocaleIndependentFloat::operator= (std::wstring& value)
 	{
-		std::size_t found = value.find(',');
-		if (found != std::string::npos) {
-			value[found] = '.';
+		std::size_t found = value.find(L',');
+		if (found != std::wstring::npos) {
+			value[found] = L'.';
 		}
 
-		std::istringstream str(value);
+		std::wistringstream str(value);
 		str >> this->value;
 
 		return *this;
 	}
 
-	std::istream& operator>> (std::istream& is, LocaleIndependentFloat& float_value)
+	std::wistream& operator>> (std::wistream& is, LocaleIndependentFloat& float_value)
 	{
 		return is >> &float_value;
 	}
 
-	std::istream& operator>> (std::istream& is, LocaleIndependentFloat* float_value)
+	std::wistream& operator>> (std::wistream& is, LocaleIndependentFloat* float_value)
 	{
-		std::string str_value;
+		std::wstring str_value;
 		is >> str_value;
 
 		*float_value = str_value;

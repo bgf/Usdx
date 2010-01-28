@@ -49,33 +49,33 @@ namespace usdx
 		database = NULL;
 	}
 
-	sqlite3_stmt *Database::sqlite_prepare(const std::string sqlStatement)
+	sqlite3_stmt *Database::sqlite_prepare(const std::wstring sqlStatement)
 	{
 		sqlite3_stmt *sqliteStatement;
-		if (SQLITE_OK != sqlite3_prepare_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
+		if (SQLITE_OK != sqlite3_prepare16_v2(database, sqlStatement.c_str(), sqlStatement.length(), &sqliteStatement, NULL)) {
 			sqlite3_finalize(sqliteStatement);
 
-			LOG4CXX_ERROR(log, "Error '" << sqlite3_errmsg(database) << "' in SQL '" << sqlStatement << "'");
+			LOG4CXX_ERROR(log, L"Error '" << sqlite3_errmsg(database) << L"' in SQL '" << sqlStatement << L"'");
 			throw "Error preparing statement.";
 		}
 
 		return sqliteStatement;
 	}
 
-	void Database::sqlite_exec(const std::string sqlStatement)
+	void Database::sqlite_exec(const std::wstring sqlStatement)
 	{
 		sqlite3_stmt *sqliteStatement = sqlite_prepare(sqlStatement);
 		sqlite3_step(sqliteStatement);
 		sqlite3_finalize(sqliteStatement);
 	}
 
-	const bool Database::sqlite_table_exists(const std::string table)
+	const bool Database::sqlite_table_exists(const std::wstring table)
 	{
-		std::string sql = "select [name] from [sqlite_master] where [type] = 'table' and [tbl_name] = ?1;";
+		std::wstring sql = L"select [name] from [sqlite_master] where [type] = 'table' and [tbl_name] = ?1;";
 		sqlite3_stmt *sqliteStatement = sqlite_prepare(sql);
 
 		// bind table name to parameter 1 and execute statement
-		sqlite3_bind_text(sqliteStatement, 1, table.c_str(), table.length(), SQLITE_TRANSIENT);
+		sqlite3_bind_text16(sqliteStatement, 1, table.c_str(), table.length(), SQLITE_TRANSIENT);
 		int rc = sqlite3_step(sqliteStatement);
 
 		// if rc is SQLITE_ROW, than result has at lease one row and so
@@ -89,16 +89,16 @@ namespace usdx
 		return result;
 	}
 
-	const bool Database::sqlite_table_contains_column(const std::string table, const std::string column)
+	const bool Database::sqlite_table_contains_column(const std::wstring table, const std::wstring column)
 	{
-		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA TABLE_INFO([" + table + "]);");
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(L"PRAGMA TABLE_INFO([" + table + L"]);");
 		bool result = false;
 
 		int rc = sqlite3_step(sqliteStatement);
 		while (rc == SQLITE_ROW) {
-			const char *column_name = (const char*)sqlite3_column_blob(sqliteStatement, 1);
+			const wchar_t *column_name = (const wchar_t*)sqlite3_column_blob(sqliteStatement, 1);
 
-			if (column == std::string(column_name)) {
+			if (column == std::wstring(column_name)) {
 				result = true;
 				break;
 			}
@@ -113,7 +113,7 @@ namespace usdx
 	const int Database::get_version(void)
 	{
 		int result = -1;
-		sqlite3_stmt *sqliteStatement = sqlite_prepare("PRAGMA user_version;");
+		sqlite3_stmt *sqliteStatement = sqlite_prepare(L"PRAGMA user_version;");
 
 		int rc = sqlite3_step(sqliteStatement);
 		if (rc == SQLITE_ROW) {
@@ -127,8 +127,8 @@ namespace usdx
 	void Database::set_version(const int version)
 	{
 		// format the PRAGMA statement (PRAGMA does _not_ support parameters)
-		std::ostringstream sqlStatementBuffer (std::ostringstream::out);
-		sqlStatementBuffer << "PRAGMA user_version = " << version << ";";
+		std::wostringstream sqlStatementBuffer (std::wostringstream::out);
+		sqlStatementBuffer << L"PRAGMA user_version = " << version << L";";
 
 		sqlite_exec(sqlStatementBuffer.str());
 	}

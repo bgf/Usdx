@@ -37,7 +37,7 @@ namespace usdx
 		float value;
 	public:
 		LocaleIndependentFloat();
-		LocaleIndependentFloat(std::string& value);
+		LocaleIndependentFloat(std::wstring& value);
 
 		virtual ~LocaleIndependentFloat();
 
@@ -46,11 +46,11 @@ namespace usdx
 
 		LocaleIndependentFloat& operator= (const LocaleIndependentFloat& value);
 		LocaleIndependentFloat& operator= (const float& vaule);
-		LocaleIndependentFloat& operator= (std::string& vaule);
+		LocaleIndependentFloat& operator= (std::wstring& vaule);
 	};
 
-	std::istream& operator>> (std::istream& is, LocaleIndependentFloat& float_value);
-	std::istream& operator>> (std::istream& is, LocaleIndependentFloat* float_value);
+	std::wistream& operator>> (std::wistream& is, LocaleIndependentFloat& float_value);
+	std::wistream& operator>> (std::wistream& is, LocaleIndependentFloat* float_value);
 
 };
 

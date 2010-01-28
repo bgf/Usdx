@@ -28,20 +28,20 @@
 
 namespace usdx
 {
-	LyricWord::LyricWord(const char type,
+	LyricWord::LyricWord(const wchar_t type,
 			     const int beat,
 			     const int length,
 			     const int height,
-			     const std::string& lyric) :
+			     const std::wstring& lyric) :
 		beat(beat), length(length), height(height), text(lyric)
 	{
-		if (type == ':') {
+		if (type == L':') {
 			this->type = nt_normal;
 		}
-		else if (type == '*') {
+		else if (type == L'*') {
 			this->type = nt_golden;
 		}
-		else if (type == 'F') {
+		else if (type == L'F') {
 			this->type = nt_freestyle;
 		}
 	}

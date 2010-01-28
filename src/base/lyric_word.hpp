@@ -44,10 +44,10 @@ namespace usdx
 		int beat;
 		int length;
 		int height;
-		std::string text;
+		std::wstring text;
 
 	public:
-		LyricWord(const char type, const int beat, const int length, const int height, const std::string& lyric);
+		LyricWord(const wchar_t type, const int beat, const int length, const int height, const std::wstring& lyric);
 		virtual ~LyricWord(void);
 	};
 };

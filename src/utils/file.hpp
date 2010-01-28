@@ -35,12 +35,12 @@ namespace usdx
 	class File
 	{
 	private:
-		std::ifstream file;
+		std::wifstream file;
 	public:
 		File(const std::string& filename);
 		virtual ~File(void);
 
-		std::istream &stream(void);
+		std::wistream &stream(void);
 	};
 };
 

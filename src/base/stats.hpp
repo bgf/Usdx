@@ -69,7 +69,7 @@ namespace usdx
 		/**
 		 * TODO
 		 */
-		static int get_count(std::string query);
+		static int get_count(std::wstring query);
 
 	public:
 		/**
@@ -111,27 +111,27 @@ namespace usdx
 	class StatResultBestScores : public Stats
 	{
 	private:
-		std::string singer;
+		std::wstring singer;
 		unsigned short score;
 		unsigned short difficulty;
-		std::string song_artist;
-		std::string song_title;
+		std::wstring song_artist;
+		std::wstring song_title;
 		time_t date;
 
 		StatResultBestScores *next;
 
 		StatResultBestScores(
-			char *singer,
+			wchar_t *singer,
 			unsigned short score,
 			unsigned short difficulty,
-			char* song_artist,
-			char* song_title,
+			wchar_t* song_artist,
+			wchar_t* song_title,
 			time_t date);
 	public:
 		/**
 		 * TODO
 		 */
-		StatResultBestScores(char* song_artist, char* song_title);
+		StatResultBestScores(wchar_t* song_artist, wchar_t* song_title);
 
 		~StatResultBestScores(void);
 
@@ -145,12 +145,12 @@ namespace usdx
 	class StatResultBestSingers : public Stats
 	{
 	private:
-		std::string singer;
+		std::wstring singer;
 		unsigned short average_score;
 
 		StatResultBestSingers *next;
 
-		StatResultBestSingers(char *singer, unsigned short average_score);
+		StatResultBestSingers(wchar_t *singer, unsigned short average_score);
 	public:
 		~StatResultBestSingers(void);
 
@@ -164,13 +164,13 @@ namespace usdx
 	class StatResultMostSungSong : public Stats
 	{
 	private:
-		std::string song_artist;
-		std::string song_title;
+		std::wstring song_artist;
+		std::wstring song_title;
 		unsigned short times_sung;
 
 		StatResultMostSungSong *next;
 
-		StatResultMostSungSong(char* song_artist, char* song_title, unsigned short times_sung);
+		StatResultMostSungSong(wchar_t* song_artist, wchar_t* song_title, unsigned short times_sung);
 	public:
 		~StatResultMostSungSong(void);
 
@@ -184,12 +184,12 @@ namespace usdx
 	class StatResultMostSungBand : public Stats
 	{
 	private:
-		std::string song_artist;
+		std::wstring song_artist;
 		unsigned short times_sung;
 
 		StatResultMostSungBand *next;
 
-		StatResultMostSungBand(char* song_artist, unsigned short times_sung);
+		StatResultMostSungBand(wchar_t* song_artist, unsigned short times_sung);
 	public:
 		~StatResultMostSungBand(void);
 

@@ -42,37 +42,37 @@ namespace usdx
 		/**
 		 * Split the header field in name and value.
 		 */
-		std::pair<std::string, std::string> split_header_field(std::string &line);
+		std::pair<std::wstring, std::wstring> split_header_field(std::wstring &line);
 
 		/**
 		 * Removes whitespaces in front of the string.
 		 */
-		std::string& ltrim(std::string& line);
+		std::wstring& ltrim(std::wstring& line);
 
 		/**
 		 * Removes whitespaces behind the string.
 		 */
-		std::string& rtrim(std::string& line);
+		std::wstring& rtrim(std::wstring& line);
 
 		/**
 		 * Removes ''\r'' and ''\n'' in front of the string.
 		 */
-		std::string& ltrim_newlines(std::string& line);
+		std::wstring& ltrim_newlines(std::wstring& line);
 
 		/**
 		 * Removes ''\r'' and ''\n'' behind the string.
 		 */
-		std::string& rtrim_newlines(std::string& line);
+		std::wstring& rtrim_newlines(std::wstring& line);
 
 		/**
 		 * Removes whitespaces in front of the string and behind it.
 		 */
-		std::string& trim(std::string& line);
+		std::wstring& trim(std::wstring& line);
 
 		bool parse_line(Song* song, File& file, const int line_number);
-		void parse_newline(Song* song, std::istringstream& linestream, const int line_number);
-		void parse_bpm(Song* song, std::istringstream& linestream, const int line_number);
-		void parse_note(Song* song, char type, std::istringstream& linestream, const int line_number);
+		void parse_newline(Song* song, std::wistringstream& linestream, const int line_number);
+		void parse_bpm(Song* song, std::wistringstream& linestream, const int line_number);
+		void parse_note(Song* song, wchar_t type, std::wistringstream& linestream, const int line_number);
 
 
 	public:

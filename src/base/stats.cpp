@@ -49,7 +49,7 @@ namespace usdx
 		return db;
 	}
 
-	int Stats::get_count(std::string query)
+	int Stats::get_count(std::wstring query)
 	{
 		int result = 0;
 		sqlite3_stmt *sqliteStatement =
@@ -84,8 +84,8 @@ namespace usdx
 		int result = -1;
 
 		sqlite3_stmt *sqliteStatement = get_database()->sqlite_prepare(
-			"SELECT [ResetTime] FROM [" +
-			get_database()->usdx_statistics_info + "];");
+			L"SELECT [ResetTime] FROM [" +
+			get_database()->usdx_statistics_info + L"];");
 
 		int rc = sqlite3_step(sqliteStatement);
 		if (rc == SQLITE_ROW) {
@@ -163,19 +163,19 @@ namespace usdx
 	}
 */
 
-	StatResultBestScores::StatResultBestScores(char *singer, unsigned short score, unsigned short difficulty,
-		char* song_artist, char* song_title, time_t date)
+	StatResultBestScores::StatResultBestScores(wchar_t *singer, unsigned short score, unsigned short difficulty,
+		wchar_t* song_artist, wchar_t* song_title, time_t date)
 	{
-		this->singer = std::string(singer);
+		this->singer = std::wstring(singer);
 		this->score = score;
 		this->difficulty = difficulty;
-		this->song_artist = std::string(song_artist);
-		this->song_title = std::string(song_title);
+		this->song_artist = std::wstring(song_artist);
+		this->song_title = std::wstring(song_title);
 		this->date = date;
 		this->next = NULL;
 	}
 
-	StatResultBestScores::StatResultBestScores(char* song_artist, char* song_title)
+	StatResultBestScores::StatResultBestScores(wchar_t* song_artist, wchar_t* song_title)
 	{
 		this->next = NULL;
 
@@ -271,8 +271,8 @@ namespace usdx
 
 	int StatResultBestScores::get_count(void)
 	{
-		return Stats::get_count("SELECT COUNT([SongID]) FROM [" +
-					get_database()->usdx_scores + "];");
+		return Stats::get_count(L"SELECT COUNT([SongID]) FROM [" +
+					get_database()->usdx_scores + L"];");
 	}
 
 	StatResultBestScores *StatResultBestScores::get_stats()
@@ -283,9 +283,9 @@ namespace usdx
 
 
 
-	StatResultBestSingers::StatResultBestSingers(char *singer, unsigned short average_score)
+	StatResultBestSingers::StatResultBestSingers(wchar_t *singer, unsigned short average_score)
 	{
-		this->singer = std::string(singer);
+		this->singer = std::wstring(singer);
 		this->average_score = average_score;
 		this->next = NULL;
 	}
@@ -306,8 +306,8 @@ namespace usdx
 	int StatResultBestSingers::get_count(void)
 	{
 		return Stats::get_count(
-			"SELECT COUNT(DISTINCT [Player]) FROM ["
-			+ get_database()->usdx_scores + "];");
+			L"SELECT COUNT(DISTINCT [Player]) FROM ["
+			+ get_database()->usdx_scores + L"];");
 	}
 
 	StatResultBestSingers *StatResultBestSingers::get_stats()
@@ -317,10 +317,10 @@ namespace usdx
 	}
 
 
-	StatResultMostSungSong::StatResultMostSungSong(char* song_artist, char* song_title, unsigned short times_sung)
+	StatResultMostSungSong::StatResultMostSungSong(wchar_t* song_artist, wchar_t* song_title, unsigned short times_sung)
 	{
-		this->song_artist = std::string(song_artist);
-		this->song_title = std::string(song_title);
+		this->song_artist = std::wstring(song_artist);
+		this->song_title = std::wstring(song_title);
 		this->times_sung = times_sung;
 		this->next = NULL;
 	}
@@ -340,8 +340,8 @@ namespace usdx
 
 	int StatResultMostSungSong::get_count(void)
 	{
-		return Stats::get_count("SELECT COUNT([ID]) FROM [" +
-					get_database()->usdx_scores + "];");
+		return Stats::get_count(L"SELECT COUNT([ID]) FROM [" +
+					get_database()->usdx_scores + L"];");
 	}
 
 	StatResultMostSungSong *StatResultMostSungSong::get_stats()
@@ -351,9 +351,9 @@ namespace usdx
 	}
 
 
-	StatResultMostSungBand::StatResultMostSungBand(char* song_artist, unsigned short times_sung)
+	StatResultMostSungBand::StatResultMostSungBand(wchar_t* song_artist, unsigned short times_sung)
 	{
-		this->song_artist = std::string(song_artist);
+		this->song_artist = std::wstring(song_artist);
 		this->times_sung = times_sung;
 		this->next = NULL;
 	}
@@ -374,8 +374,8 @@ namespace usdx
 	int StatResultMostSungBand::get_count(void)
 	{
 		return Stats::get_count(
-			"SELECT COUNT(DISTINCT [Artist]) FROM [" +
-			get_database()->usdx_scores + "];");
+			L"SELECT COUNT(DISTINCT [Artist]) FROM [" +
+			get_database()->usdx_scores + L"];");
 	}
 
 	StatResultMostSungBand *StatResultMostSungBand::get_stats()

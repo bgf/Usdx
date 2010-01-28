@@ -62,22 +62,23 @@ namespace usdx
 		void testSongloadingTxtHeader()
 		{
 			Song *song = Songloader::get_instance()->load_header("testdata/testsong_correct.txt");
-			
-            CPPUNIT_ASSERT( "Test Ärtist" == song->get_artist() );
-			CPPUNIT_ASSERT( "Test Title" == song->get_title() );
-			CPPUNIT_ASSERT( "Test.mp3" == song->get_mp3() );
+
+			CPPUNIT_ASSERT( L"Test Ärtist" == song->get_artist() );
+			CPPUNIT_ASSERT( 11 == song->get_artist().length() );
+			CPPUNIT_ASSERT( L"Test Title" == song->get_title() );
+			CPPUNIT_ASSERT( L"Test.mp3" == song->get_mp3() );
 			CPPUNIT_ASSERT( 42.23f == song->get_bpm(0) );
-            CPPUNIT_ASSERT( 42.23f == song->get_bpm(10) );
+			CPPUNIT_ASSERT( 42.23f == song->get_bpm(10) );
 			CPPUNIT_ASSERT( 10 == song->get_gap() );
-			CPPUNIT_ASSERT( "Test[BG].jpg" == song->get_background() );
-			CPPUNIT_ASSERT( "Test[CO].jpg" == song->get_cover() );
-			CPPUNIT_ASSERT( "Test Genre" == song->get_genre() );
+			CPPUNIT_ASSERT( L"Test[BG].jpg" == song->get_background() );
+			CPPUNIT_ASSERT( L"Test[CO].jpg" == song->get_cover() );
+			CPPUNIT_ASSERT( L"Test Genre" == song->get_genre() );
 			CPPUNIT_ASSERT( false == song->get_relative() );
-			CPPUNIT_ASSERT( "Cpp" == song->get_language() );
-			CPPUNIT_ASSERT( "Test[VD#12,3].mkv" == song->get_video() );
+			CPPUNIT_ASSERT( L"Cpp" == song->get_language() );
+			CPPUNIT_ASSERT( L"Test[VD#12,3].mkv" == song->get_video() );
 			CPPUNIT_ASSERT( 12.3f == song->get_video_gap() );
 			CPPUNIT_ASSERT( 0 == song->get_start() );
-			CPPUNIT_ASSERT( "Test0r" == song->get_creator() );
+			CPPUNIT_ASSERT( L"Test0r" == song->get_creator() );
 			CPPUNIT_ASSERT( 7 == song->get_year() );
 			CPPUNIT_ASSERT( 666 == song->get_stop() );
 			CPPUNIT_ASSERT( 0 == song->get_notes_gap() );
@@ -131,8 +132,6 @@ namespace usdx
 			Songloader::get_instance()->
 					load_header("testdata/testsong_missing_bpm.txt");
 		}
-
-		
 	};
 
 	CPPUNIT_TEST_SUITE_REGISTRATION(SongloadingTest);

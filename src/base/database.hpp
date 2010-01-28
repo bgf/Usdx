@@ -62,13 +62,13 @@ namespace usdx
 		 * 	parameters and executing the statement. Need to be freed
 		 * 	with sqlite3_finalize.
 		 */
-		sqlite3_stmt *sqlite_prepare(const std::string sqlStatement);
+		sqlite3_stmt *sqlite_prepare(const std::wstring sqlStatement);
 
 		/**
 		 * Just a quick alias for sqlite_prepare, sqlite3_step and
 		 * sqlite3_finalize.
 		 */
-		void sqlite_exec(const std::string sqlStatement);
+		void sqlite_exec(const std::wstring sqlStatement);
 
 		/**
 		 * Check if the given table exists in the database.
@@ -76,7 +76,7 @@ namespace usdx
 		 * @param table Name to check if exists
 		 * @return true, if table exists, false if not
 		 */
-		const bool sqlite_table_exists(const std::string table);
+		const bool sqlite_table_exists(const std::wstring table);
 
 		/**
 		 * Check if the given table has the given column by name.
@@ -85,7 +85,7 @@ namespace usdx
 		 * @param column Name of the column to check if exists
 		 * @return true, if column exists in that table, false if not
 		 */
-		const bool sqlite_table_contains_column(const std::string table, const std::string column);
+		const bool sqlite_table_contains_column(const std::wstring table, const std::wstring column);
 
 		/**
 		 * Queries the user version from the sqlite database. This is a

@@ -47,16 +47,16 @@ namespace usdx
 	{
 	}
 
-	std::pair<std::string, std::string> SongloadingStrategyTxt::split_header_field(std::string &line)
+	std::pair<std::wstring, std::wstring> SongloadingStrategyTxt::split_header_field(std::wstring &line)
 	{
-		std::size_t pos = line.find(':');
+		std::size_t pos = line.find(L':');
 
-		if (line[0] != '#' || pos == std::string::npos) {
-			LOG4CXX_DEBUG(log, "Tried to parse invalid header line: '" << line << "'");
+		if (line[0] != L'#' || pos == std::wstring::npos) {
+			LOG4CXX_DEBUG(log, L"Tried to parse invalid header line: '" << line << L"'");
 			throw "Invalid header!";
 		}
 
-		std::pair<std::string, std::string> result;
+		std::pair<std::wstring, std::wstring> result;
 
 		// copy the substring until ':', without # to result.first and
 		// transform to upper case
@@ -72,52 +72,52 @@ namespace usdx
 		// line is already rtrimmed
 		ltrim(result.second);
 
-		LOG4CXX_DEBUG(log, "Found header: '" << result.first << "' with value '" << result.second << "'");
+		LOG4CXX_DEBUG(log, L"Found header: '" << result.first << L"' with value '" << result.second << L"'");
 
 		return result;
 	}
 
-	std::string& SongloadingStrategyTxt::ltrim(std::string& line)
+	std::wstring& SongloadingStrategyTxt::ltrim(std::wstring& line)
 	{
-		std::size_t found = line.find_first_not_of(" \t\n\r");
-		if (found != std::string::npos && found >= 1) {
+		std::size_t found = line.find_first_not_of(L" \t\n\r");
+		if (found != std::wstring::npos && found >= 1) {
 			line.erase(0, found - 1);
 		}
 
 		return line;
 	}
 
-	std::string& SongloadingStrategyTxt::ltrim_newlines(std::string& line)
+	std::wstring& SongloadingStrategyTxt::ltrim_newlines(std::wstring& line)
 	{
-		std::size_t found = line.find_first_not_of("\n\r");
-		if (found != std::string::npos) {
+		std::size_t found = line.find_first_not_of(L"\n\r");
+		if (found != std::wstring::npos) {
 			line.erase(0, found - 1);
 		}
 
 		return line;
 	}
 
-	std::string& SongloadingStrategyTxt::rtrim(std::string& line)
+	std::wstring& SongloadingStrategyTxt::rtrim(std::wstring& line)
 	{
-		std::size_t found = line.find_last_not_of(" \t\n\r");
-		if (found != std::string::npos) {
+		std::size_t found = line.find_last_not_of(L" \t\n\r");
+		if (found != std::wstring::npos) {
 			line.erase(found + 1);
 		}
 
 		return line;
 	}
 
-	std::string& SongloadingStrategyTxt::rtrim_newlines(std::string& line)
+	std::wstring& SongloadingStrategyTxt::rtrim_newlines(std::wstring& line)
 	{
-		std::size_t found = line.find_last_not_of("\n\r");
-		if (found != std::string::npos) {
+		std::size_t found = line.find_last_not_of(L"\n\r");
+		if (found != std::wstring::npos) {
 			line.erase(found + 1);
 		}
 
 		return line;
 	}
 
-	std::string& SongloadingStrategyTxt::trim(std::string& line)
+	std::wstring& SongloadingStrategyTxt::trim(std::wstring& line)
 	{
 		return ltrim(rtrim(line));
 	}
@@ -139,17 +139,17 @@ namespace usdx
 	bool SongloadingStrategyTxt::parse_line(Song* song, File& file, const int line_number)
 	{
 		try {
-			std::string line;
+			std::wstring line;
 			std::getline(file.stream(), line);
 
-			char type;
-			std::istringstream linestream(line);
+			wchar_t type;
+			std::wistringstream linestream(line);
 			linestream >> std::skipws >> type;
 
-			if (type == '#') {
+			if (type == L'#') {
 				// ignore, header already read
 			}
-			else if (type == 'E') {
+			else if (type == L'E') {
 				// song end
 				if (file.stream().eof()) {
 					LOG4CXX_WARN(log, "End marker found in line " << line_number <<
@@ -158,30 +158,31 @@ namespace usdx
 
 				return false;
 			}
-			else if (type == '-') {
+			else if (type == L'-') {
 				parse_newline(song, linestream, line_number);
 			}
-			else if (type == 'B') {
+			else if (type == L'B') {
 				parse_bpm(song, linestream, line_number);
 			}
-			else if (type == ':' || type == 'F' || type == '*') {
+			else if (type == L':' || type == L'F' || type == L'*') {
 				parse_note(song, type, linestream, line_number);
 			}
 			else {
-				LOG4CXX_WARN(log, "Unknown line in song: '" << line <<
-					     "' in file: " << song->get_filename() <<
-					     " at line " << line_number);
+				LOG4CXX_WARN(log, L"Unknown line in song: '" << line <<
+					L"' in file: " << std::wstring(song->get_filename().begin(),
+								      song->get_filename().end()) <<
+					     L" at line " << line_number);
 			}
 		}
 		catch (std::exception &e) {
-			LOG4CXX_WARN(log, "Error in song file at line " <<
-				     line_number << ": " << e.what());
+			LOG4CXX_WARN(log, L"Error in song file at line " <<
+				     line_number << L": " << e.what());
 		}
 
 		return true;
 	}
 
-	void SongloadingStrategyTxt::parse_newline(Song *song, std::istringstream& linestream, const int line_number)
+	void SongloadingStrategyTxt::parse_newline(Song *song, std::wistringstream& linestream, const int line_number)
 	{
 		// line break
 		int line_out, line_in = -1;
@@ -189,63 +190,63 @@ namespace usdx
 		linestream >> line_out;
 		if (linestream.good()) {
 			linestream >> line_in;
-			LOG4CXX_DEBUG(log, "Found newline in line " <<
-				      line_number << " with out of last line with "
-				      << line_out << " and in of next line " << line_in);
+			LOG4CXX_DEBUG(log, L"Found newline in line " <<
+				      line_number << L" with out of last line with " <<
+				      line_out << L" and in of next line " << line_in);
 		}
 		else {
-			LOG4CXX_DEBUG(log, "Found newline in line " <<
-				      line_number << " with out of last line with "
-				      << line_out);
+			LOG4CXX_DEBUG(log, L"Found newline in line " <<
+				      line_number << L" with out of last line with " <<
+				      line_out);
 		}
 
 		song->new_line(line_out, line_in);
 	}
 
-	void SongloadingStrategyTxt::parse_bpm(Song *song, std::istringstream& linestream, const int line_number)
+	void SongloadingStrategyTxt::parse_bpm(Song *song, std::wistringstream& linestream, const int line_number)
 	{
 		// new bpm
 		int beat;
 		LocaleIndependentFloat new_bpm;
 
 		linestream >> beat >> new_bpm;
-		LOG4CXX_DEBUG(log, "Found new bpm in line " <<
-			      line_number << " starting at beat: " <<
-			      beat << " and new bpm of " << new_bpm.get_value());
+		LOG4CXX_DEBUG(log, L"Found new bpm in line " <<
+			      line_number << L" starting at beat: " <<
+			      beat << L" and new bpm of " << new_bpm.get_value());
 		song->new_bpm(beat, new_bpm.get_value());
 	}
 
-	void SongloadingStrategyTxt::parse_note(Song *song, char type, std::istringstream& linestream, const int line_number)
+	void SongloadingStrategyTxt::parse_note(Song *song, wchar_t type, std::wistringstream& linestream, const int line_number)
 	{
 		// normal line
 		int beat, length, height;
-		std::string lyric;
+		std::wstring lyric;
 
 		linestream >> beat >> length >> height >> std::noskipws;
 		linestream.ignore();
 		getline(linestream, lyric);
 		rtrim_newlines(lyric);
 
-		LOG4CXX_DEBUG(log, "Found lyric: '" << lyric << "' at line: " << line_number <<
-			      " at beat: " << beat << " with length: " << length <<
-			      " at height: " << height);
+		LOG4CXX_DEBUG(log, L"Found lyric: '" << lyric << L"' at line: " << line_number <<
+			      L" at beat: " << beat << L" with length: " << length <<
+			      L" at height: " << height);
 		song->new_note(type, beat, length, height, lyric);
 	}
 
 	Song* SongloadingStrategyTxt::load_header(const std::string& filename)
 	{
 		File file(filename);
-		std::string line;
-		std::map<std::string, std::string> header_fields;
+		std::wstring line;
+		std::map<std::wstring, std::wstring> header_fields;
 
 		bool header = true, notes_found = false;
 		while (file.stream().good()) {
 			std::getline(file.stream(), line);
 
 			trim(line);
-			LOG4CXX_DEBUG(log, "Line: " << line);
+			LOG4CXX_DEBUG(log, L"Line: " << line);
 
-			if (header && line[0] == '#') {
+			if (header && line[0] == L'#') {
 
 				// header
 				header_fields.insert(split_header_field(line));
@@ -256,7 +257,7 @@ namespace usdx
 					header = false;
 				}
 
-				if (line[0] == ':' || line[0] == '*' || line[0] == 'F') {
+				if (line[0] == L':' || line[0] == L'*' || line[0] == L'F') {
 					notes_found = true;
 					break;
 				}
