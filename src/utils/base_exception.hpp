@@ -38,7 +38,7 @@ namespace usdx
 		std::string message;
 
 	protected:
-		BaseException(std::string message);
+		BaseException(const std::string& message);
 
 	public:
 		~BaseException() throw ();

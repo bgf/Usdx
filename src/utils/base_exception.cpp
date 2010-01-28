@@ -28,7 +28,7 @@
 
 namespace usdx
 {
-	BaseException::BaseException(std::string message) : message(message)
+	BaseException::BaseException(const std::string& message) : message(message)
 	{
 	}
 

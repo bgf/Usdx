@@ -38,7 +38,7 @@ namespace usdx
 	class NoStrategyException : public BaseException
 	{
 	public:
-		NoStrategyException(std::string message) : BaseException(message) {};
+		NoStrategyException(const std::string& message) : BaseException(message) {};
 		~NoStrategyException () throw () {};
 	};
 
