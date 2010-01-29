@@ -70,7 +70,7 @@ namespace usdx
 	public:
 		virtual ~Language();
 
-		Language* get_instance();
+		static Language* get_instance();
 
 		void init(const boost::filesystem::wpath& language_dir);
 
