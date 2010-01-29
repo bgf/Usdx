@@ -51,6 +51,9 @@ namespace usdx
 		}
 
 		strategies.clear();
+
+		// remove reference from singleton to make regeneration possible
+		instance = NULL;
 	}
 
 	Songloader *Songloader::get_instance(void)

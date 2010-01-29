@@ -52,6 +52,9 @@ namespace usdx
 
 	Language::~Language(void)
 	{
+
+		// remove reference from singleton to make regeneration possible
+		instance = NULL;
 	}
 
 	Language* Language::get_instance(void)
