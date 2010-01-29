@@ -57,6 +57,8 @@ namespace usdx
 			// set old loglevel in case we did disable logging
 			using namespace log4cxx;
 			Logger::getRootLogger()->setLevel(Level::toLevel(oldLogLevel));
+
+			delete Songloader::get_instance();
 		}
 
 		void testSongloadingTxtHeader()
