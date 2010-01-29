@@ -29,6 +29,8 @@
 #include <sstream>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+
 #include "songloading_strategy_txt.hpp"
 #include "utils/file.hpp"
 #include "utils/locale_independent_float.hpp"
@@ -65,61 +67,16 @@ namespace usdx
 			       result.first.begin(), toupper);
 
 		// line is already ltrimmed
-		rtrim(result.first);
+		boost::trim_right(result.first);
 
 		result.second = line.substr(pos + 1);
 
 		// line is already rtrimmed
-		ltrim(result.second);
+		boost::trim_left(result.second);
 
 		LOG4CXX_DEBUG(log, L"Found header: '" << result.first << L"' with value '" << result.second << L"'");
 
 		return result;
-	}
-
-	std::wstring& SongloadingStrategyTxt::ltrim(std::wstring& line)
-	{
-		std::size_t found = line.find_first_not_of(L" \t\n\r");
-		if (found != std::wstring::npos && found >= 1) {
-			line.erase(0, found - 1);
-		}
-
-		return line;
-	}
-
-	std::wstring& SongloadingStrategyTxt::ltrim_newlines(std::wstring& line)
-	{
-		std::size_t found = line.find_first_not_of(L"\n\r");
-		if (found != std::wstring::npos) {
-			line.erase(0, found - 1);
-		}
-
-		return line;
-	}
-
-	std::wstring& SongloadingStrategyTxt::rtrim(std::wstring& line)
-	{
-		std::size_t found = line.find_last_not_of(L" \t\n\r");
-		if (found != std::wstring::npos) {
-			line.erase(found + 1);
-		}
-
-		return line;
-	}
-
-	std::wstring& SongloadingStrategyTxt::rtrim_newlines(std::wstring& line)
-	{
-		std::size_t found = line.find_last_not_of(L"\n\r");
-		if (found != std::wstring::npos) {
-			line.erase(found + 1);
-		}
-
-		return line;
-	}
-
-	std::wstring& SongloadingStrategyTxt::trim(std::wstring& line)
-	{
-		return ltrim(rtrim(line));
 	}
 
 	Song* SongloadingStrategyTxt::load_song(Song *song)
@@ -225,7 +182,7 @@ namespace usdx
 		linestream >> beat >> length >> height >> std::noskipws;
 		linestream.ignore();
 		getline(linestream, lyric);
-		rtrim_newlines(lyric);
+		boost::trim_right_if(lyric, boost::is_cntrl());
 
 		LOG4CXX_DEBUG(log, L"Found lyric: '" << lyric << L"' at line: " << line_number <<
 			      L" at beat: " << beat << L" with length: " << length <<
@@ -243,7 +200,8 @@ namespace usdx
 		while (file.stream().good()) {
 			std::getline(file.stream(), line);
 
-			trim(line);
+			boost::trim(line);
+			boost::trim_if(line, boost::is_cntrl());
 			LOG4CXX_DEBUG(log, L"Line: " << line);
 
 			if (header && line[0] == L'#') {

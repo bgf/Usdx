@@ -44,31 +44,6 @@ namespace usdx
 		 */
 		std::pair<std::wstring, std::wstring> split_header_field(std::wstring &line);
 
-		/**
-		 * Removes whitespaces in front of the string.
-		 */
-		std::wstring& ltrim(std::wstring& line);
-
-		/**
-		 * Removes whitespaces behind the string.
-		 */
-		std::wstring& rtrim(std::wstring& line);
-
-		/**
-		 * Removes ''\r'' and ''\n'' in front of the string.
-		 */
-		std::wstring& ltrim_newlines(std::wstring& line);
-
-		/**
-		 * Removes ''\r'' and ''\n'' behind the string.
-		 */
-		std::wstring& rtrim_newlines(std::wstring& line);
-
-		/**
-		 * Removes whitespaces in front of the string and behind it.
-		 */
-		std::wstring& trim(std::wstring& line);
-
 		bool parse_line(Song* song, File& file, const int line_number);
 		void parse_newline(Song* song, std::wistringstream& linestream, const int line_number);
 		void parse_bpm(Song* song, std::wistringstream& linestream, const int line_number);
