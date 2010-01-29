@@ -27,17 +27,18 @@
 #ifndef FILE_HPP
 #define FILE_HPP
 
-#include <iostream>
-#include <fstream>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 namespace usdx
 {
 	class File
 	{
 	private:
-		std::wifstream file;
+		boost::filesystem::wifstream file;
 	public:
 		File(const std::string& filename);
+		File(const boost::filesystem::wpath& path);
 		virtual ~File(void);
 
 		std::wistream &stream(void);

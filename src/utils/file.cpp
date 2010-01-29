@@ -39,6 +39,13 @@ namespace usdx
 		file.imbue(loc);
 	}
 
+	File::File(const boost::filesystem::wpath& path) : file(path, std::wifstream::in)
+	{
+		std::locale global_loc = std::locale();
+		std::locale loc(global_loc, new boost::program_options::detail::utf8_codecvt_facet());
+		file.imbue(loc);
+	}
+
 	File::~File(void)
 	{
 		file.close();
