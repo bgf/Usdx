@@ -50,8 +50,22 @@ namespace usdx
 	{
 	}
 
+	void remove_element(std::pair<std::wstring, std::map<std::wstring, std::wstring>*> element)
+	{
+		if (element.second) {
+			element.second->clear();
+		}
+
+		delete element.second;
+		element.second = NULL;
+	}
+
 	Language::~Language(void)
 	{
+		// clear memory for all elements in the map
+		std::for_each(translations.begin(), translations.end(),
+			      remove_element);
+		translations.clear();
 
 		// remove reference from singleton to make regeneration possible
 		instance = NULL;

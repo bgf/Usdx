@@ -42,14 +42,17 @@ namespace usdx
 		strategies[".xml"] = new SongloadingStrategyXml();
 	}
 
+	void remove_element(std::pair<std::string, SongloadingStrategy*> e)
+	{
+		delete e.second;
+		e.second = NULL;
+	}
+
 	Songloader::~Songloader(void)
 	{
-		std::map<std::string, SongloadingStrategy*>::iterator it;
-		for (it = strategies.begin(); it != strategies.end(); it++) {
-			delete it->second;
-			it->second = NULL;
-		}
-
+		// clear memory for all elements in the map
+		std::for_each(strategies.begin(), strategies.end(),
+			      remove_element);
 		strategies.clear();
 
 		// remove reference from singleton to make regeneration possible
