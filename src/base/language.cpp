@@ -24,8 +24,12 @@
  * $Id$
  */
 
+#include <exception>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
+
 #include "language.hpp"
+#include "utils/file.hpp"
 
 // namespace alias for shorter class names
 namespace fs = boost::filesystem;
@@ -33,6 +37,9 @@ namespace fs = boost::filesystem;
 namespace usdx
 {
 	Language* Language::instance = NULL;
+
+	log4cxx::LoggerPtr Language::log =
+		log4cxx::Logger::getLogger("usdx.base.language");
 
 	LanguageNotFound::LanguageNotFound(const std::wstring& language) :
 		BaseException("Language not found!"),
@@ -46,7 +53,7 @@ namespace usdx
 	}
 
 
-	Language::Language(void)
+	Language::Language(void) : current_translation(NULL), default_translation(NULL)
 	{
 	}
 
@@ -80,15 +87,77 @@ namespace usdx
 		return instance;
 	}
 
-	void Language::load_language(const std::wstring& language)
+	void Language::parse_translation(const std::wstring& line, std::map<std::wstring, std::wstring>& map)
 	{
-		// TODO
+		size_t found = line.find(L"=");
+		if (found != std::wstring::npos) {
+			// copy the substring until '=' and
+			// transform to upper case
+			std:: wstring key(found, L' ');
+			std::transform(line.begin(), line.begin() + found,
+				       key.begin(), toupper);
+			boost::trim(key);
+
+			std::wstring value(line.substr(found + 1));
+			boost::trim_if(value, boost::is_cntrl());
+			boost::trim(value);
+
+			LOG4CXX_TRACE(log, L"Found translation from " <<
+				      key << L" to " << value);
+
+			map[key] = value;
+		}
 	}
 
-	void Language::init(const fs::wpath& language_dir)
+	void Language::load_language(const std::wstring& language)
+	{
+		fs::wpath source_path = language_dir / (language + L".ini");
+
+		if (exists(source_path)) {
+			std::map<std::wstring, std::wstring> *map =
+				new std::map<std::wstring, std::wstring>();
+
+			File source(source_path);
+
+			bool started = false;
+			std::wstring line;
+
+			while (source.stream().good()) {
+				getline(source.stream(), line);
+
+				if (started) {
+					if (line[0] == L'[' && line[line.length() - 1] == L']') {
+						break;
+					}
+
+					parse_translation(line, *map);
+				}
+				else {
+					if (line.compare(L"[Text]")) {
+						started = true;
+					}
+				}
+			}
+
+			translations[basename(source_path)] = map;
+		}
+	}
+
+	void Language::load_default_language(const std::wstring& default_language)
+	{
+		std::map<std::wstring, std::map<std::wstring, std::wstring>*>::iterator it = translations.find(default_language);
+		if (it != translations.end()) {
+			LOG4CXX_DEBUG(log, L"Loading default language: " << default_language);
+			load_language(default_language);
+			current_translation = default_translation = translations[default_language];
+			current_language = default_language;
+		}
+	}
+
+	void Language::init(const fs::wpath& language_dir, const std::wstring& default_language)
 	{
 		if (!is_directory(language_dir)) {
-			return;
+			throw std::invalid_argument("language_dir should be a directory");
 		}
 
 		this->language_dir = language_dir;
@@ -97,14 +166,14 @@ namespace usdx
 		fs::wdirectory_iterator end_it;
 		for (fs::wdirectory_iterator it(language_dir); it != end_it; ++it)
 		{
-			if (!is_directory(it->status()))
+			if (!is_directory(it->status()) &&
+			    extension(it->path()) == L".ini")
 			{
-				if (extension(it->path()) == L".ini")
-				{
-					translations[basename(it->path())] = NULL;
-				}
+				translations[basename(it->path())] = NULL;
 			}
 		}
+
+		load_default_language(default_language);
 	}
 
 	void Language::set_language(const std::wstring& language)
@@ -118,27 +187,31 @@ namespace usdx
 			load_language(language);
 		}
 
-		current_language_name = std::wstring(language);
-		current_language = translations[current_language_name];
+		current_language = std::wstring(language);
+		current_translation = translations[current_language];
 	}
 
 	const std::wstring& Language::get_language(void) const
 	{
-		return current_language_name;
+		return current_language;
 	}
 
 	const std::wstring& Language::translate(const std::wstring& source) const
 	{
-
-		std::map<std::wstring, std::wstring>::iterator it = current_language->find(source);
-		if (it != current_language->end()) {
-			return it->second;
+		if (current_translation) {
+			std::map<std::wstring, std::wstring>::iterator it = current_translation->find(source);
+			if (it != current_translation->end()) {
+				return it->second;
+			}
 		}
 
-		it = default_language->find(source);
-		if (it != default_language->end()) {
-			return it->second;
+		if (default_translation) {
+			std::map<std::wstring, std::wstring>::iterator it = default_translation->find(source);
+			if (it != default_translation->end()) {
+				return it->second;
+			}
 		}
+
 
 		return source;
 	}

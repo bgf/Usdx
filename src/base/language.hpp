@@ -30,6 +30,7 @@
 #include <map>
 #include <string>
 #include <boost/filesystem.hpp>
+#include <log4cxx/logger.h>
 #include "utils/base_exception.hpp"
 
 /**
@@ -53,16 +54,22 @@ namespace usdx
 	class Language
 	{
 	private:
+		static log4cxx::LoggerPtr log;
+
 		boost::filesystem::wpath language_dir;
 
-		std::map<std::wstring, std::wstring>* current_language;
-		std::wstring current_language_name;
+		std::map<std::wstring, std::wstring>* current_translation;
+		std::wstring current_language;
 
-		std::map<std::wstring, std::wstring>* default_language;
+		std::map<std::wstring, std::wstring>* default_translation;
 
 		std::map<std::wstring, std::map<std::wstring, std::wstring>*> translations;
 
+		void parse_translation(const std::wstring& line,
+				       std::map<std::wstring, std::wstring>& map);
+
 		void load_language(const std::wstring& language);
+		void load_default_language(const std::wstring& language);
 
 		Language();
 
@@ -72,7 +79,8 @@ namespace usdx
 
 		static Language* get_instance();
 
-		void init(const boost::filesystem::wpath& language_dir);
+		void init(const boost::filesystem::wpath& language_dir,
+			  const std::wstring& default_language = L"English");
 
 		void set_language(const std::wstring& language);
 		const std::wstring& get_language(void) const;
