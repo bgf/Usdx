@@ -81,7 +81,7 @@ namespace usdx
 
 	Song* SongloadingStrategyTxt::load_song(Song *song)
 	{
-		LOG4CXX_DEBUG(log, "Starting loading song from file: " << song->get_filename());
+		LOG4CXX_DEBUG(log, L"Starting loading song from file: " << song->get_filename());
 
 		File file(song->get_filename());
 
@@ -109,8 +109,8 @@ namespace usdx
 			else if (type == L'E') {
 				// song end
 				if (file.stream().eof()) {
-					LOG4CXX_WARN(log, "End marker found in line " << line_number <<
-						     " before end of file: '" << song->get_filename() << "'.");
+					LOG4CXX_WARN(log, L"End marker found in line " << line_number <<
+						     L" before end of file: '" << song->get_filename() << L"'.");
 				}
 
 				return false;
@@ -126,8 +126,7 @@ namespace usdx
 			}
 			else {
 				LOG4CXX_WARN(log, L"Unknown line in song: '" << line <<
-					L"' in file: " << std::wstring(song->get_filename().begin(),
-								      song->get_filename().end()) <<
+					L"' in file: " << song->get_filename() <<
 					     L" at line " << line_number);
 			}
 		}
@@ -190,7 +189,7 @@ namespace usdx
 		song->new_note(type, beat, length, height, lyric);
 	}
 
-	Song* SongloadingStrategyTxt::load_header(const std::string& filename)
+	Song* SongloadingStrategyTxt::load_header(const boost::filesystem::wpath& filename)
 	{
 		File file(filename);
 		std::wstring line;
@@ -223,7 +222,7 @@ namespace usdx
 		}
 
 		if (! notes_found) {
-			LOG4CXX_WARN(log, "Song: '" << filename  << "' has no notes. Ignoring!");
+			LOG4CXX_WARN(log, L"Song: '" << filename  << L"' has no notes. Ignoring!");
 			throw "No notes.";
 		}
 

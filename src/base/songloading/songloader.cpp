@@ -38,11 +38,11 @@ namespace usdx
 	Songloader::Songloader(void)
 	{
 		// add different strategies to map
-		strategies[".txt"] = new SongloadingStrategyTxt();
-		strategies[".xml"] = new SongloadingStrategyXml();
+		strategies[L".txt"] = new SongloadingStrategyTxt();
+		strategies[L".xml"] = new SongloadingStrategyXml();
 	}
 
-	void remove_element(std::pair<std::string, SongloadingStrategy*> e)
+	void remove_element(std::pair<std::wstring, SongloadingStrategy*> e)
 	{
 		delete e.second;
 		e.second = NULL;
@@ -68,18 +68,12 @@ namespace usdx
 		return instance;
 	}
 
-	Song *Songloader::load_header(std::string filename)
+	Song *Songloader::load_header(const boost::filesystem::wpath& filename)
 	{
-		std::string extension = "";
-
-		size_t found = filename.rfind('.');
-		if (found != std::string::npos) {
-			extension = filename.substr(found);
-		}
-
-		std::map<std::string, SongloadingStrategy*>::iterator it = strategies.find(extension);
+		std::wstring ext = extension(filename);
+		std::map<std::wstring, SongloadingStrategy*>::iterator it = strategies.find(ext);
 		if (it == strategies.end()) {
-			LOG4CXX_WARN(log, "No SongloadingStrategy found for file extension: '" << extension << "'");
+			LOG4CXX_WARN(log, L"No SongloadingStrategy found for file extension: '" << ext << L"'");
 			throw NoStrategyException("Unknown file format.");
 		}
 
@@ -88,16 +82,10 @@ namespace usdx
 
 	Song* Songloader::load_song(Song* song)
 	{
-		std::string extension = "";
-
-		size_t found = song->get_filename().rfind('.');
-		if (found != std::string::npos) {
-			extension = song->get_filename().substr(found);
-		}
-
-		std::map<std::string, SongloadingStrategy*>::iterator it = strategies.find(extension);
+		std::wstring ext = extension(song->get_filename());
+		std::map<std::wstring, SongloadingStrategy*>::iterator it = strategies.find(ext);
 		if (it == strategies.end()) {
-			LOG4CXX_WARN(log, "No SongloadingStrategy found for file extension: '" << extension << "'");
+			LOG4CXX_WARN(log, L"No SongloadingStrategy found for file extension: '" << ext << L"'");
 			throw NoStrategyException("Unknown file format.");
 		}
 

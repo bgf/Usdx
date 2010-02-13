@@ -28,6 +28,7 @@
 #define SONGLOADING_STRATEGY_HPP
 
 #include <string>
+#include <boost/filesystem.hpp>
 #include "song.hpp"
 
 namespace usdx
@@ -41,7 +42,7 @@ namespace usdx
 		virtual ~SongloadingStrategy() {};
 
 		virtual Song* load_song(Song* song) = 0;
-		virtual Song* load_header(const std::string& filename) = 0;
+		virtual Song* load_header(const boost::filesystem::wpath& filename) = 0;
 	};
 };
 

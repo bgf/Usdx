@@ -33,12 +33,13 @@ namespace usdx
 	log4cxx::LoggerPtr Song::log =
 		log4cxx::Logger::getLogger("usdx.base.Song");
 
-	const std::string& Song::get_filename(void) const
+	const boost::filesystem::wpath& Song::get_filename(void) const
 	{
 		return filename;
 	}
 
-	Song::Song(const std::string& filename, const std::map<std::wstring, std::wstring>& header) :
+	Song::Song(const boost::filesystem::wpath& filename,
+		   const std::map<std::wstring, std::wstring>& header) :
 		filename(filename), custom_header_tags(header)
 	{
 		std::map<std::wstring, std::wstring>::iterator it;
@@ -108,7 +109,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
-				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
+				      get_filename() << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
@@ -126,7 +127,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
-				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
+				      get_filename() << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
@@ -145,7 +146,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
-				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
+				      get_filename() << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 
@@ -167,7 +168,7 @@ namespace usdx
 		}
 		else if (required) {
 			LOG4CXX_ERROR(log, L"Incomplete Song! Missing '" << tag << L"' Tag in: '" <<
-				      std::wstring(get_filename().begin(), get_filename().end()) << L"'");
+				      get_filename() << L"'");
 			throw MissingTagException(tag, "Incomplete Song! Missing Tag.");
 		}
 

@@ -63,7 +63,7 @@ namespace usdx
 
 		void testSongloadingTxtHeader()
 		{
-			Song *song = Songloader::get_instance()->load_header("testdata/testsong_correct.txt");
+			Song *song = Songloader::get_instance()->load_header(L"testdata/testsong_correct.txt");
 
 			CPPUNIT_ASSERT( L"Test Ärtist" == song->get_artist() );
 			CPPUNIT_ASSERT( 11 == song->get_artist().length() );
@@ -98,7 +98,7 @@ namespace usdx
 			Logger::getRootLogger()->setLevel(Level::getOff());
 
 			Songloader::get_instance()->
-					load_header("testdata/testsong_missing_artist.txt");
+					load_header(L"testdata/testsong_missing_artist.txt");
 		}
 
 		void testSongloadingTxtMissingHeaderFieldTitle()
@@ -109,7 +109,7 @@ namespace usdx
 			Logger::getRootLogger()->setLevel(Level::getOff());
 
 			Songloader::get_instance()->
-					load_header("testdata/testsong_missing_title.txt");
+					load_header(L"testdata/testsong_missing_title.txt");
 		}
 
 		void testSongloadingTxtMissingHeaderFieldMp3()
@@ -120,7 +120,7 @@ namespace usdx
 			Logger::getRootLogger()->setLevel(Level::getOff());
 
 			Songloader::get_instance()->
-					load_header("testdata/testsong_missing_mp3.txt");
+					load_header(L"testdata/testsong_missing_mp3.txt");
 
 		}
 
@@ -132,7 +132,7 @@ namespace usdx
 			Logger::getRootLogger()->setLevel(Level::getOff());
 
 			Songloader::get_instance()->
-					load_header("testdata/testsong_missing_bpm.txt");
+					load_header(L"testdata/testsong_missing_bpm.txt");
 		}
 	};
 

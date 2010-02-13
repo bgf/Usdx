@@ -30,6 +30,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <boost/filesystem.hpp>
 #include <log4cxx/logger.h>
 #include "bpm.hpp"
 #include "lyric_line.hpp"
@@ -60,7 +61,7 @@ namespace usdx
 	private:
 		static log4cxx::LoggerPtr log;
 
-		std::string filename;
+		boost::filesystem::wpath filename;
 
 		std::wstring title;
 		std::wstring artist;
@@ -114,10 +115,12 @@ namespace usdx
 
 		// TODO: Encoding:   TEncoding;
 	public:
-		Song(const std::string& filename, const std::map<std::wstring, std::wstring>& header);
+		Song(const boost::filesystem::wpath& filename,
+		     const std::map<std::wstring, std::wstring>& header);
+
 		virtual ~Song(void);
 
-		const std::string& get_filename(void) const;
+		const boost::filesystem::wpath& get_filename(void) const;
 
 		const std::wstring& get_title(void) const;
 		const std::wstring& get_artist(void) const;

@@ -28,6 +28,7 @@
 #define SONGLOADER_HPP
 
 #include <map>
+#include <boost/filesystem.hpp>
 #include <log4cxx/logger.h>
 #include "songloading_strategy.hpp"
 #include "song.hpp"
@@ -49,7 +50,7 @@ namespace usdx
 
 		Songloader(void);
 
-		std::map<std::string, SongloadingStrategy*> strategies;
+		std::map<std::wstring, SongloadingStrategy*> strategies;
 
 		/**
 		 * Singleton
@@ -61,7 +62,7 @@ namespace usdx
 
 		virtual ~Songloader(void);
 
-		Song* load_header(std::string filename);
+		Song* load_header(const boost::filesystem::wpath& filename);
 		Song* load_song(Song* song);
 	};
 };

@@ -42,7 +42,7 @@ namespace usdx
 		return song;
 	}
 
-	Song* SongloadingStrategyXml::load_header(const std::string& filename)
+	Song* SongloadingStrategyXml::load_header(const boost::filesystem::wpath& filename)
 	{
 		return NULL;
 	}
