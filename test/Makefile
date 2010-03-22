@@ -1,5 +1,5 @@
-CXXFLAGS:=-Wall -Werror -lcppunit -I../src/ -I../src/base -I../src/menu -I../src/media -I../src/screens -g
-LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt
+CXXFLAGS:=-Wall -Werror -lcppunit -I../src -I../src/base -I../src/menu -I../src/media -I../src/screens -g -fprofile-arcs -ftest-coverage
+LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt -lSDL_image -coverage
 
 PROJECT:=usdx-tests
 TARGET:=$(PROJECT)
