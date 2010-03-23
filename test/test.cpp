@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 	std::fstream filestr;
 	filestr.open ("test.xml", std::fstream::out | std::fstream::trunc);
 	CppUnit::XmlOutputter xml_outputter(&result, filestr);
+	xml_outputter.setStyleSheet("report.xsl");
 	xml_outputter.write();
 	filestr.close();
 
