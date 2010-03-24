@@ -1,38 +1,83 @@
-CXXFLAGS:=-Wall -Werror -lcppunit -I../src -I../src/base -I../src/menu -I../src/media -I../src/screens -g -fprofile-arcs -ftest-coverage
-LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt -lSDL_image -coverage
-
 PROJECT:=usdx-tests
-TARGET:=$(PROJECT)
+TOP:=..
 
-zip:=$(PROJECT).rar
-headers:=$(wildcard *.hpp) $(wildcard */*.hpp) $(wildcard ../src/*/*/*.hpp) $(wildcard ../src/*/*.hpp) $(wildcard ../src/*.hpp)
-sources:=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard ../src/*/*/*.cpp) $(wildcard ../src/*/*.cpp) $(wildcard ../src/*.cpp)
-objects:=$(sources:.cpp=.o)
+headers:=$(wildcard *.hpp) $(wildcard */*.hpp) $(wildcard $(TOP)/src/*/*/*.hpp) \
+		$(wildcard $(TOP)/src/*/*.hpp) $(wildcard $(TOP)/src/*.hpp)
+
+sources:=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard $(TOP)/src/*/*/*.cpp) \
+		$(wildcard $(TOP)/src/*/*.cpp) $(wildcard $(TOP)/src/*.cpp)
+
 deps:=$(sources:.cpp=.d)
 
-all:	$(deps) $(TARGET)
+CXXFLAGS:=-Wall -Werror -I$(TOP)/src -I$(TOP)/src/base -I$(TOP)/src/menu -I$(TOP)/src/media -I$(TOP)/src/screens -g
+LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt -lSDL_image -lcppunit
+TARGET:=$(PROJECT)
+
+objects:=$(sources:.cpp=.o)
+
+CXXFLAGS-COVERAGE:=-fprofile-arcs -ftest-coverage
+LDFLAGS-COVERAGE:=-coverage
+TARGET-COVERAGE:=$(TARGET)-coverage
+COVERAGE-DIR:=$(TOP)/coverage
+
+objects-coverage:=$(patsubst %,$(COVERAGE-DIR)/obj/test/%,$(sources:.cpp=.o))
+coverage:=$(COVERAGE-DIR)/coverage.info.tmp $(COVERAGE-DIR)/coverage.info \
+		$(objects-coverage:.o=.gcda) $(objects-coverage:.o=.gcno) \
+		$(COVERAGE-DIR)/obj/
+
+##############################################################################
+
+.PHONY:	all clean run
+
+all:	$(TARGET)
+
+clean:
+	-$(RM) -r $(TARGET) $(TARGET-COVERAGE) $(objects) $(deps) $(coverage)
+
+run:	$(TARGET)
+	./$(TARGET)
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(deps)
 endif
 
-.PHONY:	all clean run zip
+##############################################################################
+# normal build
 
 $(TARGET):	$(objects) $(deps)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $(objects)
+	$(CXX) $(LDFLAGS) -o $(TARGET) $(objects)
 
-%.o:	%.cpp
+%.o:		%.cpp
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
-%.d:	%.cpp
+%.d:		%.cpp
 	$(CXX) $(CXXFLAGS) -MM -c $< -MF $@
 
-clean:
-	-$(RM) $(TARGET) $(objects) $(deps)
+##############################################################################
+# build and execute tests with code coverage and build nice html pages 
 
-run:	$(TARGET)
-	./$(TARGET)
+test-with-coverage:			$(COVERAGE-DIR)/html/index.html
 
-zip:
-	-$(RM) $(zip)
-	rar a -s -m5 -ap$(PROJECT) $(zip) $(headers) $(sources) Makefile
+$(COVERAGE-DIR)/html/index.html:	$(COVERAGE-DIR)/coverage.info
+	genhtml $(COVERAGE-DIR)/coverage.info -o $(COVERAGE-DIR)/html/ -p \
+		"$(shell realpath $(shell pwd)/$(TOP)/src)"
+
+$(COVERAGE-DIR)/coverage.info:		$(COVERAGE-DIR)/coverage.info.tmp
+	lcov --extract $(COVERAGE-DIR)/coverage.info.tmp \
+		"$(shell realpath $(shell pwd)/$(TOP))/src/*" \
+		-o $(COVERAGE-DIR)/coverage.info
+
+$(COVERAGE-DIR)/coverage.info.tmp:	$(TARGET-COVERAGE)
+	lcov --directory $(TOP) --zerocounters
+	./$(TARGET-COVERAGE) || true
+	lcov --directory $(TOP) --capture \
+		--output-file $(COVERAGE-DIR)/coverage.info.tmp -b .
+
+$(TARGET-COVERAGE):			$(objects-coverage) $(deps)
+	$(CXX) $(LDFLAGS) $(LDFLAGS-COVERAGE) -o $(TARGET-COVERAGE) \
+		$(objects-coverage)
+
+$(COVERAGE-DIR)/obj/test/%.o:		%.cpp
+	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS-COVERAGE) -MMD -c $< -o $@
+
