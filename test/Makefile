@@ -60,11 +60,11 @@ test-with-coverage:			$(COVERAGE-DIR)/html/index.html
 
 $(COVERAGE-DIR)/html/index.html:	$(COVERAGE-DIR)/coverage.info
 	genhtml $(COVERAGE-DIR)/coverage.info -o $(COVERAGE-DIR)/html/ -p \
-		"$(shell realpath $(shell pwd)/$(TOP)/src)"
+		"$(realpath ./$(TOP)/src)"
 
 $(COVERAGE-DIR)/coverage.info:		$(COVERAGE-DIR)/coverage.info.tmp
 	lcov --extract $(COVERAGE-DIR)/coverage.info.tmp \
-		"$(shell realpath $(shell pwd)/$(TOP))/src/*" \
+		"$(realpath ./$(TOP))/src/*" \
 		-o $(COVERAGE-DIR)/coverage.info
 
 $(COVERAGE-DIR)/coverage.info.tmp:	$(TARGET-COVERAGE)
