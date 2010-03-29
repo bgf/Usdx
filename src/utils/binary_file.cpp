@@ -24,19 +24,54 @@
  * $Id$
  */
 
-#ifndef FILE_HPP
-#define FILE_HPP
-
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include "binary_file.hpp"
+#include <string>
 
 namespace usdx
 {
-	class File
+	BinaryFile::BinaryFile(const std::string& filename) : file(filename.c_str(), std::ifstream::in | std::ifstream::binary), content(NULL)
 	{
-	public:
-		virtual const std::streamsize get_filesize(void) = 0;
-	};
-};
+	}
 
-#endif
+	BinaryFile::BinaryFile(const boost::filesystem::wpath& path) : file(path, std::ifstream::in | std::ifstream::binary), content(NULL)
+	{
+	}
+
+	BinaryFile::~BinaryFile(void)
+	{
+		if (content) {
+			delete[] content;
+			content = NULL;
+		}
+
+		file.close();
+	}
+
+	std::istream &BinaryFile::stream(void)
+	{
+		return file;
+	}
+
+	const std::streamsize BinaryFile::get_filesize(void)
+	{
+		std::streampos position = stream().tellg();
+
+		stream().seekg (0, std::ios::end);
+		std::streamsize length = stream().tellg();
+		stream().seekg (position);
+
+		return length;
+	}
+
+	const void* BinaryFile::get_content(void)
+	{
+		if (content == NULL) {
+			std::streamsize length = get_filesize();
+
+			content = new char[length];
+			stream().read(content, length);
+		}
+
+		return (void*)content;
+	}
+};

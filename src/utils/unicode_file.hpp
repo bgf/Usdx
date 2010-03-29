@@ -24,18 +24,27 @@
  * $Id$
  */
 
-#ifndef FILE_HPP
-#define FILE_HPP
+#ifndef UNICODE_FILE_HPP
+#define UNICODE_FILE_HPP
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include "file.hpp"
 
 namespace usdx
 {
-	class File
+	class UnicodeFile : public File
 	{
+	private:
+		boost::filesystem::wifstream file;
+
 	public:
-		virtual const std::streamsize get_filesize(void) = 0;
+		UnicodeFile(const std::string& filename);
+		UnicodeFile(const boost::filesystem::wpath& path);
+		virtual ~UnicodeFile(void);
+
+		boost::filesystem::wifstream &stream(void);
+		const std::streamsize get_filesize(void);
 	};
 };
 

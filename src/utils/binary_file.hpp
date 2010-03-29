@@ -24,18 +24,29 @@
  * $Id$
  */
 
-#ifndef FILE_HPP
-#define FILE_HPP
+#ifndef BINARY_FILE_HPP
+#define BINARY_FILE_HPP
 
 #include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include "file.hpp"
 
 namespace usdx
 {
-	class File
+	class BinaryFile : public File
 	{
+	private:
+		boost::filesystem::ifstream file;
+		char* content;
+
 	public:
-		virtual const std::streamsize get_filesize(void) = 0;
+		BinaryFile(const std::string& filename);
+		BinaryFile(const boost::filesystem::wpath& path);
+		virtual ~BinaryFile(void);
+
+		std::istream &stream(void);
+		const std::streamsize get_filesize(void);
+
+		const void* get_content(void);
 	};
 };
 

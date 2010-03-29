@@ -29,7 +29,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "language.hpp"
-#include "utils/file.hpp"
+#include "utils/unicode_file.hpp"
 
 // namespace alias for shorter class names
 namespace fs = boost::filesystem;
@@ -117,7 +117,7 @@ namespace usdx
 			std::map<std::wstring, std::wstring> *map =
 				new std::map<std::wstring, std::wstring>();
 
-			File source(source_path);
+			UnicodeFile source(source_path);
 
 			bool started = false;
 			std::wstring line;

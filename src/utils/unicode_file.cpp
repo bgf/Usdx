@@ -24,7 +24,7 @@
  * $Id$
  */
 
-#include "file.hpp"
+#include "unicode_file.hpp"
 #include <string>
 #include <locale>
 
@@ -32,28 +32,38 @@
 
 namespace usdx
 {
-	File::File(const std::string& filename) : file(filename.c_str(), std::wifstream::in)
+	UnicodeFile::UnicodeFile(const std::string& filename) : file(filename.c_str(), std::wifstream::in)
 	{
 		std::locale global_loc = std::locale();
 		std::locale loc(global_loc, new boost::program_options::detail::utf8_codecvt_facet());
 		file.imbue(loc);
 	}
 
-	File::File(const boost::filesystem::wpath& path) : file(path, std::wifstream::in)
+	UnicodeFile::UnicodeFile(const boost::filesystem::wpath& path) : file(path, std::wifstream::in)
 	{
 		std::locale global_loc = std::locale();
 		std::locale loc(global_loc, new boost::program_options::detail::utf8_codecvt_facet());
 		file.imbue(loc);
 	}
 
-	File::~File(void)
+	UnicodeFile::~UnicodeFile(void)
 	{
 		file.close();
 	}
 
-	std::wistream &File::stream(void)
+	boost::filesystem::wifstream &UnicodeFile::stream(void)
 	{
 		return file;
 	}
 
+	const std::streamsize UnicodeFile::get_filesize(void)
+	{
+		std::streampos position = stream().tellg();
+
+		stream().seekg (0, std::ios::end);
+		std::streamsize length = stream().tellg();
+		stream().seekg (position);
+
+		return length;
+	}
 };
