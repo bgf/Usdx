@@ -31,7 +31,8 @@
 #include <boost/filesystem.hpp>
 #include <log4cxx/logger.h>
 #include "songloading_strategy.hpp"
-#include "utils/file.hpp"
+#include "songloading_strategy_factory.hpp"
+#include "utils/unicode_file.hpp"
 
 namespace usdx
 {
@@ -45,11 +46,10 @@ namespace usdx
 		 */
 		std::pair<std::wstring, std::wstring> split_header_field(std::wstring &line);
 
-		bool parse_line(Song* song, File& file, const int line_number);
+		bool parse_line(Song* song, UnicodeFile& file, const int line_number);
 		void parse_newline(Song* song, std::wistringstream& linestream, const int line_number);
 		void parse_bpm(Song* song, std::wistringstream& linestream, const int line_number);
 		void parse_note(Song* song, wchar_t type, std::wistringstream& linestream, const int line_number);
-
 
 	public:
 		SongloadingStrategyTxt();
@@ -57,7 +57,11 @@ namespace usdx
 
 		virtual Song* load_song(Song* song);
 		virtual Song* load_header(const boost::filesystem::wpath& filename);
+
+		static std::wstring get_fileextension(void) { return L".txt"; };
 	};
+
+	REGISTER_SONGLOADING_STRATEGY(SongloadingStrategyTxt);
 };
 
 #endif

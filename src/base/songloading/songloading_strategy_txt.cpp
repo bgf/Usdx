@@ -32,7 +32,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "songloading_strategy_txt.hpp"
-#include "utils/file.hpp"
+#include "utils/unicode_file.hpp"
 #include "utils/locale_independent_float.hpp"
 
 namespace usdx
@@ -83,7 +83,7 @@ namespace usdx
 	{
 		LOG4CXX_DEBUG(log, L"Starting loading song from file: " << song->get_filename());
 
-		File file(song->get_filename());
+		UnicodeFile file(song->get_filename());
 
 		int line_number = 0;
 		while (file.stream().good() && parse_line(song, file, ++line_number));
@@ -93,7 +93,7 @@ namespace usdx
 		return song;
 	}
 
-	bool SongloadingStrategyTxt::parse_line(Song* song, File& file, const int line_number)
+	bool SongloadingStrategyTxt::parse_line(Song* song, UnicodeFile& file, const int line_number)
 	{
 		try {
 			std::wstring line;
@@ -191,7 +191,7 @@ namespace usdx
 
 	Song* SongloadingStrategyTxt::load_header(const boost::filesystem::wpath& filename)
 	{
-		File file(filename);
+		UnicodeFile file(filename);
 		std::wstring line;
 		std::map<std::wstring, std::wstring> header_fields;
 

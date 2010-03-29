@@ -30,9 +30,9 @@
 #include <map>
 #include <boost/filesystem.hpp>
 #include <log4cxx/logger.h>
-#include "songloading_strategy.hpp"
 #include "song.hpp"
 #include "utils/base_exception.hpp"
+#include "songloading_strategy_base_factory.hpp"
 
 namespace usdx
 {
@@ -50,7 +50,7 @@ namespace usdx
 
 		Songloader(void);
 
-		std::map<std::wstring, SongloadingStrategy*> strategies;
+		std::map<std::wstring, SongloadingStrategyBaseFactory*> strategies;
 
 		/**
 		 * Singleton
@@ -64,6 +64,8 @@ namespace usdx
 
 		Song* load_header(const boost::filesystem::wpath& filename);
 		Song* load_song(Song* song);
+
+		void add_strategy(SongloadingStrategyBaseFactory* strategie);
 	};
 };
 

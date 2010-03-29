@@ -24,34 +24,31 @@
  * $Id$
  */
 
-#ifndef SONGLOADING_STRATEGY_HPP
-#define SONGLOADING_STRATEGY_HPP
+#ifndef SONGLOADING_STRATEGY_BASE_FACTORY_HPP
+#define SONGLOADING_STRATEGY_BASE_FACTORY_HPP
 
 #include <string>
-#include <boost/filesystem.hpp>
-#include "song.hpp"
-
-#define _USDX_JOIN(strategy, line) _USDX_JOIN1(strategy, line)
-#define _USDX_JOIN1(strategy, line) autoregistration__strategy__##line
-
-/* Macros to simplify registration of SongLoadingStrategy */
-#define REGISTER_SONGLOADING_STRATEGY(strategy) \
-	static SongloadingStrategyFactory<strategy> \
-	_USDX_JOIN(strategy, __LINE__)
-
+#include "songloading_strategy.hpp"
 
 namespace usdx
 {
-	class SongloadingStrategy
+	class SongloadingStrategyBaseFactory
 	{
-	protected:
-		SongloadingStrategy() {};
+	private:
+		/// no copy
+		SongloadingStrategyBaseFactory(SongloadingStrategyBaseFactory&) {};
+
+		/// no copy
+		void operator=(SongloadingStrategyBaseFactory&) {};
+
+		std::wstring fileextension;
 
 	public:
-		virtual ~SongloadingStrategy() {};
+		SongloadingStrategyBaseFactory(std::wstring fileextension);
+		virtual ~SongloadingStrategyBaseFactory(void) {};
 
-		virtual Song* load_song(Song* song) = 0;
-		virtual Song* load_header(const boost::filesystem::wpath& filename) = 0;
+		virtual SongloadingStrategy *get_songloader(void) = 0;
+		std::wstring get_fileextension(void);
 	};
 };
 

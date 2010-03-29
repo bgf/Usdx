@@ -37,22 +37,10 @@ namespace usdx
 
 	Songloader::Songloader(void)
 	{
-		// add different strategies to map
-		strategies[L".txt"] = new SongloadingStrategyTxt();
-		strategies[L".xml"] = new SongloadingStrategyXml();
-	}
-
-	void remove_element(std::pair<std::wstring, SongloadingStrategy*> e)
-	{
-		delete e.second;
-		e.second = NULL;
 	}
 
 	Songloader::~Songloader(void)
 	{
-		// clear memory for all elements in the map
-		std::for_each(strategies.begin(), strategies.end(),
-			      remove_element);
 		strategies.clear();
 
 		// remove reference from singleton to make regeneration possible
@@ -71,24 +59,31 @@ namespace usdx
 	Song *Songloader::load_header(const boost::filesystem::wpath& filename)
 	{
 		std::wstring ext = extension(filename);
-		std::map<std::wstring, SongloadingStrategy*>::iterator it = strategies.find(ext);
+		std::map<std::wstring, SongloadingStrategyBaseFactory*>::iterator it = strategies.find(ext);
 		if (it == strategies.end()) {
 			LOG4CXX_WARN(log, L"No SongloadingStrategy found for file extension: '" << ext << L"'");
 			throw NoStrategyException("Unknown file format.");
 		}
 
-		return it->second->load_header(filename);
+		return it->second->get_songloader()->load_header(filename);
 	}
 
 	Song* Songloader::load_song(Song* song)
 	{
 		std::wstring ext = extension(song->get_filename());
-		std::map<std::wstring, SongloadingStrategy*>::iterator it = strategies.find(ext);
+		std::map<std::wstring, SongloadingStrategyBaseFactory*>::iterator it = strategies.find(ext);
 		if (it == strategies.end()) {
 			LOG4CXX_WARN(log, L"No SongloadingStrategy found for file extension: '" << ext << L"'");
 			throw NoStrategyException("Unknown file format.");
 		}
 
-		return it->second->load_song(song);
+		return it->second->get_songloader()->load_song(song);
+	}
+
+	void Songloader::add_strategy(SongloadingStrategyBaseFactory *factory)
+	{
+		if (factory) {
+			strategies[factory->get_fileextension()] = factory;
+		}
 	}
 };

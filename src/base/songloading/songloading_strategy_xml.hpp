@@ -29,6 +29,7 @@
 
 #include <boost/filesystem.hpp>
 #include "songloading_strategy.hpp"
+#include "songloading_strategy_factory.hpp"
 
 namespace usdx
 {
@@ -40,7 +41,11 @@ namespace usdx
 
 		virtual Song* load_song(Song* song);
 		virtual Song* load_header(const boost::filesystem::wpath& filename);
+
+		static std::wstring get_fileextension(void) { return L".xml"; };
 	};
+
+	REGISTER_SONGLOADING_STRATEGY(SongloadingStrategyXml);
 };
 
 #endif

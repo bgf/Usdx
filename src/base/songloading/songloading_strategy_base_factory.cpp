@@ -24,35 +24,18 @@
  * $Id$
  */
 
-#ifndef SONGLOADING_STRATEGY_HPP
-#define SONGLOADING_STRATEGY_HPP
-
-#include <string>
-#include <boost/filesystem.hpp>
-#include "song.hpp"
-
-#define _USDX_JOIN(strategy, line) _USDX_JOIN1(strategy, line)
-#define _USDX_JOIN1(strategy, line) autoregistration__strategy__##line
-
-/* Macros to simplify registration of SongLoadingStrategy */
-#define REGISTER_SONGLOADING_STRATEGY(strategy) \
-	static SongloadingStrategyFactory<strategy> \
-	_USDX_JOIN(strategy, __LINE__)
-
+#include "songloading_strategy_base_factory.hpp"
+#include "songloader.hpp"
 
 namespace usdx
 {
-	class SongloadingStrategy
+	SongloadingStrategyBaseFactory::SongloadingStrategyBaseFactory(std::wstring fileextension) : fileextension(fileextension)
 	{
-	protected:
-		SongloadingStrategy() {};
+		Songloader::get_instance()->add_strategy(this);
+	}
 
-	public:
-		virtual ~SongloadingStrategy() {};
-
-		virtual Song* load_song(Song* song) = 0;
-		virtual Song* load_header(const boost::filesystem::wpath& filename) = 0;
-	};
+	std::wstring SongloadingStrategyBaseFactory::get_fileextension(void)
+	{
+		return fileextension;
+	}
 };
-
-#endif

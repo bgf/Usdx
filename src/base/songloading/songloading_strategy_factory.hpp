@@ -24,34 +24,42 @@
  * $Id$
  */
 
-#ifndef SONGLOADING_STRATEGY_HPP
-#define SONGLOADING_STRATEGY_HPP
+#ifndef SONGLOADING_STRATEGY_FACTORY_HPP
+#define SONGLOADING_STRATEGY_FACTORY_HPP
 
-#include <string>
-#include <boost/filesystem.hpp>
-#include "song.hpp"
-
-#define _USDX_JOIN(strategy, line) _USDX_JOIN1(strategy, line)
-#define _USDX_JOIN1(strategy, line) autoregistration__strategy__##line
-
-/* Macros to simplify registration of SongLoadingStrategy */
-#define REGISTER_SONGLOADING_STRATEGY(strategy) \
-	static SongloadingStrategyFactory<strategy> \
-	_USDX_JOIN(strategy, __LINE__)
-
+#include "songloading_strategy_base_factory.hpp"
 
 namespace usdx
 {
-	class SongloadingStrategy
+	template <typename T>
+	class SongloadingStrategyFactory : public SongloadingStrategyBaseFactory
 	{
-	protected:
-		SongloadingStrategy() {};
+	private:
+		T *songloader;
 
 	public:
-		virtual ~SongloadingStrategy() {};
+		SongloadingStrategyFactory(void) :
+			SongloadingStrategyBaseFactory(T::get_fileextension()),
+			songloader(NULL)
+		{
+		}
 
-		virtual Song* load_song(Song* song) = 0;
-		virtual Song* load_header(const boost::filesystem::wpath& filename) = 0;
+		virtual ~SongloadingStrategyFactory(void)
+		{
+			if (songloader) {
+				delete songloader;
+				songloader = NULL;
+			}
+		}
+
+		T *get_songloader(void)
+		{
+			if (!songloader) {
+				songloader = new T();
+			}
+
+			return songloader;
+		}
 	};
 };
 
