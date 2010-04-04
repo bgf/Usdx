@@ -71,7 +71,7 @@ namespace usdx
 			CPPUNIT_ASSERT( 42.23f == song->get_bpm(10) );
 			CPPUNIT_ASSERT( 10 == song->get_gap() );
 			CPPUNIT_ASSERT( L"Test[BG].jpg" == song->get_background() );
-			CPPUNIT_ASSERT( L"Test[CO].jpg" == song->get_cover() );
+			CPPUNIT_ASSERT( L"Test[CO].jpg" == song->get_cover_file() );
 			CPPUNIT_ASSERT( L"Test Genre" == song->get_genre() );
 			CPPUNIT_ASSERT( false == song->get_relative() );
 			CPPUNIT_ASSERT( L"Cpp" == song->get_language() );

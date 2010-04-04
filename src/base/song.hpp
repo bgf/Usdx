@@ -34,6 +34,7 @@
 #include <log4cxx/logger.h>
 #include "bpm.hpp"
 #include "lyric_line.hpp"
+#include "texture.hpp"
 #include "utils/base_exception.hpp"
 
 namespace usdx
@@ -74,8 +75,8 @@ namespace usdx
 		std::wstring video;
 		float video_gap;
 
-		std::wstring cover;
-		// texture cover_tex;
+		std::wstring cover_file;
+		Texture* cover;
 
 		std::wstring genre;
 		std::wstring edition;
@@ -127,7 +128,7 @@ namespace usdx
 		const std::wstring& get_mp3(void) const;
 		const float get_bpm(int beat) const;
 		const float get_gap(void) const;
-		const std::wstring& get_cover(void) const;
+		const std::wstring& get_cover_file(void) const;
 		const std::wstring& get_background(void) const;
 		const std::wstring& get_video(void) const;
 		const float get_video_gap(void) const;

@@ -51,7 +51,7 @@ namespace usdx
 		bpm.push_back(new BPM(get_header_tag_float(L"BPM", true)));
 
 		gap = get_header_tag_float(L"GAP");
-		cover = get_header_tag(L"COVER");
+		cover_file = get_header_tag(L"COVER");
 		background = get_header_tag(L"BACKGROUND");
 
 		video = get_header_tag(L"VIDEO");
@@ -226,9 +226,9 @@ namespace usdx
 		return gap;
 	}
 
-	const std::wstring& Song::get_cover(void) const
+	const std::wstring& Song::get_cover_file(void) const
 	{
-		return cover;
+		return cover_file;
 	}
 
 	const std::wstring& Song::get_background(void) const
