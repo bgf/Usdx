@@ -27,16 +27,16 @@
 #ifndef TEXTURE_TRANSPARENT_HPP
 #define TEXTURE_TRANSPARENT_HPP
 
-#include "texture_plain.hpp"
+#include "texture.hpp"
 
 namespace usdx
 {
 	/**
 	 * This class represents a texture like TexturePlain but with the
 	 * ability to set a alpha value to paint this texture transparent.
-	 * @see: TexturePlain
+	 * @see: Texture
 	 */
-	class TextureTransparent : public TexturePlain
+	class TextureTransparent : public Texture
 	{
 	private:
 		float alpha;

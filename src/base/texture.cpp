@@ -24,39 +24,9 @@
  * $Id$
  */
 
-#ifndef TEXTURE_PLAIN_HPP
-#define TEXTURE_PLAIN_HPP
-
-#include <boost/filesystem.hpp>
-#include <GL/gl.h>
-#include "utils/point_3d.hpp"
-#include "utils/dimension.hpp"
-#include "utils/rectangle.hpp"
+#include "texture.hpp"
 
 namespace usdx
 {
-	class TexturePlain
-	{
-	private:
-		GLuint tex_num;
-		Point3D position;
-		Dimension size;
-
-		Dimension scale; ///< for dynamic scaling
-		float rotation; ///< radiant (0 - 2*pi)
-
-		Dimension tex; ///< percentage of size to use [0..1]
-		Rectangle tex_rect;
-
-		boost::filesystem::wpath filename; ///< experimental for
-						   ///handling cache
-						   ///images. maybe it's useful
-						   ///for dynamic skins
-
-	public:
-		TexturePlain();
-		virtual ~TexturePlain();
-	};
+	
 };
-
-#endif
