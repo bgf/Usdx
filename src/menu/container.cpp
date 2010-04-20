@@ -24,29 +24,35 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#include "container.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	Container::Container()
 	{
 	}
 
-	void Drawable::repaint(void) const
+	Container::~Container()
 	{
-		if (visible) {
-			draw();
+		for (std::list<DrawableControl*>::iterator it =
+			     controls.begin(); it != controls.end(); it++) {
+			delete *it;
 		}
-	};
 
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
+		controls.clear();
 	}
 
-	const bool Drawable::get_visible(void) const
+	void Container::repaint(void) const
 	{
-		return visible;
+		if (get_visible()) {
+			draw();
+
+			for (std::list<DrawableControl*>::const_iterator it =
+				     controls.begin();
+			     it != controls.end(); it++) {
+
+				(*it)->repaint();
+			}
+		}
 	}
 };

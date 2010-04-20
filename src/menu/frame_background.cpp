@@ -24,29 +24,15 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#include "frame_background.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	FrameBackground::FrameBackground()
 	{
 	}
 
-	void Drawable::repaint(void) const
+	FrameBackground::~FrameBackground()
 	{
-		if (visible) {
-			draw();
-		}
-	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
 	}
 };

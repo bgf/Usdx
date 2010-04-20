@@ -41,16 +41,16 @@ namespace usdx
 		/**
 		 * Pure virtual method, that descendant classes have to implement.
 		 */
-		virtual void on_draw(void) const = 0;
+		virtual void draw(void) const = 0;
 
 	public:
  		Drawable(void);
 		virtual ~Drawable(void) {};
 
 		/**
-		 * Method for redraw this Object. If visible issues on_draw.
+		 * Method for redraw this Object. If visible issues draw.
 		 */
-		void draw(void) const;
+		void repaint(void) const;
 
 		/**
 		 * Setter for visible.

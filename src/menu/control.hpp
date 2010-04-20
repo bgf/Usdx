@@ -24,45 +24,16 @@
  * $Id$
  */
 
-#ifndef MENUBACKGROUND_HPP
-#define MENUBACKGROUND_HPP
+#ifndef CONTROL_HPP
+#define CONTROL_HPP
 
 namespace usdx
 {
-	// Exception
-	class MenuBackgroundException { };
-
-	// MenuBackground - abstract class for MenuBackgrounds
-	class MenuBackground
+	class Control
 	{
 	public:
-		virtual void draw(void) = 0;
-
-		// optional methods
-		virtual ~MenuBackground() {}
-
-		virtual void on_show(void) {}
-		virtual void on_finish(void) {}
-
-	protected:
-		// no copy and no assignment
-		MenuBackground(const MenuBackground&);
-		MenuBackground& operator=(const MenuBackground&);
-	};
-
-	class MenuBackgroundNone : MenuBackground
-	{
-	public:
-		virtual void draw(void);
-	};
-
-	class MenuBackgroundColor : MenuBackground
-	{
-	private:
-		RGB color;
-	public:
-		MenuBackgroundColor(RGB &color);
-		virtual void draw(void);
+		Control();
+		virtual ~Control();
 	};
 };
 

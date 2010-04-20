@@ -24,29 +24,18 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#include "frame_background_color.hpp"
+#include <GL/gl.h>
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	FrameBackgroundColor::FrameBackgroundColor(RgbColor &color) : color(color)
 	{
 	}
 
-	void Drawable::repaint(void) const
+	void FrameBackgroundColor::draw(void) const
 	{
-		if (visible) {
-			draw();
-		}
-	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
+		glClearColor(color.get_red(), color.get_green(), color.get_blue(), 0);
+		glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
 	}
 };

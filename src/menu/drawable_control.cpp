@@ -24,29 +24,15 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#include "drawable_control.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	DrawableControl::DrawableControl()
 	{
 	}
 
-	void Drawable::repaint(void) const
+	DrawableControl::~DrawableControl()
 	{
-		if (visible) {
-			draw();
-		}
-	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
 	}
 };

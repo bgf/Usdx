@@ -24,35 +24,15 @@
  * $Id$
  */
 
-#if 0
-
-#include "menuBackground.hpp"
-#include <GL/gl.h>
-
-int screen_act = 1;
+#include "control.hpp"
 
 namespace usdx
 {
-	void MenuBackgroundNone::draw(void)
+	Control::Control()
 	{
-		// clear just once when in dual screen mode
-		if (screen_act == 0)
-			glClear(GL_DEPTH_BUFFER_BIT);
 	}
 
-	MenuBackgroundColor::MenuBackgrundColor(RGB &color)
+	Control::~Control()
 	{
-		this->color = color;
-	}
-
-	void MenuBackgroundColor::draw(void)
-	{
-		// just clear once, even when using two screens
-		if (screen_act == 1) {
-			glClearColor(color.r, color.g, color.b, 0);
-			glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-		}
 	}
 };
-
-#endif

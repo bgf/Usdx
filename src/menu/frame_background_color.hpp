@@ -24,29 +24,27 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#ifndef FRAME_BACKGROUND_COLOR_HPP
+#define FRAME_BACKGROUND_COLOR_HPP
+
+#include "frame_background.hpp"
+#include "utils/rgb_color.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	class FrameBackgroundColor : public FrameBackground
 	{
-	}
+	private:
+		RgbColor color;
 
-	void Drawable::repaint(void) const
-	{
-		if (visible) {
-			draw();
-		}
+	protected:
+		virtual void draw(void) const;
+
+	public:
+		FrameBackgroundColor(RgbColor &color);
+
 	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
-	}
 };
+
+
+#endif

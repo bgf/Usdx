@@ -24,29 +24,30 @@
  * $Id$
  */
 
-#include "drawable.hpp"
+#ifndef CONTAINER_HPP
+#define CONTAINER_HPP
+
+#include "drawable_control.hpp"
+#include <list>
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	class Container : public DrawableControl
 	{
-	}
+	private:
+		std::list<DrawableControl*> controls;
 
-	void Drawable::repaint(void) const
-	{
-		if (visible) {
-			draw();
-		}
+	public:
+		Container();
+		virtual ~Container();
+
+		/**
+		 * Method for redraw all contained objects.
+		 */
+		void repaint(void) const;
+
 	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
-	}
 };
+
+
+#endif

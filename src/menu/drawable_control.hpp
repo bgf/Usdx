@@ -24,29 +24,27 @@
  * $Id$
  */
 
+#ifndef DRAWABLE_CONTROL_HPP
+#define DRAWABLE_CONTROL_HPP
+
 #include "drawable.hpp"
+#include "control.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
+	class DrawableControl : public Drawable, public Control
 	{
-	}
+	protected:
+                /**
+		 * Pure virtual method, that descendant classes have to
+		 * implement. (Should be left pure virtual.)
+		 */
+		virtual void draw(void) const = 0;
 
-	void Drawable::repaint(void) const
-	{
-		if (visible) {
-			draw();
-		}
+	public:
+		DrawableControl();
+		virtual ~DrawableControl();
 	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
-	}
 };
+
+#endif

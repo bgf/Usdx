@@ -24,29 +24,35 @@
  * $Id$
  */
 
+#ifndef FRAME_BACKGROUND_HPP
+#define FRAME_BACKGROUND_HPP
+
 #include "drawable.hpp"
 
 namespace usdx
 {
-	Drawable::Drawable(void) : visible(true)
-	{
-	}
+	// Exception
+	class FrameBackgroundException { };
 
-	void Drawable::repaint(void) const
+	// FrameBackground - abstract class for FrameBackgrounds
+	class FrameBackground : public Drawable
 	{
-		if (visible) {
-			draw();
-		}
+	public:
+		FrameBackground();
+
+		// optional methods
+		virtual ~FrameBackground();
+
+		virtual void on_show(void) {}
+		virtual void on_finish(void) {}
+
+	protected:
+		// no copy and no assignment
+		FrameBackground(const FrameBackground&);
+		FrameBackground& operator=(const FrameBackground&);
+
+		virtual void draw(void) = 0;
 	};
-
-	void Drawable::set_visible(bool value)
-	{
-		visible = value;
-		draw();
-	}
-
-	const bool Drawable::get_visible(void) const
-	{
-		return visible;
-	}
 };
+
+#endif
