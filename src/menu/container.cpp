@@ -28,7 +28,8 @@
 
 namespace usdx
 {
-	Container::Container()
+	Container::Container(Control* parent)
+		: DrawableControl(parent)
 	{
 	}
 

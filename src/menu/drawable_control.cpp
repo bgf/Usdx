@@ -28,7 +28,8 @@
 
 namespace usdx
 {
-	DrawableControl::DrawableControl()
+	DrawableControl::DrawableControl(Control* parent)
+		: Control(parent)
 	{
 	}
 

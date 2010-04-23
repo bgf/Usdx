@@ -41,8 +41,8 @@ namespace usdx
 		virtual void draw(void) const;
 
 	public:
-		Frame();
-		Frame(FrameBackground* background);
+		Frame(Control* parent);
+		Frame(Control* parent, FrameBackground* background);
 
 		virtual ~Frame();
 

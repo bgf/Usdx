@@ -42,7 +42,7 @@ namespace usdx
 		virtual void draw(void) const = 0;
 
 	public:
-		DrawableControl();
+		DrawableControl(Control* parent);
 		virtual ~DrawableControl();
 	};
 };

@@ -31,9 +31,16 @@ namespace usdx
 {
 	class Control
 	{
+	private:
+		Control* parent;
+
 	public:
-		Control();
+		Control(Control *parent);
 		virtual ~Control();
+
+		void set_parent(Control *parent);
+
+		Control* get_parent(void) const;
 	};
 };
 

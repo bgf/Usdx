@@ -24,15 +24,31 @@
  * $Id$
  */
 
+#include <stddef.h>
 #include "control.hpp"
 
 namespace usdx
 {
-	Control::Control()
+	Control::Control(Control *parent)
+		: parent(parent)
 	{
 	}
 
 	Control::~Control()
 	{
+		if (parent) {
+			delete parent;
+			parent = NULL;
+		}
+	}
+
+	void Control::set_parent(Control *parent)
+	{
+		this->parent = parent;
+	}
+
+	Control* Control::get_parent(void) const
+	{
+		return parent;
 	}
 };

@@ -38,7 +38,7 @@ namespace usdx
 		std::list<DrawableControl*> controls;
 
 	public:
-		Container();
+		Container(Control* parent);
 		virtual ~Container();
 
 		/**

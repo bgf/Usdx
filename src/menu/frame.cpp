@@ -28,11 +28,13 @@
 
 namespace usdx
 {
-	Frame::Frame() : background(NULL)
+	Frame::Frame(Control* parent)
+		: Container(parent), background(NULL)
 	{
 	}
 
-	Frame::Frame(FrameBackground* background) : background(background)
+	Frame::Frame(Control* parent, FrameBackground* background)
+		: Container(parent), background(background)
 	{
 	}
 
