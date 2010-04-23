@@ -57,6 +57,7 @@ $(TARGET):	$(objects) $(deps)
 # build and execute tests with code coverage and build nice html pages 
 
 test-with-coverage:			$(COVERAGE-DIR)/html/index.html
+	@test ! -e .error
 
 $(COVERAGE-DIR)/html/index.html:	$(COVERAGE-DIR)/coverage.info
 	genhtml $(COVERAGE-DIR)/coverage.info -o $(COVERAGE-DIR)/html/ -p \
@@ -68,8 +69,9 @@ $(COVERAGE-DIR)/coverage.info:		$(COVERAGE-DIR)/coverage.info.tmp
 		-o $(COVERAGE-DIR)/coverage.info
 
 $(COVERAGE-DIR)/coverage.info.tmp:	$(TARGET-COVERAGE)
+	-$(RM) .error
 	lcov --directory $(TOP) --zerocounters
-	./$(TARGET-COVERAGE) || true
+	./$(TARGET-COVERAGE) || touch .error
 	lcov --directory $(TOP) --capture \
 		--output-file $(COVERAGE-DIR)/coverage.info.tmp -b .
 
