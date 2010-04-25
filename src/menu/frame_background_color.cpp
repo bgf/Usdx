@@ -25,7 +25,6 @@
  */
 
 #include "frame_background_color.hpp"
-#include <GL/gl.h>
 
 namespace usdx
 {
@@ -35,7 +34,5 @@ namespace usdx
 
 	void FrameBackgroundColor::draw(SDL_Surface* display) const
 	{
-		glClearColor(color.get_red(), color.get_green(), color.get_blue(), 0);
-		glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
 	}
 };
