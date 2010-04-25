@@ -15,10 +15,12 @@ Thumbs.db
 *.bdsproj.local
 *.bak
 *~
-Makefile
 config.log
 config.status
 __history
 aclocal.m4
 autom4te.cache/
 coverage/
+usdx
+test/
+debug.log
