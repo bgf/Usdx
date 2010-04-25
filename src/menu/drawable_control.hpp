@@ -27,6 +27,8 @@
 #ifndef DRAWABLE_CONTROL_HPP
 #define DRAWABLE_CONTROL_HPP
 
+#include <SDL/SDL.h>
+
 #include "drawable.hpp"
 #include "control.hpp"
 
@@ -39,7 +41,7 @@ namespace usdx
 		 * Pure virtual method, that descendant classes have to
 		 * implement. (Should be left pure virtual.)
 		 */
-		virtual void draw(void) const = 0;
+		virtual void draw(SDL_Surface* display) const = 0;
 
 	public:
 		DrawableControl(Control* parent);

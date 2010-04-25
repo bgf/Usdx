@@ -33,7 +33,7 @@ namespace usdx
 	{
 	}
 
-	void FrameBackgroundColor::draw(void) const
+	void FrameBackgroundColor::draw(SDL_Surface* display) const
 	{
 		glClearColor(color.get_red(), color.get_green(), color.get_blue(), 0);
 		glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);

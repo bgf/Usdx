@@ -51,7 +51,7 @@ namespace usdx
 		FrameBackground(const FrameBackground&);
 		FrameBackground& operator=(const FrameBackground&);
 
-		virtual void draw(void) = 0;
+		virtual void draw(SDL_Surface* display) = 0;
 	};
 };
 

@@ -32,17 +32,16 @@ namespace usdx
 	{
 	}
 
-	void Drawable::repaint(void) const
+	void Drawable::repaint(SDL_Surface* display) const
 	{
 		if (visible) {
-			draw();
+			draw(display);
 		}
 	};
 
 	void Drawable::set_visible(bool value)
 	{
 		visible = value;
-		draw();
 	}
 
 	const bool Drawable::get_visible(void) const

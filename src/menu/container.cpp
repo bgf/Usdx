@@ -43,16 +43,16 @@ namespace usdx
 		controls.clear();
 	}
 
-	void Container::repaint(void) const
+	void Container::repaint(SDL_Surface* display) const
 	{
 		if (get_visible()) {
-			draw();
+			draw(display);
 
 			for (std::list<DrawableControl*>::const_iterator it =
 				     controls.begin();
 			     it != controls.end(); it++) {
 
-				(*it)->repaint();
+				(*it)->repaint(display);
 			}
 		}
 	}

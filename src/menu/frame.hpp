@@ -27,6 +27,8 @@
 #ifndef FRAME_HPP
 #define FRAME_HPP
 
+#include <SDL/SDL.h>
+
 #include "container.hpp"
 #include "frame_background.hpp"
 
@@ -38,7 +40,7 @@ namespace usdx
 		FrameBackground* background;
 
 	protected:
-		virtual void draw(void) const;
+		virtual void draw(SDL_Surface* display) const;
 
 	public:
 		Frame(Control* parent);

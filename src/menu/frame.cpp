@@ -56,8 +56,8 @@ namespace usdx
 		return background;
 	}
 
-	void Frame::draw(void) const
+	void Frame::draw(SDL_Surface* display) const
 	{
-		background->repaint();
+		background->repaint(display);
 	}
 };

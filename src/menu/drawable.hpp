@@ -27,6 +27,8 @@
 #ifndef DRAWABLE_HPP
 #define DRAWABLE_HPP
 
+#include <SDL/SDL.h>
+
 namespace usdx
 {
 	/**
@@ -41,7 +43,7 @@ namespace usdx
 		/**
 		 * Pure virtual method, that descendant classes have to implement.
 		 */
-		virtual void draw(void) const = 0;
+		virtual void draw(SDL_Surface* display) const = 0;
 
 	public:
  		Drawable(void);
@@ -50,7 +52,7 @@ namespace usdx
 		/**
 		 * Method for redraw this Object. If visible issues draw.
 		 */
-		void repaint(void) const;
+		void repaint(SDL_Surface* display) const;
 
 		/**
 		 * Setter for visible.

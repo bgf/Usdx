@@ -27,8 +27,10 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
 
-#include "drawable_control.hpp"
+#include <SDL/SDL.h>
 #include <list>
+
+#include "drawable_control.hpp"
 
 namespace usdx
 {
@@ -44,7 +46,7 @@ namespace usdx
 		/**
 		 * Method for redraw all contained objects.
 		 */
-		void repaint(void) const;
+		void repaint(SDL_Surface* display) const;
 
 	};
 };
