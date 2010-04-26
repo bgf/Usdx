@@ -51,6 +51,9 @@ namespace usdx
 		}
 
 		SDL_Quit();
+
+		// reset instance to be able to recreate the singleton
+		instance = NULL;
 	}
 
 	Application* Application::get_instance(void)
