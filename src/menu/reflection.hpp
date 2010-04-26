@@ -37,12 +37,11 @@ namespace usdx
 		float spacing;
 
 	protected:
-		virtual void on_draw(void) const;
+		virtual void draw(SDL_Surface* display) const;
 
 	public:
 		Reflection(float spacing);
 		virtual ~Reflection(void);
-
 
 		void set_spacing(float value);
 		const float get_spacing(void) const;

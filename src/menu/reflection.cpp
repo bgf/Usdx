@@ -36,14 +36,13 @@ namespace usdx
 	{
 	}
 
-	void Reflection::on_draw(void) const
+	void Reflection::draw(SDL_Surface* display) const
 	{
 	}
 
 	void Reflection::set_spacing(float value)
 	{
 		spacing = value;
-		draw();
 	}
 
 	const float Reflection::get_spacing(void) const
