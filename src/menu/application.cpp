@@ -36,11 +36,10 @@ namespace usdx
 
 	Application::Application(Control* parent)
 		: DrawableControl(parent), display(NULL), frame(NULL),
-		  running(false), display_width(800), display_height(600)
+		  fps_manager(NULL), running(false), display_width(800),
+		  display_height(600), frames_per_second(50)
 	{
 		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-
-		fps_manager = new FPSmanager();
 	}
 
 	Application::~Application()
@@ -80,7 +79,6 @@ namespace usdx
 	void Application::set_current_frame(Frame* new_frame)
 	{
 		frame = new_frame;
-		repaint(display);
 	}
 
 	void Application::main_loop(SDL_Surface* display)
@@ -93,7 +91,7 @@ namespace usdx
 			repaint(display);
 			SDL_Flip(display);
 
-			LOG4CXX_ERROR(log, L"repaint");
+			LOG4CXX_TRACE(log, L"repaint");
 
 			// poll current events
 			while (SDL_PollEvent(&event)) {
@@ -124,8 +122,9 @@ namespace usdx
 			throw new std::exception();
 		}
 
-		SDL_initFramerate(fps_manager);
-		SDL_setFramerate(fps_manager, 50);
+		init_fps_manager();
+
+		SDL_setFramerate(fps_manager, frames_per_second);
 
 		main_loop(display);
 	}
@@ -138,5 +137,27 @@ namespace usdx
 	const int Application::get_display_height(void) const
 	{
 		return display_height;
+	}
+
+	const int Application::get_frames_per_second(void) const
+	{
+		return frames_per_second;
+	}
+
+	void Application::set_frames_per_second(int fps)
+	{
+		this->frames_per_second = fps;
+
+		if (fps_manager) {
+			SDL_setFramerate(fps_manager, frames_per_second);
+		}
+	}
+
+	void Application::init_fps_manager(void)
+	{
+		if (! fps_manager) {
+			fps_manager = new FPSmanager();
+			SDL_initFramerate(fps_manager);
+		}
 	}
 };

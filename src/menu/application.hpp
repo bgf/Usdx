@@ -51,10 +51,14 @@ namespace usdx
 		int display_width;
 		int display_height;
 
+		int frames_per_second;
+
 		/**
 		 * This is the main loop.
 		 */
 		void main_loop(SDL_Surface* display);
+
+		void init_fps_manager(void);
 
 	protected:
 		Application(Control* parent);
@@ -73,6 +77,9 @@ namespace usdx
 
 		const int get_display_width(void) const;
 		const int get_display_height(void) const;
+
+		const int get_frames_per_second(void) const;
+		void set_frames_per_second(int fps);
 	};
 };
 
