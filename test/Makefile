@@ -2,15 +2,15 @@ PROJECT:=usdx-tests
 TOP:=..
 
 headers:=$(wildcard *.hpp) $(wildcard */*.hpp) $(wildcard $(TOP)/src/*/*/*.hpp) \
-		$(wildcard $(TOP)/src/*/*.hpp) $(wildcard $(TOP)/src/*.hpp)
+		$(wildcard $(TOP)/src/*/*.hpp)
 
 sources:=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard $(TOP)/src/*/*/*.cpp) \
-		$(wildcard $(TOP)/src/*/*.cpp) $(wildcard $(TOP)/src/*.cpp)
+		$(wildcard $(TOP)/src/*/*.cpp)
 
 deps:=$(sources:.cpp=.d)
 
 CXXFLAGS:=-Wall -Werror -I$(TOP)/src -I$(TOP)/src/base -I$(TOP)/src/menu -I$(TOP)/src/media -I$(TOP)/src/screens -g
-LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt -lSDL_image -lcppunit -lGL
+LDFLAGS:=-lsqlite3 -lSDL -llog4cxx -lboost_program_options-mt -lboost_filesystem-mt -lSDL_image -lcppunit -lSDL_gfx
 TARGET:=$(PROJECT)
 
 objects:=$(sources:.cpp=.o)
