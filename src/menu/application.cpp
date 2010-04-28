@@ -25,6 +25,7 @@
  */
 
 #include "application.hpp"
+#include "event_manager.hpp"
 #include <exception>
 
 namespace usdx
@@ -84,6 +85,8 @@ namespace usdx
 	void Application::main_loop(SDL_Surface* display)
 	{
 		SDL_Event event;
+		EventManager event_manager;
+		boost::thread event_thread(boost::bind(&EventManager::handle_events, &event_manager));
 
 		running = true;
 		while (running) {
@@ -94,17 +97,26 @@ namespace usdx
 			LOG4CXX_TRACE(log, L"repaint");
 
 			// poll current events
-			while (SDL_PollEvent(&event)) {
+			while (event_manager.available() && SDL_PollEvent(&event)) {
 				switch (event.type) {
 				case SDL_QUIT:
 					running = false;
-					return;
+					event_thread.interrupt();
+					break;
+
+				default:
+					event_manager.add_event(event);
+					break;
 				}
 			}
 
-			// limit frames
-			SDL_framerateDelay(fps_manager);
+			if (running) {
+				// limit frames
+				SDL_framerateDelay(fps_manager);
+			}
 		}
+
+		event_thread.join();
 	}
 
 	void Application::run(void)
