@@ -54,7 +54,7 @@ $(TARGET):	$(objects) $(deps)
 	$(CXX) $(CXXFLAGS) -MM -c $< -MF $@
 
 ##############################################################################
-# build and execute tests with code coverage and build nice html pages 
+# build and execute tests with code coverage and build nice html pages
 
 test-with-coverage:			$(COVERAGE-DIR)/html/index.html
 	@test ! -e .error
