@@ -36,13 +36,6 @@ namespace usdx
 {
 	class DrawableControl : public Drawable, public Control
 	{
-	protected:
-                /**
-		 * Pure virtual method, that descendant classes have to
-		 * implement. (Should be left pure virtual.)
-		 */
-		virtual void draw(SDL_Surface* display) const = 0;
-
 	public:
 		DrawableControl(Control* parent);
 		virtual ~DrawableControl();
