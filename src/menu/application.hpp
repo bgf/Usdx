@@ -30,6 +30,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_framerate.h>
 #include <log4cxx/logger.h>
+#include <list>
 
 #include "drawable_control.hpp"
 #include "frame.hpp"
@@ -52,6 +53,8 @@ namespace usdx
 		int display_height;
 
 		int frames_per_second;
+
+		std::list<DrawableControl*> overlays;
 
 		/**
 		 * This is the main loop.
@@ -80,6 +83,8 @@ namespace usdx
 
 		const int get_frames_per_second(void) const;
 		void set_frames_per_second(int fps);
+
+		void repaint(SDL_Surface* display) const;
 	};
 };
 

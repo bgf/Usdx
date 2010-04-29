@@ -45,6 +45,13 @@ namespace usdx
 
 	Application::~Application()
 	{
+		for (std::list<DrawableControl*>::iterator it =
+			     overlays.begin(); it != overlays.end(); it++) {
+			delete *it;
+		}
+
+		overlays.clear();
+
 		if (fps_manager) {
 			delete fps_manager;
 			fps_manager = NULL;
@@ -69,6 +76,17 @@ namespace usdx
 	{
 		if (frame) {
 			frame->repaint(screen);
+		}
+	}
+
+	void Application::repaint(SDL_Surface* display) const {
+		DrawableControl::repaint(display);
+
+		for (std::list<DrawableControl*>::const_iterator it =
+			     overlays.begin();
+		     it != overlays.end(); it++) {
+
+			(*it)->repaint(display);
 		}
 	}
 
