@@ -36,6 +36,7 @@
 #include <boost/thread/condition.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/signals2.hpp>
 
 #include <log4cxx/logger.h>
 
@@ -121,6 +122,9 @@ namespace usdx
 		 * left the buffer for a new element or not.
 		 */
 		bool available(void);
+
+
+		boost::signals2::signal<void (int, int)> mouse_move;
 	};
 };
 

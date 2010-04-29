@@ -98,7 +98,7 @@ namespace usdx
 				break;
 
 			case SDL_MOUSEMOTION:
-				LOG4CXX_ERROR(log, L"mouse");
+				mouse_move(event.motion.x, event.motion.y);
 			}
 		}
 	}
