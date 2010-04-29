@@ -27,6 +27,8 @@
 #include "application.hpp"
 #include "event_manager.hpp"
 #include <exception>
+#include "software_mouse_pointer.hpp"
+
 
 namespace usdx
 {
@@ -105,6 +107,7 @@ namespace usdx
 		SDL_Event event;
 		EventManager event_manager;
 		boost::thread event_thread(boost::bind(&EventManager::handle_events, &event_manager));
+		overlays.push_front(new SoftwareMousePointer(NULL, &event_manager));
 
 		running = true;
 		while (running) {
@@ -156,7 +159,11 @@ namespace usdx
 
 		SDL_setFramerate(fps_manager, frames_per_second);
 
+		SDL_ShowCursor(SDL_DISABLE);
+
 		main_loop(display);
+
+		SDL_ShowCursor(SDL_ENABLE);
 	}
 
 	const int Application::get_display_width(void) const
