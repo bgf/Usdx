@@ -66,7 +66,7 @@ namespace usdx
 	protected:
 		Application(Control* parent);
 
-		void draw(SDL_Surface* screen) const;
+		void draw(SDL_Surface* display) const;
 
 	public:
 		virtual ~Application();

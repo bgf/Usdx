@@ -72,10 +72,10 @@ namespace usdx
 		return instance;
 	}
 
-	void Application::draw(SDL_Surface* screen) const
+	void Application::draw(SDL_Surface* display) const
 	{
 		if (frame) {
-			frame->repaint(screen);
+			frame->repaint(display);
 		}
 	}
 
