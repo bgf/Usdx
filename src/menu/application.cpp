@@ -28,6 +28,7 @@
 #include "event_manager.hpp"
 #include <exception>
 #include "software_mouse_pointer.hpp"
+#include "loading_frame.hpp"
 #include <GL/gl.h>
 
 namespace usdx
@@ -108,6 +109,9 @@ namespace usdx
 		EventManager event_manager;
 		boost::thread event_thread(boost::bind(&EventManager::handle_events, &event_manager));
 		overlays.push_front(new SoftwareMousePointer(NULL, &event_manager));
+
+		LoadingFrame frame;
+		set_current_frame(&frame);
 
 		running = true;
 		while (running) {
