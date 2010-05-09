@@ -39,6 +39,12 @@ namespace usdx
 
 	EventManager::~EventManager(void)
 	{
+		boost::mutex::scoped_lock lock(mutex);
+
+		while (waiting > 0) {
+			--waiting;
+			delete buffer[waiting];
+		}
 	}
 
 	bool EventManager::is_not_full() const
