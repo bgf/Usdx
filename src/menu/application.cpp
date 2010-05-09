@@ -28,7 +28,7 @@
 #include "event_manager.hpp"
 #include <exception>
 #include "software_mouse_pointer.hpp"
-
+#include <GL/gl.h>
 
 namespace usdx
 {
@@ -74,21 +74,21 @@ namespace usdx
 		return instance;
 	}
 
-	void Application::draw(SDL_Surface* display) const
+	void Application::draw(void)
 	{
 		if (frame) {
-			frame->repaint(display);
+			frame->repaint();
 		}
 	}
 
-	void Application::repaint(SDL_Surface* display) const {
-		DrawableControl::repaint(display);
+	void Application::repaint(void) {
+		DrawableControl::repaint();
 
 		for (std::list<DrawableControl*>::const_iterator it =
 			     overlays.begin();
 		     it != overlays.end(); it++) {
 
-			(*it)->repaint(display);
+			(*it)->repaint();
 		}
 	}
 
@@ -112,8 +112,8 @@ namespace usdx
 		running = true;
 		while (running) {
 			// repaint everything
-			repaint(display);
-			SDL_Flip(display);
+			repaint();
+			SDL_GL_SwapBuffers();
 
 			LOG4CXX_TRACE(log, L"repaint");
 
@@ -123,7 +123,6 @@ namespace usdx
 				case SDL_QUIT:
 					running = false;
 					event_thread.interrupt();
-					break;
 
 				default:
 					event_manager.add_event(event);
@@ -143,11 +142,42 @@ namespace usdx
 	void Application::run(void)
 	{
 		if (! display) {
+			// opengl settings
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+			// center screen
+			char test[] = "SDL_VIDEO_CENTERED=center";
+			SDL_putenv(test);
+
+			// create screen
 			display = SDL_SetVideoMode(display_width,
 						   display_height,
 						   24,
-						   SDL_SWSURFACE |
-						   SDL_DOUBLEBUF);
+						   SDL_OPENGL);
+
+			glEnable( GL_TEXTURE_2D );
+
+			glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
+			glViewport( 0, 0, display_width, display_height );
+
+			glClear( GL_COLOR_BUFFER_BIT );
+
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_COLOR_MATERIAL);
+
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+
+			glOrtho(0.0f, display_width, display_height, 0.0f, -1.0f, 1.0f);
+
+			glMatrixMode( GL_MODELVIEW );
+			glLoadIdentity();
 		}
 
 		if (! display) {

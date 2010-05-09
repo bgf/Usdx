@@ -40,7 +40,7 @@ namespace usdx
 		FrameBackground* background;
 
 	protected:
-		virtual void draw(SDL_Surface* display) const;
+		virtual void draw(void);
 
 	public:
 		Frame(Control* parent);

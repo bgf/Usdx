@@ -53,7 +53,7 @@ namespace usdx
 		static log4cxx::LoggerPtr log;
 
 		boost::filesystem::wpath filename;
-		SDL_Surface *surface;
+		SDL_Surface* surface;
 
 		void load(void);
 
@@ -61,7 +61,7 @@ namespace usdx
 		Image(boost::filesystem::wpath filename);
 		virtual ~Image();
 
-		const SDL_Surface* get_surface(void);
+		SDL_Surface* get_surface(void);
 	};
 };
 

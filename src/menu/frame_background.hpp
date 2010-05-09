@@ -39,19 +39,12 @@ namespace usdx
 	{
 	public:
 		FrameBackground();
-
-		// optional methods
 		virtual ~FrameBackground();
-
-		virtual void on_show(void) {}
-		virtual void on_finish(void) {}
 
 	protected:
 		// no copy and no assignment
 		FrameBackground(const FrameBackground&);
 		FrameBackground& operator=(const FrameBackground&);
-
-		virtual void draw(SDL_Surface* display) = 0;
 	};
 };
 

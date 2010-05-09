@@ -30,9 +30,11 @@
 #include "drawable_control.hpp"
 #include "control.hpp"
 #include "event_manager.hpp"
-#include "image.hpp"
+#include "texture.hpp"
 
 #include <boost/signals2.hpp>
+#include <boost/thread/mutex.hpp>
+#include <GL/gl.h>
 
 namespace usdx
 {
@@ -42,12 +44,19 @@ namespace usdx
 		int x;
 		int y;
 
-		Image* texture;
+		GLfloat vertices[12];
+		GLubyte color[16];
+		GLfloat texture[8];
+
+		Texture* texture_normal;
+		Texture* texture_pressed;
 
 		boost::signals2::connection mouse_move_connection;
 
+		boost::mutex mutex;
+
 	protected:
-		void draw(SDL_Surface* display) const;
+		void draw(void);
 
 	public:
 		SoftwareMousePointer(Control* parent, EventManager* event_manager);

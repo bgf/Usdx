@@ -25,14 +25,23 @@
  */
 
 #include "frame_background_color.hpp"
+#include <GL/gl.h>
 
 namespace usdx
 {
-	FrameBackgroundColor::FrameBackgroundColor(RgbColor &color) : color(color)
+	FrameBackgroundColor::FrameBackgroundColor(RgbColor &color) :
+		color(color)
 	{
 	}
 
-	void FrameBackgroundColor::draw(SDL_Surface* display) const
+	FrameBackgroundColor::FrameBackgroundColor(void) :
+		color(0, 0, 0)
 	{
+	}
+
+	void FrameBackgroundColor::draw()
+	{
+		glClearColor(color.get_red(), color.get_green(), color.get_blue(), 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 };

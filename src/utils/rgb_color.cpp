@@ -28,8 +28,13 @@
 
 namespace usdx
 {
-	RgbColor::RgbColor(float red, float green, float blue) :
-		red(red), green(green), blue(blue)
+	RgbColor::RgbColor(int red, int green, int blue)
+		: red(red / 255.0f), green(green / 255.0f), blue(blue / 255.0f)
+	{
+	}
+
+	RgbColor::RgbColor(float red, float green, float blue)
+		: red(red), green(green), blue(blue)
 	{
 	}
 

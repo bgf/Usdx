@@ -29,33 +29,61 @@
 
 #include <boost/filesystem.hpp>
 #include <GL/gl.h>
+
 #include "utils/point_3d.hpp"
 #include "utils/dimension.hpp"
 #include "utils/rectangle.hpp"
+#include "image.hpp"
+#include "drawable.hpp"
 
 namespace usdx
 {
+	class TextureLoadException
+	{
+	public:
+		TextureLoadException() {};
+		virtual ~TextureLoadException() {};
+	};
+
+	class TextureSizeException : public TextureLoadException
+	{
+	private:
+		Dimension size;
+
+	public:
+		TextureSizeException(Dimension size) : size(size) { };
+		virtual ~TextureSizeException() { };
+	};
+
+	class TextureColorDepthException : public TextureLoadException
+	{
+	private:
+		unsigned int number_of_colors;
+
+	public:
+		TextureColorDepthException(unsigned int number_of_colors) : number_of_colors(number_of_colors) {};
+		virtual ~TextureColorDepthException() {};
+	};
+
 	class Texture
 	{
 	private:
-		GLuint tex_num;
-		Point3D position;
+		static log4cxx::LoggerPtr log;
+
+		boost::filesystem::wpath filename;
+
+		GLuint texture;
+		GLenum texture_format;
+
 		Dimension size;
 
-		Dimension scale; ///< for dynamic scaling
 		float rotation; ///< radiant (0 - 2*pi)
 
-		Dimension tex; ///< percentage of size to use [0..1]
-		Rectangle tex_rect;
-
-		boost::filesystem::wpath filename; ///< experimental for
-						   ///handling cache
-						   ///images. maybe it's useful
-						   ///for dynamic skins
-
 	public:
-		Texture();
+		Texture(boost::filesystem::wpath filename);
 		virtual ~Texture();
+
+		GLuint get_texture(void) const;
 	};
 };
 

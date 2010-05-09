@@ -36,6 +36,7 @@ namespace usdx
 		float green;
 		float blue;
 	public:
+		RgbColor(int red, int green, int blue);
 		RgbColor(float red, float green, float blue);
 
 		float get_red(void) const;

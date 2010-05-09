@@ -32,14 +32,17 @@ namespace usdx
 	class Dimension
 	{
 	private:
-		float width;
-		float height;
+		unsigned int width;
+		unsigned int height;
 	public:
-		Dimension(float width, float height);
+		Dimension(unsigned int width, unsigned int height);
 		Dimension(const Dimension& dimension);
 
-		float get_width(void) const;
-		float get_height(void) const;
+		unsigned int get_width(void) const;
+		void set_width(unsigned int width);
+
+		unsigned int get_height(void) const;
+		void set_height(unsigned int height);
 	};
 };
 

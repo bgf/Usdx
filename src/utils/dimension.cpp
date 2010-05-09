@@ -28,7 +28,7 @@
 
 namespace usdx
 {
-	Dimension::Dimension(float width, float height) :
+	Dimension::Dimension(unsigned int width, unsigned int height) :
 		width(width), height(height)
 	{
 	}
@@ -38,13 +38,23 @@ namespace usdx
 	{
 	}
 
-	float Dimension::get_width(void) const
+	unsigned int Dimension::get_width(void) const
 	{
 		return width;
 	}
 
-	float Dimension::get_height(void) const
+	void Dimension::set_width(unsigned int width)
+	{
+		this->width = width;
+	}
+
+	unsigned int Dimension::get_height(void) const
 	{
 		return height;
+	}
+
+	void Dimension::set_height(unsigned int height)
+	{
+		this->height = height;
 	}
 };

@@ -66,7 +66,7 @@ namespace usdx
 	protected:
 		Application(Control* parent);
 
-		void draw(SDL_Surface* display) const;
+		void draw(void);
 
 	public:
 		virtual ~Application();
@@ -84,7 +84,7 @@ namespace usdx
 		const int get_frames_per_second(void) const;
 		void set_frames_per_second(int fps);
 
-		void repaint(SDL_Surface* display) const;
+		void repaint(void);
 	};
 };
 

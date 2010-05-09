@@ -33,7 +33,8 @@ namespace usdx
 	log4cxx::LoggerPtr Image::log =
 		log4cxx::Logger::getLogger("usdx.base.Image");
 
-	ImageLoadException::ImageLoadException(std::string error) : error(error)
+	ImageLoadException::ImageLoadException(std::string error) :
+		error(error)
 	{
 	}
 
@@ -72,7 +73,7 @@ namespace usdx
 		}
 	}
 
-	const SDL_Surface* Image::get_surface(void)
+	SDL_Surface* Image::get_surface(void)
 	{
 		if (surface == NULL) {
 			load();

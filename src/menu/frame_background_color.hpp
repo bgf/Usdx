@@ -27,8 +27,6 @@
 #ifndef FRAME_BACKGROUND_COLOR_HPP
 #define FRAME_BACKGROUND_COLOR_HPP
 
-#include <SDL/SDL.h>
-
 #include "frame_background.hpp"
 #include "utils/rgb_color.hpp"
 
@@ -40,9 +38,10 @@ namespace usdx
 		RgbColor color;
 
 	protected:
-		virtual void draw(SDL_Surface* display) const;
+		void draw(void);
 
 	public:
+		FrameBackgroundColor(void);
 		FrameBackgroundColor(RgbColor &color);
 
 	};

@@ -37,7 +37,7 @@ namespace usdx
 		float spacing;
 
 	protected:
-		virtual void draw(SDL_Surface* display) const;
+		virtual void draw(void);
 
 	public:
 		Reflection(float spacing);

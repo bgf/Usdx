@@ -36,7 +36,7 @@ namespace usdx
 	{
 	}
 
-	void Reflection::draw(SDL_Surface* display) const
+	void Reflection::draw(void)
 	{
 	}
 

@@ -32,10 +32,10 @@ namespace usdx
 	{
 	}
 
-	void Drawable::repaint(SDL_Surface* display) const
+	void Drawable::repaint(void)
 	{
 		if (visible) {
-			draw(display);
+			draw();
 		}
 	};
 
