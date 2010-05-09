@@ -48,6 +48,10 @@ namespace usdx
 
 	void Frame::set_background(FrameBackground* background)
 	{
+		if (this->background) {
+			delete this->background;
+		}
+
 		this->background = background;
 	}
 
