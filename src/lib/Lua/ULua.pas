@@ -14,11 +14,11 @@ interface
   {$MODE Delphi}
 {$ENDIF}
 
-{$IFDEF UNIX}
 uses
+{$IFDEF UNIX}
   dl,
-  UConfig;
 {$ENDIF}
+  UConfig;
 
 {$DEFINE LUA51}
 

@@ -101,13 +101,13 @@ uses
         swscale           in 'lib\' + FFMPEG_DIR + '\swscale.pas',
       {$ENDIF}
     {$ELSE} // speak: This is for Delphi. Change version as needed!
-      avcodec            in 'lib\ffmpeg-0.10\avcodec.pas',
-      avformat           in 'lib\ffmpeg-0.10\avformat.pas',
-      avutil             in 'lib\ffmpeg-0.10\avutil.pas',
-      rational           in 'lib\ffmpeg-0.10\rational.pas',
-      avio               in 'lib\ffmpeg-0.10\avio.pas',
+      avcodec            in 'lib\ffmpeg\avcodec.pas',
+      avformat           in 'lib\ffmpeg\avformat.pas',
+      avutil             in 'lib\ffmpeg\avutil.pas',
+      rational           in 'lib\ffmpeg\rational.pas',
+      avio               in 'lib\ffmpeg\avio.pas',
       {$IFDEF UseSWScale}
-        swscale          in 'lib\ffmpeg-0.10\swscale.pas',
+        swscale          in 'lib\ffmpeg\swscale.pas',
   	  {$ENDIF}
     {$ENDIF}
     UMediaCore_FFmpeg    in 'media\UMediaCore_FFmpeg.pas',
